@@ -221,8 +221,8 @@
     <!-- Modal 弹窗 -->
     <div id="pub-modal-overlay" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
         <div id="pub-modal-content" class="bg-white w-full max-w-4xl max-h-[90vh] rounded-[30px] shadow-2xl relative flex flex-col overflow-hidden text-left">
-            <button id="close-modal" class="absolute top-6 right-6 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors z-20">
-                <i class="fas fa-times text-gray-500 text-lg"></i>
+            <button id="close-modal" class="absolute top-6 right-6 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors z-20 text-gray-500 text-2xl leading-none" aria-label="Close publication details">
+                <span aria-hidden="true">&times;</span>
             </button>
             <div class="p-8 md:p-14 overflow-y-auto hide-scrollbar">
                 <p id="modal-journal-meta" class="text-[13px] font-semibold text-emerald-600 uppercase tracking-[0.1em] mb-4"></p>
