@@ -796,7 +796,6 @@
                                     <span>P90 min saved</span>
                                 </div>
                             </div>
-                            <p class="selected-lock" id="selected-lock-text">Click a lock node to inspect its public aggregate profile.</p>
                         </div>
                     </div>
                 </div>
@@ -984,10 +983,8 @@
             const lock = DATA.locks.find((item) => item.id === lockId) || DATA.locks[0];
             const row = priorityById().get(lock.id);
             if (!row) return;
-            const [, , region, gateway, mean, p90, cp, sensitivity] = row;
-            const text = `${lock.name} · ${region} · ${gateway ? "gateway" : "non-gateway"} · mean burden ${mean.toFixed(1)} min · P90 ${p90.toFixed(1)} min · CP ${cp.toFixed(1)} · sensitivity ${sensitivity.toFixed(2)}`;
             const selected = $("#selected-lock-text");
-            if (selected) selected.textContent = text;
+            if (selected) selected.textContent = "";
         }
 
         function markerSize(lockId) {
