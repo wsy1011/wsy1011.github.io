@@ -183,6 +183,34 @@
             background: rgba(0, 113, 227, 0.1);
             color: #0071E3;
         }
+        .demo-card {
+            min-height: 260px;
+            padding: 1.75rem;
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.96), transparent 34%),
+                linear-gradient(135deg, rgba(240, 249, 255, 0.98), rgba(237, 242, 255, 0.84));
+            border: 1px solid rgba(255, 255, 255, 0.82);
+            box-shadow: 0 18px 52px rgba(15, 23, 42, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.92);
+            transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .demo-card:hover {
+            transform: translateY(-8px) scale(1.018);
+            filter: saturate(1.04);
+            box-shadow: 0 30px 78px rgba(15, 23, 42, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.96);
+        }
+        .demo-kicker {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 0.35rem 0.75rem;
+            background: rgba(0, 113, 227, 0.1);
+            color: #0071E3;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
         
         #pub-modal-overlay {
             background: rgba(245, 245, 247, 0.85);
@@ -251,6 +279,7 @@
             <div class="hidden md:flex space-x-8 text-gray-500">
                 <a href="#about" class="hover:text-gray-900 transition-colors">About</a>
                 <a href="#publications" class="hover:text-gray-900 transition-colors">Publications</a>
+                <a href="#demos" class="hover:text-gray-900 transition-colors">Demos</a>
                 <a href="#photography" class="hover:text-gray-900 transition-colors">Photography</a>
                 <a href="#awards" class="hover:text-gray-900 transition-colors">Awards</a>
             </div>
@@ -365,6 +394,41 @@
             </div>
         </div>
     </div>
+
+    <!-- Demo Section -->
+    <section id="demos" class="py-24 px-6 bg-white border-b border-gray-100 text-left">
+        <div class="max-w-6xl mx-auto">
+            <div class="mb-12 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Demos</h2>
+                <p class="text-xl text-gray-500 mt-4 max-w-2xl font-light">
+                    Interactive paper visualizations and research prototypes will be collected here.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+                <article class="demo-card reveal-scale">
+                    <span class="demo-kicker">Coming Soon</span>
+                    <h3 class="mt-8 text-2xl font-bold leading-tight text-gray-900">Paper Visualization Gallery</h3>
+                    <p class="mt-4 text-gray-500 leading-relaxed">
+                        Entry point for interactive figures, evidence maps, and visual explanations linked to selected papers.
+                    </p>
+                </article>
+                <article class="demo-card reveal-scale delay-100">
+                    <span class="demo-kicker">Prototype</span>
+                    <h3 class="mt-8 text-2xl font-bold leading-tight text-gray-900">Model Explorer</h3>
+                    <p class="mt-4 text-gray-500 leading-relaxed">
+                        A future space for explaining optimization models, assumptions, and scenario behavior through interaction.
+                    </p>
+                </article>
+                <article class="demo-card reveal-scale delay-200">
+                    <span class="demo-kicker">Archive</span>
+                    <h3 class="mt-8 text-2xl font-bold leading-tight text-gray-900">Research Evidence Browser</h3>
+                    <p class="mt-4 text-gray-500 leading-relaxed">
+                        A planned browser for datasets, result tables, figures, and supporting materials behind the manuscripts.
+                    </p>
+                </article>
+            </div>
+        </div>
+    </section>
 
     <!-- 摄影作品 Section -->
     <section id="photography" class="py-24 overflow-hidden relative bg-white border-b border-gray-100 text-left">
