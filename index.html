@@ -1,0 +1,445 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suyang Wang - Academic Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入衬线体 Arvo -->
+    <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --apple-bg: #ffffff;
+            --apple-secondary-bg: #f5f5f7;
+            --apple-text: #1d1d1f;
+            --apple-gray: #86868b;
+            --apple-blue: #0071e3;
+            --apple-blue-hover: #0077ed;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: var(--apple-bg);
+            color: var(--apple-text);
+            -webkit-font-smoothing: antialiased;
+            margin: 0;
+            padding: 0;
+            overflow-x: clip;
+        }
+
+        .nav-glass {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: translateY(30px) scale(0.96);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-scale.is-visible { opacity: 1; transform: translateY(0) scale(1); }
+
+        .leadership-name { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; letter-spacing: -0.015em; line-height: 1.1; }
+        .leadership-title { font-size: clamp(1.2rem, 3vw, 1.8rem); color: var(--apple-gray); margin-top: 0.5rem; }
+
+        .ibm-logo-style {
+            font-family: 'Arvo', serif;
+            display: inline-block;
+            background-image: repeating-linear-gradient(
+                to bottom,
+                #1d1d1f 0%,
+                #1d1d1f 75%,
+                transparent 75%,
+                transparent 100%
+            );
+            background-size: 100% 0.12em;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .pub-card-custom {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            border-radius: 28px;
+            padding: 2.2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+        }
+        .pub-card-custom * {
+            font-family: inherit;
+        }
+        #pub-modal-content,
+        #pub-modal-content * {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        .pub-card-custom:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-published { background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); }
+        .card-under-review { background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%); }
+
+        .apple-card { background: #ffffff; border-radius: 24px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02); overflow: hidden; }
+        
+        #pub-modal-overlay {
+            background: rgba(245, 245, 247, 0.85);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s;
+        }
+        #pub-modal-overlay.active { opacity: 1; visibility: visible; }
+        #pub-modal-content { transform: scale(0.9) translateY(20px); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        #pub-modal-overlay.active #pub-modal-content { transform: scale(1) translateY(0); }
+
+        #avatar-container { cursor: pointer; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        #avatar-container:hover { transform: scale(1.01); }
+    </style>
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <nav id="navbar" class="nav-glass border-b border-gray-200/60 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 flex justify-between items-center text-sm font-medium h-[54px]">
+            <a href="#" class="ibm-logo-style text-xl tracking-tighter z-20">WSY</a>
+            <div class="hidden md:flex space-x-8 text-gray-500">
+                <a href="#about" class="hover:text-gray-900 transition-colors">About</a>
+                <a href="#publications" class="hover:text-gray-900 transition-colors">Publications</a>
+                <a href="#photography" class="hover:text-gray-900 transition-colors">Photography</a>
+                <a href="#awards" class="hover:text-gray-900 transition-colors">Awards</a>
+            </div>
+            <a href="mailto:wangsuyang@hhu.edu.cn" class="bg-[#0071e3] text-white px-4 py-1.5 rounded-full hover:bg-[#0077ed] transition-colors text-xs font-semibold z-20">Contact</a>
+        </div>
+    </nav>
+
+    <!-- 顶部金句模块 -->
+    <section class="bg-gradient-to-b from-white via-white to-[#f5f5f7] pt-28 pb-32 px-6 text-center border-b border-gray-100">
+        <div class="max-w-5xl mx-auto reveal">
+            <h2 class="text-4xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight ibm-logo-style text-center">
+                Building real-life useful applications from your research is very important.
+            </h2>
+        </div>
+    </section>
+
+    <!-- About Me -->
+    <section id="about" class="pt-16 pb-24 px-6 bg-white border-b border-gray-100">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-gray-200 pb-12">
+                <div class="reveal text-left">
+                    <h1 class="leadership-name tracking-tight">Suyang Wang</h1>
+                    <h2 class="leadership-title font-medium">Ph.D. Candidate at Hohai University</h2>
+                    <div class="flex items-center space-x-4 mt-8">
+                        <a href="https://orcid.org/my-orcid?orcid=0009-0002-8499-1181" target="_blank" class="text-[#0071e3] hover:underline font-medium text-[17px]">ORCID Profile <i class="fas fa-chevron-right text-[10px] ml-1"></i></a>
+                        <a href="https://github.com/wsy1011" target="_blank" class="text-[#0071e3] hover:underline font-medium text-[17px]">GitHub <i class="fas fa-chevron-right text-[10px] ml-1"></i></a>
+                    </div>
+                </div>
+                <div class="mt-12 md:mt-0 reveal-scale delay-100">
+                    <div id="avatar-container" class="w-64 h-64 md:w-[400px] md:h-[400px] overflow-hidden rounded-3xl bg-gray-50 flex items-center justify-center relative shadow-sm border border-gray-100">
+                        <img id="avatar-gif" src="assets/avatar.png" alt="Suyang Wang" class="w-full h-full object-cover relative z-10" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'text-gray-300 font-medium italic text-center p-4\'>[Avatar Placeholder]</div>'">
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24 mt-16 text-left">
+                <div class="md:col-span-7 reveal delay-100">
+                    <h3 class="text-[11px] font-bold text-gray-400 mb-6 tracking-[0.12em] uppercase">Research Focus</h3>
+                    <div class="text-[19px] md:text-[21px] leading-[1.45] text-gray-700 space-y-6 tracking-tight">
+                        <p>I am Suyang Wang, a Ph.D. student at Hohai University. My research is dedicated to <strong>sustainable waterway transportation</strong> and the <strong>decarbonization of inland shipping</strong>.</p>
+                        <p>Methodologically, I specialize in integrating <strong>hydrodynamic numerical simulation</strong> with <strong>operations optimization</strong>. By leveraging this interdisciplinary approach, I explore sustainable logistics solutions to drive emission reductions and enhance the efficiency of inland waterway networks.</p>
+                    </div>
+                </div>
+                <div id="education" class="md:col-span-5 reveal delay-200">
+                    <h3 class="text-[11px] font-bold text-gray-400 mb-6 tracking-[0.12em] uppercase">Education</h3>
+                    <div class="relative border-l border-gray-200 ml-1 space-y-12 pb-2">
+                        <div class="relative pl-8 text-left">
+                            <div class="w-2.5 h-2.5 bg-gray-900 rounded-full absolute -left-[5px] top-1.5 border-2 border-white shadow-sm"></div>
+                            <span class="text-[12px] font-semibold text-gray-400 tracking-wider">2025 - Present</span>
+                            <h4 class="text-[17px] font-bold text-gray-900 mt-1 leading-tight">Ph.D. in Port, Coastal and Offshore Engineering</h4>
+                            <p class="text-[15px] text-gray-500 mt-1">Hohai University, Nanjing</p>
+                        </div>
+                        <div class="relative pl-8 text-left">
+                            <div class="w-2 h-2 bg-gray-300 rounded-full absolute -left-1 top-2 border-2 border-white"></div>
+                            <span class="text-[12px] font-semibold text-gray-400 tracking-wider">2022 - 2025</span>
+                            <h4 class="text-[17px] font-bold text-gray-900 mt-1 leading-tight">M.S. in Port, Coastal and Offshore Engineering</h4>
+                            <p class="text-[15px] text-gray-500 mt-1">Hohai University, Nanjing</p>
+                        </div>
+                        <div class="relative pl-8 text-left">
+                            <div class="w-2 h-2 bg-gray-300 rounded-full absolute -left-1 top-2 border-2 border-white"></div>
+                            <span class="text-[12px] font-semibold text-gray-400 tracking-wider">2018 - 2022</span>
+                            <h4 class="text-[17px] font-bold text-gray-900 mt-1 leading-tight">B.S. in Port, Waterway and Coastal Engineering</h4>
+                            <p class="text-[15px] text-gray-500 mt-1">Hohai University, Nanjing</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications Section -->
+    <section id="publications" class="pt-24 pb-24 bg-[#f5f5f7] text-left overflow-hidden">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="px-6 md:px-12 mb-10 flex justify-between items-end reveal">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Publications</h2>
+                    <p class="text-gray-500 mt-4 max-w-2xl text-[17px] font-medium leading-relaxed">
+                        A collection of published research and ongoing studies in sustainable waterway transportation.
+                    </p>
+                </div>
+                <div class="hidden md:flex gap-3">
+                    <button id="pub-scroll-left" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-50 transition-colors text-gray-700"><i class="fas fa-chevron-left text-sm"></i></button>
+                    <button id="pub-scroll-right" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-50 transition-colors text-gray-700"><i class="fas fa-chevron-right text-sm"></i></button>
+                </div>
+            </div>
+            
+            <div id="pub-carousel-track" class="flex gap-6 overflow-x-auto pb-16 pt-4 px-6 md:px-12 hide-scrollbar snap-x snap-mandatory items-center">
+                <!-- 10 篇文章渲染处 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal 弹窗 -->
+    <div id="pub-modal-overlay" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div id="pub-modal-content" class="bg-white w-full max-w-4xl max-h-[90vh] rounded-[30px] shadow-2xl relative flex flex-col overflow-hidden text-left">
+            <button id="close-modal" class="absolute top-6 right-6 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors z-20">
+                <i class="fas fa-times text-gray-500 text-lg"></i>
+            </button>
+            <div class="p-8 md:p-14 overflow-y-auto hide-scrollbar">
+                <p id="modal-journal-meta" class="text-[13px] font-semibold text-emerald-600 uppercase tracking-[0.1em] mb-4"></p>
+                <h2 id="modal-title" class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-10 tracking-tight"></h2>
+                <div class="space-y-12">
+                    <div><h4 class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-3 font-semibold">Authors</h4><div id="modal-author-tags" class="flex flex-wrap gap-2 mb-3"></div><p id="modal-authors" class="text-[18px] text-gray-800 font-medium leading-relaxed"></p></div>
+                    <div><h4 class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-3 font-semibold">Keywords</h4><p id="modal-keywords" class="text-[16px] text-gray-600 italic"></p></div>
+                    <div id="modal-abstract-section"><h4 class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-3 font-semibold">Abstract</h4><p id="modal-abstract" class="text-[17px] text-gray-700 leading-relaxed"></p></div>
+                    <div id="modal-citation-section" class="bg-gray-50 p-7 rounded-2xl border border-gray-200/60 mt-12 text-left">
+                        <h4 class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-4 flex items-center"><i class="fas fa-quote-left mr-2 text-[10px] text-gray-300"></i> APA-Style Citation</h4>
+                        <p id="modal-citation" class="text-[14px] text-gray-600 leading-relaxed break-words"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 摄影作品 Section -->
+    <section id="photography" class="py-24 overflow-hidden relative bg-white border-b border-gray-100 text-left">
+        <div class="max-w-[1400px] mx-auto text-left">
+            <div class="px-6 md:px-12 mb-10 flex justify-between items-end reveal">
+                <div><h2 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Photography</h2><p class="text-xl text-gray-500 mt-4 max-w-2xl font-light">Capturing moments of life.</p></div>
+                <div class="hidden md:flex gap-3"><button id="photo-scroll-left" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors text-gray-700"><i class="fas fa-chevron-left text-sm"></i></button><button id="photo-scroll-right" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors text-gray-700"><i class="fas fa-chevron-right text-sm"></i></button></div>
+            </div>
+            <div id="photo-carousel-track" class="flex gap-6 overflow-x-auto pb-12 pt-4 px-6 md:px-12 hide-scrollbar snap-x snap-mandatory items-center">
+                <div class="apple-card flex-none w-[280px] md:w-[460px] group relative overflow-hidden rounded-[28px] bg-gray-50 aspect-[4/3] reveal-scale snap-center cursor-pointer">
+                    <img src="assets/photo-0401.jpg" alt="Photography work 1" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6"><span class="text-white font-semibold text-xl">My First Photo Taken with a Camera</span></div>
+                </div>
+                <div class="apple-card flex-none w-[280px] md:w-[460px] group relative overflow-hidden rounded-[28px] bg-gray-50 aspect-[4/3] reveal-scale snap-center cursor-pointer">
+                    <img src="assets/photo-2087.jpg" alt="Hohai University campus" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6"><span class="text-white font-semibold text-xl">Cats</span></div>
+                </div>
+                <div class="apple-card flex-none w-[280px] md:w-[460px] group relative overflow-hidden rounded-[28px] bg-gray-50 aspect-[4/3] reveal-scale snap-center cursor-pointer">
+                    <img src="assets/photo-6324.jpg" alt="Photography work 3" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6"><span class="text-white font-semibold text-xl">Cats</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 荣誉奖项 Section -->
+    <section id="awards" class="py-24 px-6 bg-[#f5f5f7] text-left">
+        <div class="max-w-4xl mx-auto text-left">
+            <h3 class="text-3xl md:text-4xl font-bold mb-12 tracking-tight reveal text-center">Awards & Honors</h3>
+            <div class="apple-card p-8 md:p-12 reveal-scale"><ul id="awards-list" class="space-y-8"></ul></div>
+        </div>
+    </section>
+
+    <footer class="bg-white py-12 px-6 border-t border-gray-200">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+            <div class="mb-4 md:mb-0">&copy; 2026 Suyang Wang. All rights reserved.</div>
+            <div class="flex space-x-6 font-medium">
+                <a href="mailto:wangsuyang@hhu.edu.cn" class="hover:text-gray-900 transition-colors">Contact</a>
+                <a href="https://orcid.org/my-orcid?orcid=0009-0002-8499-1181" target="_blank" class="hover:text-gray-900 transition-colors">ORCID</a>
+                <a href="https://github.com/wsy1011" target="_blank" class="hover:text-gray-900 transition-colors">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Core data: manually sorted by date from newest to oldest (April 2026 -> December 2021)
+        const publications = [
+            { id: 101, status: "Under Review", articleType: "Journal Article", journalShort: "Transp. Res. Part D", journalFull: "Transportation Research Part D: Transport and Environment", date: "April 2026", title: "From Ship to Supply Chain: Evidence on Inland Waterway Decarbonization in China", authors: "Suyang Wang, Xuejun Feng*, Guangyu Huang, Lanqin Ma, Ruihua Wang, Kum Fai Yuen*, Min Wu*", keywords: "Inland shipping; Carbon intensity; EEOI; Voyage organization; Regional supply chains; Decarbonization governance", abstract: "", citation: "" },
+            { id: 102, status: "Under Review", articleType: "Journal Article", journalShort: "Int. J. Disaster Risk Reduct.", journalFull: "International Journal of Disaster Risk Reduction", date: "March 2026", title: "Risk-informed and disruption-aware rescue-base siting for emergency preparedness in tidal inland waterways", authors: "Mingchang Huang, Zhiyi Lei, Suyang Wang*, Guangyu Huang, Liangen Zeng*", keywords: "AIS trajectories; hydrodynamic modelling; emergency preparedness; Disaster risk reduction; robust rescue-base siting; tidal inland waterways", abstract: "", citation: "" },
+            { id: 103, status: "Under Review", articleType: "Journal Article", journalShort: "Transp. Res. Part D", journalFull: "Transportation Research Part D: Transport and Environment", date: "February 2026", title: "Collaborative Planning Framework for Heavy-Duty Truck Electrification: Corridor-Port Integrated Energy Systems", authors: "Ruihua Wang, Xuejun Feng*, Suyang Wang, Kaixuan Tao, Kum Fai Yuen*, Min Wu*", keywords: "Port integrated energy system; Green freight corridor; Heavy-duty truck electrification; Renewable energy; Two-stage distributionally robust optimisation; Battery swapping station", abstract: "", citation: "" },
+            { id: 1, status: "Published", articleType: "Journal Article", journalShort: "Transp. Lett.", journalFull: "Transportation Letters: The International Journal of Transportation Research", date: "January 2026", title: "A study on dynamic scheduling of AGV in ACTs with consideration of battery constraints", authors: "Ruihua Wang, Xuejun Feng*, Suyang Wang, Ran Yan", keywords: "Automated container terminal; AGV; scheduling; wireless charging; charging strategy; dual-engine decision-making.", abstract: "Automated guided vehicles (AGVs) have significantly improved automation and efficiency in automated container terminals (ACTs). As AGVs rely on electric power, their operational range directly influences their overall performance, making effective battery management essential. This study introduces the first application of wireless AGV charging at ports, developing a hybrid AGV charging system. A dual-engine mechanism is proposed: a rule engine formulates task assignment strategies, while a learning engine employing a hybrid metaheuristic-based algorithm optimizes routing. Integrating real-time battery status into scheduling achieves dynamic coordination between task allocation and path planning. Results show wireless charging reduces centralized charging events and shortens AGV idle time by 7.21%. Combined with optimized scheduling, terminal efficiency further improves, reducing operational time by an additional 10.31%. Optimal performance occurs at a 16% charging threshold, balancing charging frequency, equipment lifespan, and scheduling stability. These findings support effective decision-making for AGV energy strategies in ACTs.", citation: "Wang, Ruihua, Feng, Xuejun, Wang, Suyang, & Yan, Ran. (2026). A study on dynamic scheduling of AGV in ACTs with consideration of battery constraints. Transportation Letters: The International Journal of Transportation Research. Advance online publication. https://doi.org/10.1080/19427867.2026.2613148" },
+            { id: 2, status: "Published", articleType: "Journal Article", journalShort: "J. Hohai Univ.", journalFull: "Journal of Hohai University (Natural Sciences)", date: "October 2025", title: "A Review of Research on Ship Speed Optimization Driven by Multi-Source Environmental Information Fusion", authors: "Suyang Wang, Xuejun Feng*, Lanqing Ma, Jinxing Shen, Zhonglian Jiang", keywords: "Ship speed optimization; navigation environment; energy saving and emission reduction; multi-source information fusion; data-driven.", abstract: "Ship speed optimization is a key technical measure for reducing energy consumption and emissions, where considering the dynamic navigation environment is crucial for achieving precise optimization. This paper systematically reviews the research progress in this field from three perspectives: environmental impact mechanisms, information perception technologies, and optimization models and algorithms. The review shows that existing models have evolved from static planning to dynamic optimal control methods capable of handling time-varying environments. Meanwhile, data-driven techniques have been widely applied to environmental forecasting and energy consumption modeling, enhancing optimization accuracy and efficiency. Despite significant progress, challenges remain in the refined modeling of ship-environment coupling mechanisms, the robustness and efficiency of optimization algorithms, and multi-objective collaborative optimization. Future work should strengthen research on coupling mechanisms, develop intelligent algorithms that integrate machine learning with traditional methods, and expand the optimization scope from single ships to fleet collaboration to promote the continuous development and application of this technology.", citation: "Wang, Suyang, Feng, Xuejun, Ma, Lanqing, Shen, Jinxing, & Jiang, Zhonglian. (2025). A review of research on ship speed optimization driven by multi-source environmental information fusion. Journal of Hohai University (Natural Sciences). Advance online publication. https://link.cnki.net/urlid/32.1117.TV.20251010.1023.010" },
+            { id: 3, status: "Published", articleType: "Journal Article", journalShort: "Case Stud. Transp. Policy", journalFull: "Case Studies on Transport Policy", date: "December 2024", title: "Game Theory-Based Shore Power Analysis: From the Perspective of Policy Makers", authors: "Suyang Wang, Xuejun Feng*, Yiqiang Peng, Haipeng Wang, Yan Zhang", keywords: "Game theory; shore power; waterway transport policy.", abstract: "With growing concerns about ship emissions in port areas, access to shore power for berthed ships has become a critical component of green shipping initiatives. However, conflicting stakeholder interests pose challenges to the construction and promotion of shore power infrastructure. This paper analyzes the behavioral strategies of governments, port operators, and shipping companies by developing game models for these actors under three different policy scenarios: government non-intervention, mandatory measures such as emission taxes, and government subsidies. To quantify the impact of ship emissions on these interactions, an exhaust emission calculation model for berthed ships is developed based on the STEAM2 model and a localized database of emission correction factors for inland areas. The container terminal at Nanjing Port Longtan Harbor is used as a case study, where ship exhaust emissions are monetized as a social cost, taking into account the socio-economic context of the region. The findings indicate that under scenarios of government non-intervention and emission taxes, equilibrium strategies do not achieve optimal socio-economic benefits for the government. In contrast, under a subsidy policy, a well-calibrated subsidy can align the interests of the government, port operators, and shipping companies to facilitate the implementation of shore power projects. This study provides valuable decision support for government policies related to shore power infrastructure.", citation: "Wang, Suyang, Feng, Xuejun, Peng, Yiqiang, Wang, Haipeng, & Zhang, Yan. (2025). Game theory-based shore power analysis: From the perspective of policy makers. Case Studies on Transport Policy, 19, 101341. https://doi.org/10.1016/j.cstp.2024.101341" },
+            { id: 6, status: "Published", articleType: "Conference Paper", journalShort: "WTC", journalFull: "World Transport Convention (WTC): Shipping Route Optimization & Container Management Forum", date: "June 2024", title: "Study on ship speed optimization in tidal reach", authors: "Suyang Wang, Xuejun Feng, Weihua Gu, Yan Zhang, Ruihua Wang", keywords: "Tidal reach; Ship speed optimization; Shipping route optimization; Container management.", abstract: "This conference paper studies ship speed optimization in tidal reaches, focusing on how tidal conditions affect route planning and vessel operating decisions.", citation: "Wang Suyang, Feng Xuejun, Gu Weihua, Zhang Yan, & Wang Ruihua. (2024). Study on ship speed optimization in tidal reach. World Transport Convention (WTC): Shipping Route Optimization & Container Management Forum." },
+            { id: 7, status: "Published", articleType: "Journal Article", journalShort: "J. Waterway & Port", journalFull: "Journal of Waterway and Port", date: "January 2024", title: "Navigation efficiency of restricted waterway based on scheduling rules", authors: "Jianliang Huang, Xuejun Feng*, Suyang Wang", keywords: "Restricted Waterway; Efficiency.", abstract: "Examines maritime scheduling rules to improve navigation safety.", citation: "Huang, J., Feng, X., & Wang, S. (2024)." },
+            { id: 4, status: "Published", articleType: "Journal Article", journalShort: "J. Transp. Syst. Eng. & IT", journalFull: "Journal of Transportation Systems Engineering and Information Technology", date: "June 2023", title: "A simulation-based research on the location and size of one-way channel buffers for large marine crude oil terminals", authors: "Xuejun Feng, Suyang Wang, Bo Xu, Yan Zhang, Jianliang Huang, Weihua Gu*", keywords: "Waterway transportation; discrete-event system simulation; channel buffer; crude oil terminals.", abstract: "The critical bottleneck affecting a terminal’s oil throughput capacity is shifting from the limited number of berths to the channel connecting the berths to the anchorage area. This is especially true for the terminals with a one-way channel where large oil tankers can navigate through the channel only at high tides. Buffers can be installed at those terminals to significantly improve the one-way channel’s capacity. This paper examines the buffer’s location and size choices for a crude oil terminal with a one-way channel. A discrete-event simulator in-house was developed using Python to explicitly model the buffer’s location and size choices. The simulator accounts for a sufficient level of realism, including the tidal time windows for large tankers and the daytime operation constraints. Taking the Rizhao Shihua Oil Terminal of the Rizhao Port as the case study, this paper used the simulator to analyze the effects of various buffer locations and sizes on the port capacity and service level under two priority rules. They are the conventional “first come, first served” rule and a value priority rule that prioritizes the tankers with higher holding values. The results show that the value priority rule can improve the terminal’s capacity by up to 2.35% compared to the first come, first served rule. The capacity increases as the buffer moves from the anchorage side to the dockyard side of the channel, with improvement up to 7.56%. Moreover, a one-way channel accompanied with a dockyard-side buffer holding one tanker only can attain 91.54% of the capacity of a two-way channel, manifesting the great potential of buffers.", citation: "Feng, Xuejun, Wang, Suyang, Xu, Bo, Zhang, Yan, Huang, Jianliang, & Gu, Weihua. (2023). Simulation and study of location and size of one-way channel buffers for large marine crude oil terminals. Journal of Transportation Systems Engineering and Information Technology, 23(3), 253–264. https://doi.org/10.16097/j.cnki.1009-6744.2023.03.027" },
+            { id: 5, status: "Published", articleType: "Journal Article", journalShort: "Marit. Policy Manag.", journalFull: "Maritime Policy & Management", date: "December 2021", title: "Spatial evolution model of port group hinterland from the perspective of intermodal transport", authors: "Guangyu Huang, Xuejun Feng*, Mili Chen, Liupeng Jiang, Haipeng Wang, Suyang Wang", keywords: "Port hinterland; intermodal transport; GIS; African ports.", abstract: "The rapid development of the intermodal system has led to the intensification of the hinterland competition within the port group, and the spatial pattern of the hinterland has become discontinuous. Based on geographic information system technology, a spatial interaction model, in which the intermodal cost distance is computed by integrating the raster analysis method and network method, is developed to facilitate the examination of the spatial evolution process of the port group intermodal hinterland. Considering the example of the Gulf of Guinea port group in West Africa, the spatial evolution process of its five ports is simulated in three scenarios. The results indicate that intermodal transport drives the hinterland’s discontinuous development, and the direction and layout of the intermodal corridors significantly impact the hinterland competition of the port group. In most cases, the intermodal corridors can help realize connected ports to enhance the hinterland’s competitive advantage within the port group. However, adjacent ports may also benefit from this aspect under certain conditions, which implies the importance of port cooperation in planning collection and distribution corridors. The model and findings can theoretically support the decision-making of port investors and operators.", citation: "Huang, Guangyu, Feng, Xuejun, Chen, Mili, Jiang, Liupeng, Wang, Haipeng, & Wang, Suyang. (2021). Spatial evolution model of port group hinterland from the perspective of intermodal transport. Maritime Policy & Management. DOI: 10.1080/03088839.2021.2009134" }
+        ];
+
+        const awards = [
+            { icon: "fa-trophy", title: "Honorary Title of Outstanding Graduate of Hohai University", detail: "2025 (1 of 101 students)", issuer: "Awarded by Hohai University" },
+            { icon: "fa-medal", title: "National Scholarship", detail: "2024", issuer: "Awarded by the Ministry of Education of the People's Republic of China" },
+            { icon: "fa-award", title: "Outstanding Presenter", detail: "2023 - 12th Graduate Academic Annual Conference of Hohai University", issuer: "Awarded by Hohai University" },
+            { icon: "fa-award", title: "Honorary Title of Outstanding Undergraduate Thesis", detail: "2022 - Hohai University", issuer: "Awarded by Hohai University" },
+            { icon: "fa-trophy", title: "Honorary Title of Outstanding Graduate of Hohai University", detail: "2022 (1 of 101 students)", issuer: "Awarded by Hohai University" },
+            { icon: "fa-medal", title: "Outstanding Student Cadres of Jiangsu Province", detail: "2021 (1 of about 2,500 students)", issuer: "Awarded by the Jiangsu Provincial Department of Education" }
+        ];
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // GIF 重播
+            const avContainer = document.getElementById('avatar-container');
+            if (avContainer) {
+                avContainer.addEventListener('mouseenter', () => {
+                    const avImg = document.getElementById('avatar-gif');
+                    if (avImg) { const base = avImg.src.split('?')[0]; avImg.src = base + "?t=" + Date.now(); }
+                });
+            }
+
+            // 渲染论文卡片
+            const pubTrack = document.getElementById('pub-carousel-track');
+            if (pubTrack) {
+                publications.forEach(pub => {
+                    const card = document.createElement('div');
+                    const statusClass = pub.status === "Under Review" ? "card-under-review" : "card-published";
+                    card.className = `pub-card-custom ${statusClass} flex-none w-[280px] md:w-[340px] h-[460px] md:h-[500px] snap-center flex flex-col justify-between reveal-scale`;
+                    
+                    const dotColor = pub.status === "Under Review" ? "text-amber-500" : "text-emerald-500";
+                    const btnColor = pub.status === "Under Review" ? "bg-amber-500" : "bg-emerald-500";
+                    const statusTag = `<span class="${dotColor} font-bold tracking-tight text-[11px] md:text-xs uppercase"><i class="fas fa-circle text-[8px] align-middle mr-1.5 mb-[2px]"></i>${pub.status}</span>`;
+                    const typeTag = `<span class="text-gray-500 font-bold tracking-tight text-[11px] md:text-xs uppercase">${pub.articleType}</span>`;
+
+                    card.innerHTML = `
+                        <div class="relative z-10">
+                            <p class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1">${statusTag}${typeTag}</p>
+                            <h3 class="text-2xl md:text-3xl font-bold leading-tight mb-4 tracking-tight text-gray-900 text-left">${pub.title}</h3>
+                        </div>
+                        <div class="relative z-10 flex justify-between items-end">
+                            <div class="max-w-[75%] text-left">
+                                <p class="text-sm text-gray-500 font-medium mb-1 line-clamp-1">${pub.authors.split(',')[0].split(';')[0]} et al.</p>
+                                <p class="text-[11px] text-gray-400 font-semibold uppercase tracking-wide">
+                                    ${pub.journalShort} · ${pub.date}
+                                </p>
+                            </div>
+                            <button class="open-modal-btn w-10 h-10 rounded-full ${btnColor} text-white flex items-center justify-center hover:opacity-80 transition-all shadow-sm" data-id="${pub.id}">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                        </div>
+                    `;
+                    pubTrack.appendChild(card);
+                });
+            }
+
+            // 渲染奖项 (Hohai University)
+            const al = document.getElementById('awards-list');
+            if (al) {
+                awards.forEach((a, i) => {
+                    const li = document.createElement('li');
+                    li.className = `flex items-start reveal delay-${(i+1)*100}`;
+                    li.innerHTML = `<div class="flex-shrink-0 mt-1 text-gray-800"><i class="fas ${a.icon} text-xl"></i></div><div class="ml-4 text-left"><h4 class="text-lg font-bold text-gray-900">${a.title}</h4><p class="text-gray-500 text-sm">${a.detail}</p><p class="text-gray-400 text-sm mt-1">${a.issuer}</p></div>`;
+                    al.appendChild(li);
+                });
+            }
+
+            // 弹窗逻辑
+            const modal = document.getElementById('pub-modal-overlay');
+            const absSec = document.getElementById('modal-abstract-section');
+            const citSec = document.getElementById('modal-citation-section');
+            const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[char]));
+            const highlightSuyang = (authors) => escapeHtml(authors).replace(/Suyang Wang/g, '<strong class="font-bold text-[#0071E3]">Suyang Wang</strong>');
+            const getAuthorRoles = (authors) => {
+                const parts = authors.split(/[,;]/).map((name) => name.trim()).filter(Boolean);
+                return {
+                    firstAuthor: parts.some((name, index) => index === 0 && name.replace(/\*/g, '') === 'Suyang Wang'),
+                    correspondingAuthor: parts.some((name) => name === 'Suyang Wang*'),
+                    supervisorFirstAuthor: parts.some((name, index) => index === 0 && name.replace(/\*/g, '') === 'Xuejun Feng')
+                };
+            };
+            const renderAuthorTags = (authors) => {
+                const roles = getAuthorRoles(authors);
+                const tags = [];
+                if (roles.firstAuthor) tags.push('First Author');
+                if (roles.correspondingAuthor) tags.push('Corresponding Author');
+                if (roles.supervisorFirstAuthor) tags.push('Supervisor First Author');
+                return tags.map((tag) => `<span class="inline-flex items-center rounded-full bg-[#EAF3FF] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] text-[#0071E3]">${tag}</span>`).join('');
+            };
+            document.addEventListener('click', e => {
+                const btn = e.target.closest('.open-modal-btn');
+                if(!btn) return;
+                const pub = publications.find(p => p.id == btn.dataset.id);
+                if(!pub) return;
+                document.getElementById('modal-journal-meta').innerText = `${pub.journalFull} · ${pub.date}`;
+                document.getElementById('modal-title').innerText = pub.title;
+                document.getElementById('modal-author-tags').innerHTML = renderAuthorTags(pub.authors);
+                document.getElementById('modal-authors').innerHTML = highlightSuyang(pub.authors);
+                document.getElementById('modal-keywords').innerText = pub.keywords;
+                if(pub.status === "Under Review") {
+                    absSec.style.display = 'none'; citSec.style.display = 'none';
+                } else {
+                    absSec.style.display = 'block'; citSec.style.display = 'block';
+                    document.getElementById('modal-abstract').innerText = pub.abstract;
+                    document.getElementById('modal-citation').innerText = pub.citation;
+                }
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+
+            const close = () => { if(modal) modal.classList.remove('active'); document.body.style.overflow = ''; };
+            const closeBtn = document.getElementById('close-modal');
+            if (closeBtn) closeBtn.addEventListener('click', close);
+            if (modal) modal.addEventListener('click', (e) => { if(e.target === modal) close(); });
+
+            // 滚动控制
+            const setup = (tid, l, r) => {
+                const t = document.getElementById(tid);
+                const lb = document.getElementById(l);
+                const rb = document.getElementById(r);
+                if(!t || !lb || !rb) return;
+                lb.addEventListener('click', () => t.scrollBy({left: -360, behavior: 'smooth'}));
+                rb.addEventListener('click', () => t.scrollBy({left: 360, behavior: 'smooth'}));
+            };
+            setup('pub-carousel-track', 'pub-scroll-left', 'pub-scroll-right');
+            const setupPhoto = (tid, l, r) => {
+                const t = document.getElementById(tid);
+                const lb = document.getElementById(l);
+                const rb = document.getElementById(r);
+                if(!t || !lb || !rb) return;
+                lb.onclick = () => t.scrollBy({left: -480, behavior: 'smooth'});
+                rb.onclick = () => t.scrollBy({left: 480, behavior: 'smooth'});
+            };
+            setupPhoto('photo-carousel-track', 'photo-scroll-left', 'photo-scroll-right');
+
+            const obs = new IntersectionObserver(es => {
+                es.forEach(e => { if(e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
+            }, {threshold: 0.1});
+            document.querySelectorAll('.reveal, .reveal-scale').forEach(el => obs.observe(el));
+        });
+    </script>
+</body>
+</html>
+
+
+
