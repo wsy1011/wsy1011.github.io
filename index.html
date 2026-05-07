@@ -348,7 +348,8 @@
                 publications.forEach(pub => {
                     const card = document.createElement('div');
                     const statusClass = pub.status === "Under Review" ? "card-under-review" : "card-published";
-                    card.className = `pub-card-custom ${statusClass} flex-none w-[280px] md:w-[340px] h-[460px] md:h-[500px] snap-center flex flex-col justify-between reveal-scale`;
+                    card.className = `pub-card-custom ${statusClass} flex-none w-[280px] md:w-[340px] h-[460px] md:h-[500px] snap-center flex flex-col justify-between reveal-scale cursor-pointer`;
+                    card.dataset.id = pub.id;
                     
                     const dotColor = pub.status === "Under Review" ? "text-amber-500" : "text-emerald-500";
                     const btnColor = pub.status === "Under Review" ? "bg-amber-500" : "bg-emerald-500";
@@ -412,10 +413,8 @@
                 if (roles.supervisorFirstAuthor) tags.push('Supervisor First Author');
                 return tags.map((tag) => `<span class="inline-flex items-center rounded-full bg-[#EAF3FF] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] text-[#0071E3]">${tag}</span>`).join('');
             };
-            document.addEventListener('click', e => {
-                const btn = e.target.closest('.open-modal-btn');
-                if(!btn) return;
-                const pub = publications.find(p => p.id == btn.dataset.id);
+            const openPublicationModal = (id) => {
+                const pub = publications.find(p => p.id == id);
                 if(!pub) return;
                 document.getElementById('modal-journal-meta').innerText = `${pub.journalFull} · ${pub.date}`;
                 document.getElementById('modal-title').innerText = pub.title;
@@ -431,6 +430,16 @@
                 }
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
+            };
+            document.addEventListener('click', e => {
+                const btn = e.target.closest('.open-modal-btn');
+                const card = e.target.closest('.pub-card-custom');
+                if (btn) {
+                    e.stopPropagation();
+                    openPublicationModal(btn.dataset.id);
+                    return;
+                }
+                if (card) openPublicationModal(card.dataset.id);
             });
 
             const close = () => { if(modal) modal.classList.remove('active'); document.body.style.overflow = ''; };
