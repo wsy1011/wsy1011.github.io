@@ -1,0 +1,1213 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected Lock Pressure Demo - Suyang Wang</title>
+    <meta name="description" content="A public demo page for research paper.">
+    <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230071e3'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial' font-size='24' font-weight='700' fill='white'%3EWS%3C/text%3E%3C/svg%3E">
+    <style>
+        :root {
+            --apple-bg: #ffffff;
+            --apple-secondary-bg: #f5f5f7;
+            --apple-text: #1d1d1f;
+            --apple-gray: #86868b;
+            --apple-blue: #0071e3;
+            --apple-blue-hover: #0077ed;
+            --apple-green: #34c759;
+            --apple-amber: #ff9f0a;
+            --apple-red: #ff3b30;
+            --line: rgba(0, 0, 0, 0.08);
+            --shadow-soft: 0 18px 50px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            --shadow-lift: 0 30px 78px rgba(15, 23, 42, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.96);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background:
+                radial-gradient(circle at 18% 8%, rgba(0, 113, 227, 0.08), transparent 30%),
+                radial-gradient(circle at 86% 18%, rgba(52, 199, 89, 0.08), transparent 28%),
+                linear-gradient(180deg, #ffffff 0%, #fbfbfd 46%, #f5f5f7 100%);
+            color: var(--apple-text);
+            -webkit-font-smoothing: antialiased;
+            margin: 0;
+            padding: 0;
+            overflow-x: clip;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        button { font: inherit; }
+
+        .nav-glass {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        #navbar a {
+            transition: color 0.45s var(--ease), transform 0.45s var(--ease), background-color 0.45s var(--ease);
+        }
+
+        #navbar a:hover { transform: translateY(-1px); }
+
+        .ibm-logo-style {
+            font-family: 'Arvo', Georgia, serif;
+            display: inline-block;
+            background-image: repeating-linear-gradient(
+                to bottom,
+                #1d1d1f 0%,
+                #1d1d1f 75%,
+                transparent 75%,
+                transparent 100%
+            );
+            background-size: 100% 0.12em;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-border { border-bottom: 1px solid rgba(229, 231, 235, 0.7); }
+        .nav-inner {
+            max-width: 72rem;
+            height: 54px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .nav-logo { font-size: 1.25rem; letter-spacing: -0.04em; z-index: 20; }
+        .nav-links { display: flex; gap: 2rem; color: #6b7280; }
+        .nav-links a:hover { color: #111827; }
+        .contact-pill {
+            background: #0071e3;
+            color: white;
+            padding: 0.375rem 1rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            z-index: 20;
+        }
+        .contact-pill:hover { background: #0077ed; text-decoration: none; }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.2s var(--ease), transform 1.2s var(--ease);
+            will-change: opacity, transform;
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: translateY(30px) scale(0.96);
+            transition: opacity 1.2s var(--ease), transform 1.2s var(--ease);
+            will-change: opacity, transform;
+        }
+
+        .reveal.is-visible { opacity: 1; transform: translateY(0); }
+        .reveal-scale.is-visible { opacity: 1; transform: translateY(0) scale(1); }
+
+        .hero-strip {
+            background: linear-gradient(180deg, #ffffff 0%, #ffffff 42%, #f5f5f7 100%);
+            padding: 7rem 1.5rem 7.5rem;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .max-hero { max-width: 64rem; margin: 0 auto; }
+
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 999px;
+            padding: 0.42rem 0.8rem;
+            background: rgba(0, 113, 227, 0.1);
+            color: #0071e3;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 1.4rem;
+        }
+
+        .hero-title {
+            margin: 0 auto;
+            max-width: 58rem;
+            font-size: clamp(2.6rem, 6vw, 5.4rem);
+            line-height: 1.04;
+            letter-spacing: -0.035em;
+            font-weight: 760;
+        }
+
+        .hero-subtitle {
+            margin: 1.45rem auto 0;
+            max-width: 48rem;
+            color: #6b7280;
+            font-size: clamp(1.08rem, 2.1vw, 1.45rem);
+            line-height: 1.48;
+            letter-spacing: -0.015em;
+        }
+
+        .hero-links {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .blue-link {
+            color: #0071e3;
+            font-weight: 650;
+            font-size: 1.02rem;
+        }
+
+        .blue-link:hover { text-decoration: underline; }
+
+        .mainpage-button {
+            margin-top: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            padding: 0.78rem 1.35rem;
+            background: #0071e3;
+            color: #ffffff;
+            font-size: 0.98rem;
+            font-weight: 750;
+            box-shadow: 0 18px 42px rgba(0, 113, 227, 0.25);
+            transition: transform 0.45s var(--ease), background-color 0.45s var(--ease), box-shadow 0.45s var(--ease);
+        }
+
+        .mainpage-button:hover {
+            background: #0077ed;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 22px 48px rgba(0, 113, 227, 0.30);
+        }
+
+        section.demo-section {
+            padding: 6rem 1.5rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .bg-white { background: #ffffff; }
+        .bg-secondary { background: #f5f5f7; }
+        .max-page { max-width: 72rem; margin: 0 auto; }
+        .wide-page { max-width: 87.5rem; margin: 0 auto; }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 2rem;
+            margin-bottom: 2.6rem;
+        }
+
+        .section-title {
+            margin: 0;
+            color: #111827;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            line-height: 1.08;
+            font-weight: 800;
+            letter-spacing: -0.035em;
+        }
+
+        .section-copy {
+            margin: 0.9rem 0 0;
+            color: #6b7280;
+            max-width: 42rem;
+            font-size: 1.06rem;
+            line-height: 1.65;
+            font-weight: 500;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+
+        .demo-card {
+            min-height: 260px;
+            padding: 1.75rem;
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.96), transparent 34%),
+                linear-gradient(135deg, rgba(240, 249, 255, 0.98), rgba(237, 242, 255, 0.84));
+            border: 1px solid rgba(255, 255, 255, 0.82);
+            box-shadow: 0 18px 52px rgba(15, 23, 42, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.92);
+            transition: transform 0.55s var(--ease), box-shadow 0.55s var(--ease), filter 0.55s var(--ease);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-8px) scale(1.018);
+            filter: saturate(1.04);
+            box-shadow: var(--shadow-lift);
+        }
+
+        .demo-kicker {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 0.35rem 0.75rem;
+            background: rgba(0, 113, 227, 0.1);
+            color: #0071e3;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .demo-card h3 {
+            margin: 1.2rem 0 0;
+            font-size: 1.62rem;
+            line-height: 1.12;
+            letter-spacing: -0.03em;
+        }
+
+        .demo-card p {
+            color: #6b7280;
+            line-height: 1.6;
+            font-size: 0.98rem;
+            margin: 0.9rem 0 0;
+        }
+
+        .metric-card {
+            min-height: 180px;
+            border-radius: 24px;
+            padding: 1.35rem;
+            background:
+                radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.95), transparent 34%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.84));
+            border: 1px solid rgba(255, 255, 255, 0.82);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .metric-label {
+            margin: 0;
+            color: #9ca3af;
+            font-size: 0.68rem;
+            font-weight: 850;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .metric-value {
+            margin: 0.8rem 0 0;
+            color: #111827;
+            font-size: 2.35rem;
+            line-height: 1;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .metric-help {
+            margin: 0.75rem 0 0;
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+
+        .apple-card {
+            background: rgba(255, 255, 255, 0.86);
+            border-radius: 24px;
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.76);
+        }
+
+        .panel-card {
+            padding: 1.55rem;
+            background:
+                radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.95), transparent 34%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.84));
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.82);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .panel-title {
+            margin: 0;
+            color: #111827;
+            font-size: 1.5rem;
+            line-height: 1.18;
+            letter-spacing: -0.025em;
+        }
+
+        .panel-copy {
+            margin: 0.55rem 0 0;
+            color: #6b7280;
+            font-size: 0.98rem;
+            line-height: 1.58;
+        }
+
+        .bar-list { display: grid; gap: 1rem; margin-top: 1.5rem; }
+        .bar-row {
+            display: grid;
+            grid-template-columns: minmax(10rem, 14rem) minmax(8rem, 1fr) 5.5rem;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .bar-name { color: #374151; font-size: 0.92rem; font-weight: 700; }
+        .bar-track { height: 0.72rem; border-radius: 999px; background: #e5e7eb; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 999px; background: #0071e3; min-width: 4px; transition: width 0.8s var(--ease); }
+        .bar-value { color: #6b7280; text-align: right; font-size: 0.88rem; font-weight: 750; font-variant-numeric: tabular-nums; }
+
+        .layer-list { display: grid; gap: 0.85rem; margin-top: 1.5rem; }
+        .layer {
+            border-radius: 18px;
+            border: 1px solid rgba(229, 231, 235, 0.86);
+            background: rgba(255, 255, 255, 0.72);
+            padding: 1rem;
+        }
+
+        .layer strong { display: block; color: #111827; font-size: 1rem; }
+        .layer span { display: block; color: #6b7280; margin-top: 0.35rem; font-size: 0.9rem; line-height: 1.5; }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 0.28rem 0.65rem;
+            background: #eaf3ff;
+            color: #0071e3;
+            font-size: 0.72rem;
+            font-weight: 850;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .table-wrap {
+            margin-top: 1.4rem;
+            overflow-x: auto;
+            border-radius: 22px;
+            border: 1px solid rgba(229, 231, 235, 0.86);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        table { width: 100%; border-collapse: collapse; min-width: 760px; }
+        th, td { padding: 0.9rem 1rem; border-bottom: 1px solid rgba(229, 231, 235, 0.86); text-align: left; }
+        th { color: #9ca3af; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+        td { color: #374151; font-size: 0.92rem; }
+        td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+        tr:last-child td { border-bottom: 0; }
+
+        .schematic {
+            margin-top: 1.4rem;
+            height: 420px;
+            border-radius: 24px;
+            border: 1px solid rgba(229, 231, 235, 0.86);
+            background:
+                radial-gradient(circle at 16% 16%, rgba(0, 113, 227, 0.09), transparent 30%),
+                radial-gradient(circle at 78% 74%, rgba(52, 199, 89, 0.10), transparent 28%),
+                rgba(255, 255, 255, 0.72);
+            overflow: hidden;
+        }
+
+        svg { width: 100%; height: 100%; display: block; }
+
+        .map-tool-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+            gap: 1.4rem;
+            margin-top: 1.4rem;
+        }
+
+        .map-stage {
+            position: relative;
+            min-height: 560px;
+            border-radius: 28px;
+            border: 1px solid rgba(229, 231, 235, 0.86);
+            background:
+                radial-gradient(circle at 16% 18%, rgba(0, 113, 227, 0.12), transparent 32%),
+                radial-gradient(circle at 80% 78%, rgba(52, 199, 89, 0.12), transparent 30%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(248, 250, 252, 0.74));
+            overflow: hidden;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+        }
+
+        .leaflet-map {
+            width: 100%;
+            height: 560px;
+            min-height: 560px;
+            border-radius: 28px;
+            overflow: hidden;
+            background: #eef2f7;
+        }
+
+        .leaflet-container {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        .leaflet-popup-content-wrapper,
+        .leaflet-popup-tip {
+            border-radius: 18px;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
+        }
+
+        .lock-marker {
+            width: var(--size);
+            height: var(--size);
+            border-radius: 999px;
+            background: #1d1d1f;
+            border: 3px solid #ffffff;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.20), 0 0 0 8px rgba(0, 113, 227, 0.12);
+            transform: translate(-50%, -50%) scale(0.86);
+            transition: width 0.45s var(--ease), height 0.45s var(--ease), background-color 0.45s var(--ease), box-shadow 0.45s var(--ease), opacity 0.45s var(--ease), transform 0.45s var(--ease);
+            pointer-events: auto;
+            display: grid;
+            place-items: center;
+        }
+
+        .lock-marker.is-highlighted {
+            background: #0071e3;
+            box-shadow: 0 16px 38px rgba(0, 113, 227, 0.28), 0 0 0 11px rgba(0, 113, 227, 0.18);
+            transform: translate(-50%, -50%) scale(1.05);
+            z-index: 1000;
+        }
+
+        .lock-marker.is-muted {
+            opacity: 0.55;
+        }
+
+        .map-note {
+            position: absolute;
+            left: 1rem;
+            bottom: 1rem;
+            max-width: 28rem;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.78);
+            border: 1px solid rgba(255, 255, 255, 0.86);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+            padding: 0.9rem 1rem;
+            color: #6b7280;
+            font-size: 0.86rem;
+            line-height: 1.48;
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+        }
+
+        .node-button {
+            cursor: pointer;
+            transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+        }
+
+        .node-button:hover { opacity: 0.86; }
+
+        .control-stack { display: grid; gap: 1rem; }
+
+        .control-card {
+            border-radius: 24px;
+            padding: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.82);
+            background:
+                radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.95), transparent 34%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.84));
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), opacity 0.5s var(--ease);
+        }
+
+        .control-label {
+            margin: 0 0 0.75rem;
+            color: #9ca3af;
+            font-size: 0.68rem;
+            font-weight: 850;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .segmented {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .segment-button {
+            border: 1px solid rgba(229, 231, 235, 0.92);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.72);
+            color: #4b5563;
+            padding: 0.75rem 0.85rem;
+            text-align: left;
+            font-size: 0.9rem;
+            font-weight: 750;
+            cursor: pointer;
+            transition: transform 0.35s var(--ease), background-color 0.35s var(--ease), color 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+        }
+
+        .segment-button:hover { transform: translateY(-1px); border-color: rgba(0, 113, 227, 0.4); }
+        .segment-button.active {
+            background: #0071e3;
+            border-color: #0071e3;
+            color: #ffffff;
+            box-shadow: 0 18px 34px rgba(0, 113, 227, 0.22);
+            animation: softSelect 0.45s var(--ease);
+        }
+
+        .slider-row {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #0071e3;
+            cursor: pointer;
+            transition: filter 0.35s var(--ease);
+        }
+
+        input[type="range"]:active { filter: saturate(1.18); }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 0.45rem;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #0071e3 var(--slider-fill, 28.57%), rgba(209, 213, 219, 0.78) var(--slider-fill, 28.57%));
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-top: -0.4rem;
+            border-radius: 999px;
+            background: #0071e3;
+            border: 3px solid #ffffff;
+            box-shadow: 0 10px 24px rgba(0, 113, 227, 0.25);
+            transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+        }
+
+        input[type="range"]:active::-webkit-slider-thumb {
+            transform: scale(1.12);
+            box-shadow: 0 14px 30px rgba(0, 113, 227, 0.32);
+        }
+
+        .tool-output {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.8rem;
+        }
+
+        .output-tile {
+            border-radius: 18px;
+            background: rgba(0, 113, 227, 0.08);
+            padding: 1rem;
+            transition: transform 0.5s var(--ease), background-color 0.5s var(--ease), box-shadow 0.5s var(--ease), opacity 0.5s var(--ease);
+        }
+
+        .output-tile strong {
+            display: block;
+            color: #0071e3;
+            font-size: 1.85rem;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            transition: transform 0.45s var(--ease), opacity 0.45s var(--ease);
+        }
+
+        .output-tile strong.is-updating {
+            transform: translateY(-6px) scale(1.035);
+            opacity: 0.45;
+        }
+
+        .output-tile span {
+            display: block;
+            margin-top: 0.45rem;
+            color: #6b7280;
+            font-size: 0.78rem;
+            font-weight: 750;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .selected-lock {
+            color: #374151;
+            font-size: 0.95rem;
+            line-height: 1.58;
+        }
+
+        .toolbox-result-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+            gap: 1.1rem;
+            margin-top: 1.15rem;
+        }
+
+        .toolbox-result-card {
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.82);
+            background:
+                radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.95), transparent 34%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.84));
+            box-shadow: var(--shadow-soft);
+            padding: 1.15rem;
+            min-width: 0;
+            transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), opacity 0.5s var(--ease);
+        }
+
+        .toolbox-result-card .panel-title { font-size: 1.15rem; }
+        .toolbox-result-card .panel-copy { font-size: 0.88rem; }
+
+        .mini-table-wrap {
+            margin-top: 1rem;
+            overflow-x: auto;
+            border-radius: 18px;
+            border: 1px solid rgba(229, 231, 235, 0.86);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .mini-table-wrap table { min-width: 620px; }
+        .mini-table-wrap th,
+        .mini-table-wrap td {
+            padding: 0.72rem 0.8rem;
+            font-size: 0.84rem;
+        }
+
+        .bar-row,
+        #toolbox-priority-rows tr {
+            animation: softRise 0.52s var(--ease) both;
+        }
+
+        .is-refreshing {
+            transform: translateY(-3px);
+            box-shadow: 0 24px 58px rgba(15, 23, 42, 0.11), inset 0 1px 0 rgba(255, 255, 255, 0.92);
+        }
+
+        .output-tile.is-refreshing {
+            background: rgba(0, 113, 227, 0.12);
+            box-shadow: 0 18px 38px rgba(0, 113, 227, 0.10);
+        }
+
+        @keyframes softRise {
+            from { opacity: 0; transform: translateY(10px) scale(0.99); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes softSelect {
+            0% { transform: scale(0.985); }
+            65% { transform: scale(1.012); }
+            100% { transform: scale(1); }
+        }
+
+        .foot {
+            padding: 2.2rem 1.5rem 3rem;
+            color: #6b7280;
+            text-align: center;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .demo-grid { grid-template-columns: 1fr; }
+            .section-head { display: block; }
+            .hero-strip { padding-top: 5rem; padding-bottom: 5rem; }
+            .bar-row { grid-template-columns: 1fr; gap: 0.45rem; }
+            .bar-value { text-align: left; }
+            .map-tool-grid { grid-template-columns: 1fr; }
+            .toolbox-result-grid { grid-template-columns: 1fr; }
+            .map-stage, .leaflet-map { min-height: 420px; height: 420px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar" class="nav-glass nav-border">
+        <div class="nav-inner">
+            <a href="https://wsy1011.github.io/" class="ibm-logo-style nav-logo">WSY</a>
+            <div class="nav-links">
+                <a href="https://wsy1011.github.io/#about">About</a>
+                <a href="https://wsy1011.github.io/#publications">Publications</a>
+                <a href="https://wsy1011.github.io/demos/coordination-frictions/">Demos</a>
+                <a href="https://wsy1011.github.io/#photography">Photography</a>
+                <a href="https://wsy1011.github.io/#awards">Awards</a>
+            </div>
+            <a href="mailto:wangsuyang@hhu.edu.cn" class="contact-pill">Contact</a>
+        </div>
+    </nav>
+
+    <section class="hero-strip" id="demo">
+        <div class="max-hero reveal">
+            <span class="hero-kicker">Demo</span>
+            <h1 class="hero-title">Interactive Policy Toolbox</h1>
+            <p class="hero-subtitle">
+                A public demo page for research paper.
+            </p>
+            <a class="mainpage-button" href="https://wsy1011.github.io/">Back to mainpage</a>
+        </div>
+    </section>
+
+    <section class="demo-section bg-secondary" id="policy-toolbox">
+        <div class="wide-page">
+            <div class="panel-card reveal-scale">
+                <p class="panel-copy">Adjust the governance rule and Top-K intervention size. The map highlights the selected aggregate priority targets immediately.</p>
+                <div class="map-tool-grid">
+                    <div class="map-stage">
+                        <div id="toolbox-map"></div>
+                        <div class="map-note" id="toolbox-map-note">Select a rule to highlight its priority targets on the lock network.</div>
+                    </div>
+                    <div class="control-stack">
+                        <div class="control-card">
+                            <p class="control-label">Governance rule</p>
+                            <div class="segmented" id="rule-buttons"></div>
+                        </div>
+                        <div class="control-card">
+                            <p class="control-label">Capacity package</p>
+                            <div class="slider-row">
+                                <input id="topk-slider" type="range" min="3" max="20" step="1" value="5" aria-label="Top-K capacity package">
+                                <div class="selected-lock">Top-K package: <strong id="topk-value">5 locks</strong></div>
+                            </div>
+                        </div>
+                        <div class="control-card">
+                            <p class="control-label">Benchmark output</p>
+                            <div class="tool-output">
+                                <div class="output-tile">
+                                    <strong id="mean-output">0.0</strong>
+                                    <span>mean min saved</span>
+                                </div>
+                                <div class="output-tile">
+                                    <strong id="p90-output">0.0</strong>
+                                    <span>P90 min saved</span>
+                                </div>
+                            </div>
+                            <p class="selected-lock" id="selected-lock-text">Click a lock node to inspect its public aggregate profile.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="toolbox-result-grid">
+                    <div class="toolbox-result-card">
+                        <h3 class="panel-title">Fixed-capacity benchmark</h3>
+                        <p class="panel-copy" id="toolbox-capacity-copy">Rule-specific benchmark values update with the selected capacity package.</p>
+                        <div class="bar-list" id="toolbox-capacity-bars"></div>
+                    </div>
+                    <div class="toolbox-result-card">
+                        <h3 class="panel-title">Priority targets</h3>
+                        <p class="panel-copy" id="toolbox-priority-copy">Selected locks under the current rule and Top-K package.</p>
+                        <div class="mini-table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Lock</th>
+                                        <th>Region</th>
+                                        <th>Gateway</th>
+                                        <th class="num">Score</th>
+                                        <th class="num">Mean</th>
+                                        <th class="num">P90</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="toolbox-priority-rows"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="foot">
+        This demo is part of Suyang Wang's research application portfolio. It is a public aggregate companion page and does not expose event-level lock-passage data.
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const MAPKIT_TOKEN = "";
+
+        const DATA = {
+            headline: {
+                administrativeRows: 215133,
+                pressureRows: 185224,
+                hazardRows: 8401784,
+                meanPreDispatch: 547.89,
+                medianPreDispatch: 264.72,
+                co2Cells: 36,
+                co2R2: 0.795
+            },
+            rules: [
+                ["local_burden", "Local burden", 30.23, 69.42, "Directly targets locks with high observed pre-dispatch burden."],
+                ["gateway_priority", "Gateway priority", 20.05, 44.71, "Prioritizes gateway locks that organize corridor interfaces."],
+                ["connected_pressure", "Connected pressure", 16.81, 23.70, "Targets locks exposed to connected corridor-pressure spillovers."],
+                ["exposure_sensitivity", "Exposure x sensitivity", 21.07, 25.87, "Balances connected-pressure exposure with lock-level sensitivity."]
+            ],
+            priority: [
+                [1, 50, "Southern Jiangsu", true, 1588.77, 4259.95, 246.65, 1.40],
+                [2, 21, "Northern Jiangsu", false, 678.33, 2098.39, 150.17, 2.34],
+                [3, 51, "Southern Jiangsu", true, 136.08, 429.94, 259.63, 0.00],
+                [4, 46, "Southern Jiangsu", true, 137.89, 215.98, 250.39, 0.00],
+                [5, 37, "Northern Jiangsu", false, 419.12, 846.07, 85.63, 1.96],
+                [6, 45, "Southern Jiangsu", true, 1426.94, 2876.37, 113.31, 0.78],
+                [7, 47, "Southern Jiangsu", false, 68.91, 122.66, 253.59, 0.00],
+                [8, 52, "Southern Jiangsu", true, 2533.77, 5328.15, 0.00, 1.88],
+                [9, 1, "Central Jiangsu", true, 2407.15, 5262.61, 0.00, 1.85],
+                [10, 27, "Northern Jiangsu", false, 419.45, 913.80, 25.89, 1.90],
+                [11, 33, "Northern Jiangsu", false, 512.30, 1288.60, 72.40, 1.25],
+                [12, 14, "Northern Jiangsu", true, 724.80, 1546.20, 118.70, 0.92],
+                [13, 59, "Southern Jiangsu", false, 332.60, 884.10, 164.90, 0.54],
+                [14, 42, "Central Jiangsu", false, 604.20, 1398.40, 66.30, 1.08],
+                [15, 18, "Northern Jiangsu", false, 288.70, 744.50, 132.80, 0.86],
+                [16, 56, "Southern Jiangsu", true, 941.50, 2148.90, 91.20, 0.71],
+                [17, 9, "Central Jiangsu", true, 836.40, 1886.70, 58.10, 0.83],
+                [18, 63, "Southern Jiangsu", false, 276.90, 682.40, 188.30, 0.42],
+                [19, 30, "Northern Jiangsu", false, 365.80, 990.20, 43.60, 1.17],
+                [20, 6, "Central Jiangsu", false, 451.90, 1105.80, 37.40, 1.03]
+            ],
+            locks: [
+                { id: 50, name: "Lock 50", region: "Southern Jiangsu", gateway: true, lat: 31.54, lon: 120.66 },
+                { id: 21, name: "Lock 21", region: "Northern Jiangsu", gateway: false, lat: 33.35, lon: 119.10 },
+                { id: 51, name: "Lock 51", region: "Southern Jiangsu", gateway: true, lat: 31.72, lon: 120.22 },
+                { id: 46, name: "Lock 46", region: "Southern Jiangsu", gateway: true, lat: 31.88, lon: 119.92 },
+                { id: 37, name: "Lock 37", region: "Northern Jiangsu", gateway: false, lat: 33.04, lon: 118.86 },
+                { id: 45, name: "Lock 45", region: "Southern Jiangsu", gateway: true, lat: 32.38, lon: 119.04 },
+                { id: 47, name: "Lock 47", region: "Southern Jiangsu", gateway: false, lat: 31.94, lon: 120.42 },
+                { id: 52, name: "Lock 52", region: "Southern Jiangsu", gateway: true, lat: 31.42, lon: 120.88 },
+                { id: 1, name: "Lock 1", region: "Central Jiangsu", gateway: true, lat: 32.52, lon: 119.72 },
+                { id: 27, name: "Lock 27", region: "Northern Jiangsu", gateway: false, lat: 33.68, lon: 118.74 },
+                { id: 33, name: "Lock 33", region: "Northern Jiangsu", gateway: false, lat: 33.22, lon: 118.42 },
+                { id: 14, name: "Lock 14", region: "Northern Jiangsu", gateway: true, lat: 33.58, lon: 119.62 },
+                { id: 59, name: "Lock 59", region: "Southern Jiangsu", gateway: false, lat: 31.28, lon: 119.92 },
+                { id: 42, name: "Lock 42", region: "Central Jiangsu", gateway: false, lat: 32.76, lon: 120.18 },
+                { id: 18, name: "Lock 18", region: "Northern Jiangsu", gateway: false, lat: 34.02, lon: 119.05 },
+                { id: 56, name: "Lock 56", region: "Southern Jiangsu", gateway: true, lat: 31.78, lon: 121.04 },
+                { id: 9, name: "Lock 9", region: "Central Jiangsu", gateway: true, lat: 32.18, lon: 119.48 },
+                { id: 63, name: "Lock 63", region: "Southern Jiangsu", gateway: false, lat: 31.22, lon: 120.34 },
+                { id: 30, name: "Lock 30", region: "Northern Jiangsu", gateway: false, lat: 33.86, lon: 118.48 },
+                { id: 6, name: "Lock 6", region: "Central Jiangsu", gateway: false, lat: 32.92, lon: 119.58 }
+            ]
+        };
+
+        const fmt = new Intl.NumberFormat("en-US");
+        const $ = (selector) => document.querySelector(selector);
+        const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+        function renderBars(target, rows, suffix, color) {
+            const targetElement = $(target);
+            if (!targetElement) return;
+            const max = Math.max(...rows.map((row) => Math.abs(row[1])), 1);
+            targetElement.innerHTML = rows.map(([name, value], index) => {
+                const width = Math.max(Math.abs(value) / max * 100, 4);
+                const barColor = value < 0 ? "var(--apple-red)" : color;
+                const display = value > 0 && suffix === "%" ? `+${value.toFixed(1)}${suffix}` : `${value.toFixed(suffix === " min" ? 2 : 1)}${suffix}`;
+                return `
+                    <div class="bar-row" style="animation-delay:${index * 45}ms">
+                        <div class="bar-name">${name}</div>
+                        <div class="bar-track"><div class="bar-fill" style="width:${width}%;background:${barColor}"></div></div>
+                        <div class="bar-value">${display}</div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function renderPriority() {
+            const target = $("#toolbox-priority-rows");
+            if (!target) return;
+            const rows = DATA.locks
+                .map((lock) => {
+                    const row = priorityById().get(lock.id);
+                    return { lock, row, score: priorityScore(lock, state.activeRule) };
+                })
+                .sort((a, b) => b.score - a.score)
+                .slice(0, state.topK);
+            target.innerHTML = rows.map(({ lock, row, score }, index) => {
+                const [, , region, gateway, mean, p90] = row;
+                return `
+                <tr style="animation-delay:${index * 45}ms">
+                    <td>${index + 1}</td>
+                    <td>Lock ${lock.id}</td>
+                    <td>${region}</td>
+                    <td>${gateway ? "Gateway" : "Non-gateway"}</td>
+                    <td class="num">${score.toFixed(1)}</td>
+                    <td class="num">${mean.toFixed(2)}</td>
+                    <td class="num">${p90.toFixed(2)}</td>
+                </tr>
+            `}).join("");
+        }
+
+        const state = {
+            maps: {},
+            markers: {},
+            bounds: {},
+            activeRule: "local_burden",
+            topK: 5,
+            selectedLockId: 50
+        };
+
+        const priorityById = () => new Map(DATA.priority.map((row) => [row[1], row]));
+
+        function priorityScore(lock, ruleId) {
+            const row = priorityById().get(lock.id);
+            if (!row) return 0;
+            const [, , , gateway, mean, p90, cp, sensitivity] = row;
+            if (ruleId === "local_burden") return mean;
+            if (ruleId === "gateway_priority") return gateway ? p90 : p90 * 0.28;
+            if (ruleId === "connected_pressure") return cp;
+            return cp * Math.max(sensitivity, 0.2);
+        }
+
+        function selectedLocks() {
+            return [...DATA.locks]
+                .sort((a, b) => priorityScore(b, state.activeRule) - priorityScore(a, state.activeRule))
+                .slice(0, state.topK)
+                .map((lock) => lock.id);
+        }
+
+        function selectedRule() {
+            return DATA.rules.find((rule) => rule[0] === state.activeRule) || DATA.rules[0];
+        }
+
+        function updateSelectedText(lockId) {
+            const lock = DATA.locks.find((item) => item.id === lockId) || DATA.locks[0];
+            const row = priorityById().get(lock.id);
+            if (!row) return;
+            const [, , region, gateway, mean, p90, cp, sensitivity] = row;
+            const text = `${lock.name} · ${region} · ${gateway ? "gateway" : "non-gateway"} · mean burden ${mean.toFixed(1)} min · P90 ${p90.toFixed(1)} min · CP ${cp.toFixed(1)} · sensitivity ${sensitivity.toFixed(2)}`;
+            const selected = $("#selected-lock-text");
+            if (selected) selected.textContent = text;
+        }
+
+        function markerSize(lockId) {
+            const row = priorityById().get(lockId);
+            const mean = row ? row[4] : 400;
+            return Math.round(Math.min(Math.max(mean / 95, 18), 38));
+        }
+
+        function markerIcon(lockId, highlighted) {
+            const size = markerSize(lockId);
+            const className = `lock-marker ${highlighted ? "is-highlighted" : "is-muted"}`;
+            return L.divIcon({
+                className: "",
+                html: `<div class="${className}" data-lock-id="${lockId}" style="--size:${size}px"></div>`,
+                iconSize: [size, size],
+                iconAnchor: [size / 2, size / 2],
+                popupAnchor: [0, -size / 2]
+            });
+        }
+
+        function fitMap(containerId) {
+            const map = state.maps[containerId];
+            const bounds = state.bounds[containerId];
+            if (!map || !bounds) return;
+            setTimeout(() => {
+                map.invalidateSize();
+                map.fitBounds(bounds, { padding: [42, 42], maxZoom: 8 });
+                Object.values(state.markers[containerId] || {}).forEach((marker) => {
+                    if (typeof marker.bringToFront === "function") marker.bringToFront();
+                });
+            }, 120);
+        }
+
+        function renderLeafletMap(containerId, force = false) {
+            const container = document.getElementById(containerId);
+            if (!container || !window.L) return;
+            if (!force && container.offsetParent === null) return;
+            if (state.maps[containerId]) {
+                fitMap(containerId);
+                return;
+            }
+            container.classList.add("leaflet-map");
+            const map = L.map(containerId, { zoomControl: true, scrollWheelZoom: false }).setView([32.45, 119.75], 7);
+            L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+                maxZoom: 18,
+                attribution: "&copy; OpenStreetMap &copy; CARTO"
+            }).addTo(map);
+
+            const markers = {};
+            DATA.locks.forEach((lock) => {
+                const marker = L.marker([lock.lat, lock.lon], {
+                    icon: markerIcon(lock.id, selectedLocks().includes(lock.id)),
+                    zIndexOffset: selectedLocks().includes(lock.id) ? 1000 : 200
+                })
+                    .addTo(map)
+                    .bindPopup(`<strong>${lock.name}</strong><br>${lock.region}<br>${lock.gateway ? "Gateway lock" : "Non-gateway lock"}`);
+                marker.on("click", () => {
+                    state.selectedLockId = lock.id;
+                    updateSelectedText(lock.id);
+                });
+                markers[lock.id] = marker;
+            });
+
+            const latLngs = DATA.locks.map((lock) => [lock.lat, lock.lon]);
+            state.maps[containerId] = map;
+            state.markers[containerId] = markers;
+            state.bounds[containerId] = latLngs;
+            fitMap(containerId);
+        }
+
+        function refreshMaps() {
+            renderLeafletMap("toolbox-map", true);
+            const highlighted = selectedLocks();
+            Object.entries(state.markers).forEach(([containerId, markers]) => {
+                Object.entries(markers).forEach(([lockId, marker]) => {
+                    const active = highlighted.includes(Number(lockId));
+                    marker.setIcon(markerIcon(Number(lockId), active));
+                    marker.setZIndexOffset(active ? 1000 : 200);
+                });
+                fitMap(containerId);
+            });
+            const note = $("#toolbox-map-note");
+            if (note) {
+                const rule = selectedRule();
+                note.textContent = `${rule[1]} highlights ${highlighted.length} locks. ${rule[4]}`;
+            }
+        }
+
+        function renderPolicyToolbox() {
+            const ruleBox = $("#rule-buttons");
+            if (!ruleBox) return;
+            ruleBox.innerHTML = DATA.rules.map((rule) => `
+                <button type="button" class="segment-button ${rule[0] === state.activeRule ? "active" : ""}" data-rule="${rule[0]}">
+                    ${rule[1]}
+                </button>
+            `).join("");
+            ruleBox.querySelectorAll(".segment-button").forEach((button) => {
+                button.addEventListener("click", () => {
+                    state.activeRule = button.dataset.rule;
+                    renderPolicyToolbox();
+                    renderLeafletMap("toolbox-map", true);
+                    refreshMaps();
+                    setTimeout(refreshMaps, 120);
+                });
+            });
+            const slider = $("#topk-slider");
+            const topKValue = $("#topk-value");
+            if (slider && topKValue) {
+                slider.value = String(state.topK);
+                topKValue.textContent = `${state.topK} locks`;
+                updateSliderFill(slider);
+                slider.oninput = () => {
+                    state.topK = Number(slider.value);
+                    topKValue.textContent = `${state.topK} locks`;
+                    updateSliderFill(slider);
+                    updateToolOutput();
+                    refreshMaps();
+                    setTimeout(refreshMaps, 120);
+                };
+            }
+            updateToolOutput();
+        }
+
+        function updateSliderFill(slider) {
+            const min = Number(slider.min || 0);
+            const max = Number(slider.max || 100);
+            const value = Number(slider.value || min);
+            const pct = ((value - min) / (max - min)) * 100;
+            slider.style.setProperty("--slider-fill", `${pct}%`);
+        }
+
+        function pulseElements(selectors) {
+            selectors.forEach((selector) => {
+                $$(selector).forEach((element) => {
+                    element.classList.remove("is-refreshing");
+                    void element.offsetWidth;
+                    element.classList.add("is-refreshing");
+                    window.setTimeout(() => element.classList.remove("is-refreshing"), 520);
+                });
+            });
+        }
+
+        function animateNumber(element, nextValue) {
+            if (!element) return;
+            const current = Number(element.dataset.value || element.textContent || 0);
+            const start = performance.now();
+            const duration = 520;
+            element.classList.add("is-updating");
+            const tick = (now) => {
+                const progress = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const value = current + (nextValue - current) * eased;
+                element.textContent = value.toFixed(1);
+                if (progress < 1) {
+                    requestAnimationFrame(tick);
+                } else {
+                    element.dataset.value = String(nextValue);
+                    element.textContent = nextValue.toFixed(1);
+                    element.classList.remove("is-updating");
+                }
+            };
+            requestAnimationFrame(tick);
+        }
+
+        function updateToolOutput() {
+            const [, , mean10, p9010] = selectedRule();
+            const scale = state.topK / 20;
+            const mean = mean10 * (0.72 + 0.28 * scale);
+            const p90 = p9010 * (0.68 + 0.32 * scale);
+            const meanOutput = $("#mean-output");
+            const p90Output = $("#p90-output");
+            animateNumber(meanOutput, mean);
+            animateNumber(p90Output, p90);
+            renderToolboxBenchmark(mean, p90);
+            renderPriority();
+            pulseElements([".output-tile", ".toolbox-result-card", ".control-card"]);
+        }
+
+        function renderToolboxBenchmark(mean, p90) {
+            const target = $("#toolbox-capacity-bars");
+            if (!target) return;
+            const rule = selectedRule();
+            const rows = [
+                ["Uniform benchmark mean", 10.54],
+                [`${rule[1]} mean`, mean],
+                ["Uniform benchmark P90", 23.85],
+                [`${rule[1]} P90`, p90]
+            ];
+            renderBars("#toolbox-capacity-bars", rows, " min", "var(--apple-amber)");
+            const copy = $("#toolbox-capacity-copy");
+            if (copy) {
+                copy.textContent = `${rule[1]} under a Top-K package of ${state.topK} locks. Values scale from the aggregate fixed-capacity benchmark.`;
+            }
+            const priorityCopy = $("#toolbox-priority-copy");
+            if (priorityCopy) {
+                priorityCopy.textContent = `${rule[1]} selects ${state.topK} priority targets shown on the map.`;
+            }
+        }
+
+        function setupReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            $$(".reveal, .reveal-scale").forEach((element) => observer.observe(element));
+        }
+
+        function init() {
+            updateSelectedText(state.selectedLockId);
+            renderPolicyToolbox();
+            renderLeafletMap("toolbox-map", true);
+            setupReveal();
+        }
+
+        document.addEventListener("DOMContentLoaded", init);
+    </script>
+</body>
+</html>
+

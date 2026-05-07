@@ -9,6 +9,7 @@ The site is a static single-page homepage built with plain HTML, Tailwind CSS vi
 - Academic profile and contact links
 - Education and research focus
 - Publications with expandable detail cards
+- Demo dropdown linking to interactive research subpages
 - Photography gallery with image preview
 - Awards and honors
 - Footer notice for template reuse under the MIT License
@@ -22,6 +23,9 @@ The site is a static single-page homepage built with plain HTML, Tailwind CSS vi
 |   +-- photo-0401.jpg
 |   +-- photo-2087.jpg
 |   +-- photo-6324.jpg
++-- demos/
+|   +-- coordination-frictions/
+|       +-- index.html
 +-- index.html
 +-- LICENSE
 +-- README.md
