@@ -136,6 +136,7 @@
 
         .card-published { background: linear-gradient(135deg, #F7FFF9 0%, #E3FBEA 48%, #D9F8E5 100%); }
         .card-under-review { background: linear-gradient(135deg, #FFFDF1 0%, #FFF5C9 52%, #FFEFB2 100%); }
+        .card-working-paper { background: linear-gradient(135deg, #F1F8FF 0%, #DCEEFF 50%, #C9E2FF 100%); }
 
         .apple-card {
             background: rgba(255, 255, 255, 0.86);
@@ -456,10 +457,12 @@
     </footer>
 
     <script>
-        // Core data: manually sorted by date from newest to oldest (April 2026 -> December 2021)
+        // Core data: manually sorted by status and date from newest to oldest.
         const publications = [
+            { id: 201, status: "Working Paper", articleType: "Manuscript", journalShort: "Working Paper", journalFull: "Working Paper", date: "Latest", title: "Operational Strategies for Low-Emission Inland Shipping", authors: "Suyang Wang", keywords: "Inland shipping; Low-emission operations; Operational strategy.", abstract: "Manuscript in progress.", citation: "" },
+            { id: 202, status: "Working Paper", articleType: "Manuscript", journalShort: "Working Paper", journalFull: "Working Paper", date: "Latest", title: "Governance and Bottlenecks in Inland Waterway Transport", authors: "Suyang Wang", keywords: "Inland waterway transport; Governance; Bottlenecks.", abstract: "Manuscript in progress.", citation: "" },
             { id: 101, status: "Under Review", articleType: "Journal Article", journalShort: "Transp. Res. Part D", journalFull: "Transportation Research Part D: Transport and Environment", date: "April 2026", title: "From Ship to Supply Chain: Evidence on Inland Waterway Decarbonization in China", authors: "Suyang Wang, Xuejun Feng*, Guangyu Huang, Lanqin Ma, Ruihua Wang, Kum Fai Yuen*, Min Wu*", keywords: "Inland shipping; Carbon intensity; EEOI; Voyage organization; Regional supply chains; Decarbonization governance", abstract: "", citation: "" },
-            { id: 102, status: "Under Review", articleType: "Journal Article", journalShort: "Int. J. Disaster Risk Reduct.", journalFull: "International Journal of Disaster Risk Reduction", date: "March 2026", title: "Risk-Informed and Disruption-Aware Rescue-Base Siting for Emergency Preparedness in Tidal Inland Waterways", authors: "Mingchang Huang, Zhiyi Lei, Suyang Wang*, Guangyu Huang, Liangen Zeng*", keywords: "AIS trajectories; hydrodynamic modelling; emergency preparedness; Disaster risk reduction; robust rescue-base siting; tidal inland waterways", abstract: "", citation: "" },
+            { id: 102, status: "Under Review", articleType: "Journal Article", journalShort: "Int. J. Disaster Risk Reduct.", journalFull: "International Journal of Disaster Risk Reduction", date: "April 2026", title: "Risk-Informed and Disruption-Aware Rescue-Base Siting for Emergency Preparedness in Tidal Inland Waterways", authors: "Mingchang Huang, Zhiyi Lei, Suyang Wang*, Guangyu Huang, Liangen Zeng*", keywords: "AIS trajectories; hydrodynamic modelling; emergency preparedness; Disaster risk reduction; robust rescue-base siting; tidal inland waterways", abstract: "", citation: "" },
             { id: 103, status: "Under Review", articleType: "Journal Article", journalShort: "Transp. Res. Part D", journalFull: "Transportation Research Part D: Transport and Environment", date: "April 2026", title: "Collaborative Planning Framework for Heavy-Duty Truck Electrification: Corridor-Port Integrated Energy Systems", authors: "Ruihua Wang, Xuejun Feng*, Suyang Wang, Kaixuan Tao, Kum Fai Yuen*, Min Wu*", keywords: "Port integrated energy system; Green freight corridor; Heavy-duty truck electrification; Renewable energy; Two-stage distributionally robust optimisation; Battery swapping station", abstract: "", citation: "" },
             { id: 1, status: "Published", articleType: "Journal Article", journalShort: "Transp. Lett.", journalFull: "Transportation Letters: The International Journal of Transportation Research", date: "January 2026", title: "A Study on Dynamic Scheduling of AGV in ACTs with Consideration of Battery Constraints", authors: "Ruihua Wang, Xuejun Feng*, Suyang Wang, Ran Yan", keywords: "Automated container terminal; AGV; scheduling; wireless charging; charging strategy; dual-engine decision-making.", abstract: "Automated guided vehicles (AGVs) have significantly improved automation and efficiency in automated container terminals (ACTs). As AGVs rely on electric power, their operational range directly influences their overall performance, making effective battery management essential. This study introduces the first application of wireless AGV charging at ports, developing a hybrid AGV charging system. A dual-engine mechanism is proposed: a rule engine formulates task assignment strategies, while a learning engine employing a hybrid metaheuristic-based algorithm optimizes routing. Integrating real-time battery status into scheduling achieves dynamic coordination between task allocation and path planning. Results show wireless charging reduces centralized charging events and shortens AGV idle time by 7.21%. Combined with optimized scheduling, terminal efficiency further improves, reducing operational time by an additional 10.31%. Optimal performance occurs at a 16% charging threshold, balancing charging frequency, equipment lifespan, and scheduling stability. These findings support effective decision-making for AGV energy strategies in ACTs.", citation: "Wang, Ruihua, Feng, Xuejun, Wang, Suyang, & Yan, Ran. (2026). A study on dynamic scheduling of AGV in ACTs with consideration of battery constraints. Transportation Letters: The International Journal of Transportation Research. Advance online publication. https://doi.org/10.1080/19427867.2026.2613148" },
             { id: 2, status: "Published", articleType: "Journal Article", journalShort: "J. Hohai Univ.", journalFull: "Journal of Hohai University (Natural Sciences)", date: "October 2025", title: "A Review of Research on Ship Speed Optimization Driven by Multi-Source Environmental Information Fusion", authors: "Suyang Wang, Xuejun Feng*, Lanqing Ma, Jinxing Shen, Zhonglian Jiang", keywords: "Ship speed optimization; navigation environment; energy saving and emission reduction; multi-source information fusion; data-driven.", abstract: "Ship speed optimization is a key technical measure for reducing energy consumption and emissions, where considering the dynamic navigation environment is crucial for achieving precise optimization. This paper systematically reviews the research progress in this field from three perspectives: environmental impact mechanisms, information perception technologies, and optimization models and algorithms. The review shows that existing models have evolved from static planning to dynamic optimal control methods capable of handling time-varying environments. Meanwhile, data-driven techniques have been widely applied to environmental forecasting and energy consumption modeling, enhancing optimization accuracy and efficiency. Despite significant progress, challenges remain in the refined modeling of ship-environment coupling mechanisms, the robustness and efficiency of optimization algorithms, and multi-objective collaborative optimization. Future work should strengthen research on coupling mechanisms, develop intelligent algorithms that integrate machine learning with traditional methods, and expand the optimization scope from single ships to fleet collaboration to promote the continuous development and application of this technology.", citation: "Wang, Suyang, Feng, Xuejun, Ma, Lanqing, Shen, Jinxing, & Jiang, Zhonglian. (2025). A review of research on ship speed optimization driven by multi-source environmental information fusion. Journal of Hohai University (Natural Sciences). Advance online publication. https://link.cnki.net/urlid/32.1117.TV.20251010.1023.010" },
@@ -492,15 +495,21 @@
             // 渲染论文卡片
             const pubTrack = document.getElementById('pub-carousel-track');
             if (pubTrack) {
+                const statusStyles = {
+                    "Working Paper": { card: "card-working-paper", text: "text-blue-500", bg: "bg-blue-500" },
+                    "Under Review": { card: "card-under-review", text: "text-amber-500", bg: "bg-amber-500" },
+                    "Published": { card: "card-published", text: "text-emerald-500", bg: "bg-emerald-500" }
+                };
                 publications.forEach(pub => {
                     const card = document.createElement('div');
-                    const statusClass = pub.status === "Under Review" ? "card-under-review" : "card-published";
+                    const style = statusStyles[pub.status] || statusStyles.Published;
+                    const statusClass = style.card;
                     card.className = `pub-card-custom ${statusClass} flex-none w-[280px] md:w-[340px] h-[460px] md:h-[500px] snap-center flex flex-col justify-between reveal-scale cursor-pointer`;
                     card.dataset.id = pub.id;
                     
-                    const dotColor = pub.status === "Under Review" ? "text-amber-500" : "text-emerald-500";
-                    const btnColor = pub.status === "Under Review" ? "bg-amber-500" : "bg-emerald-500";
-                    const dotBg = pub.status === "Under Review" ? "bg-amber-500" : "bg-emerald-500";
+                    const dotColor = style.text;
+                    const btnColor = style.bg;
+                    const dotBg = style.bg;
                     const statusTag = `<span class="${dotColor} inline-flex items-center font-bold tracking-tight text-[11px] md:text-xs uppercase"><span class="${dotBg} mr-1.5 h-2 w-2 rounded-full"></span>${pub.status}</span>`;
                     const typeTag = `<span class="text-gray-500 font-bold tracking-tight text-[11px] md:text-xs uppercase">${pub.articleType}</span>`;
 
@@ -568,11 +577,14 @@
                 document.getElementById('modal-author-tags').innerHTML = renderAuthorTags(pub.authors);
                 document.getElementById('modal-authors').innerHTML = highlightSuyang(pub.authors);
                 document.getElementById('modal-keywords').innerText = pub.keywords;
-                if(pub.status === "Under Review") {
-                    absSec.style.display = 'none'; citSec.style.display = 'none';
-                } else {
-                    absSec.style.display = 'block'; citSec.style.display = 'block';
+                const hasAbstract = Boolean(pub.abstract);
+                const hasCitation = Boolean(pub.citation);
+                absSec.style.display = hasAbstract ? 'block' : 'none';
+                citSec.style.display = hasCitation ? 'block' : 'none';
+                if (hasAbstract) {
                     document.getElementById('modal-abstract').innerText = pub.abstract;
+                }
+                if (hasCitation) {
                     document.getElementById('modal-citation').innerText = pub.citation;
                 }
                 modal.classList.add('active');
