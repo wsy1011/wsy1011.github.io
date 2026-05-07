@@ -327,7 +327,8 @@
                     
                     const dotColor = pub.status === "Under Review" ? "text-amber-500" : "text-emerald-500";
                     const btnColor = pub.status === "Under Review" ? "bg-amber-500" : "bg-emerald-500";
-                    const statusTag = `<span class="${dotColor} font-bold tracking-tight text-[11px] md:text-xs uppercase"><i class="fas fa-circle text-[8px] align-middle mr-1.5 mb-[2px]"></i>${pub.status}</span>`;
+                    const dotBg = pub.status === "Under Review" ? "bg-amber-500" : "bg-emerald-500";
+                    const statusTag = `<span class="${dotColor} inline-flex items-center font-bold tracking-tight text-[11px] md:text-xs uppercase"><span class="${dotBg} mr-1.5 h-2 w-2 rounded-full"></span>${pub.status}</span>`;
                     const typeTag = `<span class="text-gray-500 font-bold tracking-tight text-[11px] md:text-xs uppercase">${pub.articleType}</span>`;
 
                     card.innerHTML = `
