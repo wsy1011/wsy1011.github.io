@@ -20,7 +20,10 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            background-color: var(--apple-bg);
+            background:
+                radial-gradient(circle at 18% 8%, rgba(0, 113, 227, 0.08), transparent 30%),
+                radial-gradient(circle at 86% 18%, rgba(52, 199, 89, 0.08), transparent 28%),
+                linear-gradient(180deg, #ffffff 0%, #fbfbfd 46%, #f5f5f7 100%);
             color: var(--apple-text);
             -webkit-font-smoothing: antialiased;
             margin: 0;
@@ -36,6 +39,10 @@
             top: 0;
             z-index: 50;
         }
+        #navbar a {
+            transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #navbar a:hover { transform: translateY(-1px); }
 
         .reveal {
             opacity: 0;
@@ -78,28 +85,79 @@
 
         .pub-card-custom {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            position: relative;
+            isolation: isolate;
             border-radius: 28px;
             padding: 2.2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+            box-shadow: 0 16px 44px rgba(15, 23, 42, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.82);
+            border: 1px solid rgba(255, 255, 255, 0.92);
+            overflow: hidden;
+            transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.55s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .pub-card-custom * {
             font-family: inherit;
+        }
+        .pub-card-custom::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.95), transparent 36%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.65), transparent 58%);
+            opacity: 0.74;
+            pointer-events: none;
+        }
+        .pub-card-custom::after {
+            content: "";
+            position: absolute;
+            inset: -60% auto auto -85%;
+            width: 70%;
+            height: 220%;
+            transform: rotate(18deg) translateX(-40%);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.72), transparent);
+            opacity: 0;
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
         }
         #pub-modal-content,
         #pub-modal-content * {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
         .pub-card-custom:hover {
-            transform: scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            transform: translateY(-8px) scale(1.025);
+            filter: saturate(1.04);
+            box-shadow: 0 28px 70px rgba(15, 23, 42, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.94);
+        }
+        .pub-card-custom:hover::after {
+            opacity: 1;
+            transform: rotate(18deg) translateX(290%);
         }
 
-        .card-published { background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); }
-        .card-under-review { background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%); }
+        .card-published { background: linear-gradient(135deg, #F7FFF9 0%, #E3FBEA 48%, #D9F8E5 100%); }
+        .card-under-review { background: linear-gradient(135deg, #FFFDF1 0%, #FFF5C9 52%, #FFEFB2 100%); }
 
-        .apple-card { background: #ffffff; border-radius: 24px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02); overflow: hidden; }
+        .apple-card {
+            background: rgba(255, 255, 255, 0.86);
+            border-radius: 24px;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.76);
+        }
+        .photo-card {
+            transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .photo-card img {
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .photo-card:hover {
+            transform: translateY(-7px) scale(1.018);
+            box-shadow: 0 28px 70px rgba(15, 23, 42, 0.16);
+        }
+        .photo-card:hover img {
+            transform: scale(1.055);
+            filter: saturate(1.06) contrast(1.03);
+        }
         
         #pub-modal-overlay {
             background: rgba(245, 245, 247, 0.85);
@@ -112,6 +170,24 @@
         #pub-modal-overlay.active { opacity: 1; visibility: visible; }
         #pub-modal-content { transform: scale(0.9) translateY(20px); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         #pub-modal-overlay.active #pub-modal-content { transform: scale(1) translateY(0); }
+        .open-modal-btn,
+        #pub-scroll-left,
+        #pub-scroll-right,
+        #photo-scroll-left,
+        #photo-scroll-right,
+        #close-modal,
+        #close-photo-modal {
+            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .open-modal-btn:hover,
+        #pub-scroll-left:hover,
+        #pub-scroll-right:hover,
+        #photo-scroll-left:hover,
+        #photo-scroll-right:hover,
+        #close-modal:hover,
+        #close-photo-modal:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
 
         #avatar-container { cursor: pointer; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         #avatar-container:hover { transform: scale(1.01); }
@@ -129,6 +205,16 @@
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         #photo-modal-overlay.active #photo-modal-content { transform: translateY(0) scale(1); }
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
