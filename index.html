@@ -413,6 +413,34 @@
             if (closeBtn) closeBtn.addEventListener('click', close);
             if (modal) modal.addEventListener('click', (e) => { if(e.target === modal) close(); });
 
+            // Non-linear navigation scrolling
+            const easeOutExpo = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+            const animateScrollTo = (targetY, duration = 900) => {
+                const startY = window.scrollY;
+                const distance = targetY - startY;
+                const startTime = performance.now();
+                const step = (now) => {
+                    const progress = Math.min((now - startTime) / duration, 1);
+                    window.scrollTo(0, startY + distance * easeOutExpo(progress));
+                    if (progress < 1) requestAnimationFrame(step);
+                };
+                requestAnimationFrame(step);
+            };
+            document.querySelectorAll('nav a[href^="#"]').forEach((link) => {
+                link.addEventListener('click', (event) => {
+                    const hash = link.getAttribute('href');
+                    const target = hash === '#' ? document.body : document.querySelector(hash);
+                    if (!target) return;
+                    event.preventDefault();
+                    const navHeight = document.getElementById('navbar')?.offsetHeight || 0;
+                    const targetY = hash === '#'
+                        ? 0
+                        : target.getBoundingClientRect().top + window.scrollY - navHeight - 12;
+                    animateScrollTo(Math.max(targetY, 0));
+                    history.pushState(null, '', hash);
+                });
+            });
+
             // 滚动控制
             const setup = (tid, l, r) => {
                 const t = document.getElementById(tid);
