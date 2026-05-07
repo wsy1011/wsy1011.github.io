@@ -158,6 +158,31 @@
             transform: scale(1.055);
             filter: saturate(1.06) contrast(1.03);
         }
+        .award-card {
+            min-height: 210px;
+            padding: 1.6rem;
+            border-radius: 24px;
+            background:
+                radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.95), transparent 34%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.84));
+            border: 1px solid rgba(255, 255, 255, 0.82);
+            box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1), background 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .award-card:hover {
+            transform: translateY(-7px) scale(1.018);
+            box-shadow: 0 28px 70px rgba(15, 23, 42, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.96);
+        }
+        .award-icon {
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            background: rgba(0, 113, 227, 0.1);
+            color: #0071E3;
+        }
         
         #pub-modal-overlay {
             background: rgba(245, 245, 247, 0.85);
@@ -379,7 +404,7 @@
     <section id="awards" class="py-24 px-6 bg-[#f5f5f7] text-left">
         <div class="max-w-4xl mx-auto text-left">
             <h3 class="text-3xl md:text-4xl font-bold mb-12 tracking-tight reveal text-center">Awards & Honors</h3>
-            <div class="apple-card p-8 md:p-12 reveal-scale"><ul id="awards-list" class="space-y-8"></ul></div>
+            <ul id="awards-list" class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6"></ul>
         </div>
     </section>
 
@@ -469,8 +494,8 @@
             if (al) {
                 awards.forEach((a, i) => {
                     const li = document.createElement('li');
-                    li.className = `flex items-start reveal delay-${(i+1)*100}`;
-                    li.innerHTML = `<div class="flex-shrink-0 mt-1 text-gray-800"><i class="fas ${a.icon} text-xl"></i></div><div class="ml-4 text-left"><h4 class="text-lg font-bold text-gray-900">${a.title}</h4><p class="text-gray-500 text-sm">${a.detail}</p><p class="text-gray-400 text-sm mt-1">${a.issuer}</p></div>`;
+                    li.className = `award-card reveal-scale delay-${(i+1)*100}`;
+                    li.innerHTML = `<div class="award-icon mb-5"><i class="fas ${a.icon} text-lg"></i></div><div class="text-left"><h4 class="text-xl font-bold text-gray-900 leading-tight">${a.title}</h4><p class="text-gray-500 text-sm mt-3">${a.detail}</p><p class="text-gray-400 text-sm mt-2">${a.issuer}</p></div>`;
                     al.appendChild(li);
                 });
             }
