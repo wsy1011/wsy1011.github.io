@@ -20,9 +20,11 @@ The site is a static single-page homepage built with plain HTML, Tailwind CSS vi
 .
 +-- assets/
 |   +-- avatar.png
+|   +-- main.js
 |   +-- photo-0401.jpg
 |   +-- photo-2087.jpg
 |   +-- photo-6324.jpg
+|   +-- site-data.js
 +-- demos/
 |   +-- coordination-frictions/
 |       +-- index.html
@@ -40,6 +42,10 @@ file:///D:/Code/personal-homepage/index.html
 ```
 
 No build step is required.
+
+## Editing Content
+
+Edit publications and awards in `assets/site-data.js`. The homepage layout stays in `index.html`, while carousel rendering, modals, scrolling, and gallery interactions live in `assets/main.js`.
 
 ## GitHub Pages
 
