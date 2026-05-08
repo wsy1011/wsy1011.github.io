@@ -43,6 +43,11 @@
             transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
         }
         #navbar a:hover { transform: translateY(-1px); }
+        .mobile-nav-scroll {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .mobile-nav-scroll::-webkit-scrollbar { display: none; }
 
         .reveal {
             opacity: 0;
@@ -318,6 +323,13 @@
             </div>
             <a href="mailto:wangsuyang@hhu.edu.cn" class="bg-[#0071e3] text-white px-4 py-1.5 rounded-full hover:bg-[#0077ed] transition-colors text-xs font-semibold z-20">Contact</a>
         </div>
+        <div class="mobile-nav-scroll md:hidden flex gap-6 overflow-x-auto whitespace-nowrap px-5 pb-3 text-[13px] font-medium text-gray-500">
+            <a href="#about" class="hover:text-gray-900 transition-colors">About</a>
+            <a href="#publications" class="hover:text-gray-900 transition-colors">Publications</a>
+            <a href="demos/coordination-frictions/index.html" class="hover:text-gray-900 transition-colors">Demo</a>
+            <a href="#photography" class="hover:text-gray-900 transition-colors">Photography</a>
+            <a href="#awards" class="hover:text-gray-900 transition-colors">Awards</a>
+        </div>
     </nav>
 
     <!-- 顶部金句模块 -->
@@ -336,10 +348,10 @@
                 <div class="reveal text-left">
                     <h1 class="leadership-name tracking-tight">Suyang Wang</h1>
                     <h2 class="leadership-title font-medium">Ph.D. Candidate at Hohai University</h2>
-                    <div class="flex items-center space-x-4 mt-8">
-                        <a href="https://orcid.org/my-orcid?orcid=0009-0002-8499-1181" target="_blank" class="text-[#0071e3] hover:underline font-medium text-[17px]">ORCID Profile <i class="fas fa-chevron-right text-[10px] ml-1"></i></a>
-                        <a href="https://github.com/wsy1011" target="_blank" class="text-[#0071e3] hover:underline font-medium text-[17px]">GitHub <i class="fas fa-chevron-right text-[10px] ml-1"></i></a>
-                        <a href="https://www.researchgate.net/profile/Suyang-Wang-6?ev=hdr_xprf" target="_blank" class="text-[#0071e3] hover:underline font-medium text-[17px]">ResearchGate</a>
+                    <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+                        <a href="https://orcid.org/my-orcid?orcid=0009-0002-8499-1181" target="_blank" class="inline-flex items-center gap-1 whitespace-nowrap text-[#0071e3] hover:underline font-medium text-[17px]">ORCID Profile <i class="fas fa-chevron-right text-[10px]"></i></a>
+                        <a href="https://github.com/wsy1011" target="_blank" class="inline-flex items-center gap-1 whitespace-nowrap text-[#0071e3] hover:underline font-medium text-[17px]">GitHub <i class="fas fa-chevron-right text-[10px]"></i></a>
+                        <a href="https://www.researchgate.net/profile/Suyang-Wang-6?ev=hdr_xprf" target="_blank" class="inline-flex items-center whitespace-nowrap text-[#0071e3] hover:underline font-medium text-[17px]">ResearchGate</a>
                     </div>
                 </div>
                 <div class="mt-12 md:mt-0 reveal-scale delay-100">
@@ -475,13 +487,13 @@
     </section>
 
     <footer class="bg-white py-12 px-6 border-t border-gray-200">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
             <div class="mb-4 md:mb-0">&copy; 2026 Suyang Wang. All rights reserved.</div>
-            <div class="flex space-x-6 font-medium">
-                <a href="mailto:wangsuyang@hhu.edu.cn" class="hover:text-gray-900 transition-colors">Contact</a>
-                <a href="https://orcid.org/my-orcid?orcid=0009-0002-8499-1181" target="_blank" class="hover:text-gray-900 transition-colors">ORCID</a>
-                <a href="https://github.com/wsy1011" target="_blank" class="hover:text-gray-900 transition-colors">GitHub</a>
-                <a href="https://www.researchgate.net/profile/Suyang-Wang-6?ev=hdr_xprf" target="_blank" class="hover:text-gray-900 transition-colors">ResearchGate</a>
+            <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 font-medium">
+                <a href="mailto:wangsuyang@hhu.edu.cn" class="whitespace-nowrap hover:text-gray-900 transition-colors">Contact</a>
+                <a href="https://orcid.org/my-orcid?orcid=0009-0002-8499-1181" target="_blank" class="whitespace-nowrap hover:text-gray-900 transition-colors">ORCID</a>
+                <a href="https://github.com/wsy1011" target="_blank" class="whitespace-nowrap hover:text-gray-900 transition-colors">GitHub</a>
+                <a href="https://www.researchgate.net/profile/Suyang-Wang-6?ev=hdr_xprf" target="_blank" class="whitespace-nowrap hover:text-gray-900 transition-colors">ResearchGate</a>
             </div>
         </div>
         <p class="max-w-6xl mx-auto mt-6 text-center md:text-left text-xs leading-relaxed text-gray-400">
