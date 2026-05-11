@@ -24,13 +24,21 @@ The site is a static single-page homepage built with plain HTML, Tailwind CSS vi
 |   +-- photo-0401.jpg
 |   +-- photo-2087.jpg
 |   +-- photo-6324.jpg
-|   +-- site-data.js
+|   +-- site-data.js        # generated from data/, do not edit by hand
++-- data/
+|   +-- awards/
+|   |   +-- awards.csv
+|   +-- publications/
+|       +-- publications.csv
 +-- demos/
 |   +-- coordination-frictions/
 |       +-- index.html
++-- scripts/
+|   +-- build_site_data.py
 +-- index.html
 +-- LICENSE
 +-- README.md
++-- update-site-data.ps1
 ```
 
 ## Local Preview
@@ -45,7 +53,19 @@ No build step is required.
 
 ## Editing Content
 
-Edit publications and awards in `assets/site-data.js`. The homepage layout stays in `index.html`, while carousel rendering, modals, scrolling, and gallery interactions live in `assets/main.js`.
+Edit source tables under `data/`, then regenerate the homepage data file:
+
+```powershell
+.\update-site-data.ps1
+```
+
+The main files are:
+
+- `data/publications/publications.csv` for publications, working papers, and theses
+- `data/awards/awards.csv` for awards and honors
+- `assets/site-data.js` is generated from the CSV files and should not be edited by hand
+
+The homepage layout stays in `index.html`, while carousel rendering, modals, scrolling, and gallery interactions live in `assets/main.js`.
 
 ## GitHub Pages
 
