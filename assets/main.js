@@ -2,6 +2,19 @@
         const awards = window.siteData.awards;
 
         document.addEventListener("DOMContentLoaded", function() {
+            const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[char]));
+
+            const heroQuote = document.getElementById('hero-quote');
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (heroQuote && !reduceMotion) {
+                const words = heroQuote.innerText.trim().split(/\s+/);
+                heroQuote.innerHTML = words.map((word, index) => (
+                    `<span class="quote-word" style="--word-index: ${index}">${escapeHtml(word)}${index === words.length - 1 ? '' : '&nbsp;'}</span>`
+                )).join('');
+            }
+
             // GIF 重播
             const avContainer = document.getElementById('avatar-container');
             if (avContainer) {
@@ -61,19 +74,112 @@
             if (al) {
                 awards.forEach((a, i) => {
                     const li = document.createElement('li');
-                    li.className = `award-card reveal-scale delay-${(i+1)*100}`;
-                    li.innerHTML = `<div class="award-icon mb-5"><i class="fas ${a.icon} text-lg"></i></div><div class="text-left"><h4 class="text-xl font-bold text-gray-900 leading-tight">${a.title}</h4><p class="text-gray-500 text-sm mt-3">${a.detail}</p><p class="text-gray-400 text-sm mt-2">${a.issuer}</p></div>`;
+                    li.className = `award-card flex-none w-[280px] md:w-[340px] h-[460px] md:h-[500px] snap-center reveal-scale delay-${(i+1)*100} flex flex-col justify-between`;
+                    li.innerHTML = `<div><div class="award-icon mb-8"><i class="fas ${a.icon} text-lg"></i></div><div class="text-left"><h4 class="text-2xl md:text-3xl font-bold text-gray-900 leading-tight tracking-tight">${a.title}</h4></div></div><div class="text-left"><p class="text-sm text-gray-500 font-medium mt-3">${a.detail}</p><p class="text-[11px] text-gray-400 font-semibold uppercase tracking-wide mt-2">${a.issuer}</p></div>`;
                     al.appendChild(li);
                 });
             }
+
+            // GitHub recent 30-day contributions
+            const renderGitHubContributions = async () => {
+                const username = 'wsy1011';
+                const calendarEl = document.getElementById('github-calendar');
+                const rangeLabelEl = document.getElementById('github-range-label');
+                const statusEl = document.getElementById('github-status');
+                if (!calendarEl || !rangeLabelEl || !statusEl) return;
+
+                const today = new Date();
+                const rangeStart = new Date(today);
+                rangeStart.setDate(today.getDate() - 29);
+                const formatDate = (date) => {
+                    const y = date.getFullYear();
+                    const m = String(date.getMonth() + 1).padStart(2, '0');
+                    const d = String(date.getDate()).padStart(2, '0');
+                    return `${y}-${m}-${d}`;
+                };
+                const formatShortDate = (dateString) => {
+                    const [y, m, d] = dateString.split('-').map(Number);
+                    return new Date(y, m - 1, d).toLocaleString('en-US', { month: 'short', day: 'numeric' });
+                };
+                const todayKey = formatDate(today);
+                const rangeStartKey = formatDate(rangeStart);
+                const rangeDates = Array.from({ length: 30 }, (_, index) => {
+                    const date = new Date(rangeStart);
+                    date.setDate(rangeStart.getDate() + index);
+                    return formatDate(date);
+                });
+                const yearsToFetch = [...new Set(rangeDates.map((date) => date.slice(0, 4)))];
+
+                rangeLabelEl.innerText = `${formatShortDate(rangeStartKey)} to ${formatShortDate(todayKey)} contribution activity from the public GitHub calendar.`;
+                calendarEl.innerHTML = '';
+
+                const setLoadingGrid = () => {
+                    for (let day = 0; day < 30; day += 1) {
+                        const cell = document.createElement('span');
+                        cell.className = 'github-day github-level-0';
+                        cell.setAttribute('aria-hidden', 'true');
+                        calendarEl.appendChild(cell);
+                    }
+                };
+                setLoadingGrid();
+
+                const normalizeContributions = (payload) => {
+                    if (Array.isArray(payload?.contributions)) return payload.contributions;
+                    if (Array.isArray(payload?.contributionsByDate)) return payload.contributionsByDate;
+                    if (Array.isArray(payload?.data?.contributions)) return payload.data.contributions;
+                    return [];
+                };
+
+                try {
+                    let contributions = [];
+                    for (const year of yearsToFetch) {
+                        const endpoints = [
+                            `https://github-contributions-api.jogruber.de/v4/${username}?y=${year}`,
+                            `https://github-contributions.vercel.app/api/v1/${username}`
+                        ];
+                        for (const endpoint of endpoints) {
+                            const response = await fetch(endpoint, { cache: 'no-store' });
+                            if (!response.ok) continue;
+                            const payload = await response.json();
+                            const yearlyContributions = normalizeContributions(payload);
+                            if (yearlyContributions.length) {
+                                contributions = contributions.concat(yearlyContributions);
+                                break;
+                            }
+                        }
+                    }
+
+                    const rangeData = contributions
+                        .filter((item) => item.date && item.date >= rangeStartKey && item.date <= todayKey)
+                        .map((item) => ({
+                            date: item.date,
+                            count: Number(item.count ?? item.contributionCount ?? 0),
+                            level: Number(item.level ?? item.intensity ?? 0)
+                        }));
+                    const byDate = new Map(rangeData.map((item) => [item.date, item]));
+                    statusEl.innerText = `Updated from GitHub public contribution data for ${username}.`;
+
+                    calendarEl.innerHTML = '';
+                    rangeDates.forEach((key) => {
+                        const item = byDate.get(key) || { count: 0, level: 0 };
+                        const cell = document.createElement('span');
+                        const level = Math.max(0, Math.min(4, item.level || (item.count > 0 ? 1 : 0)));
+                        cell.className = `github-day github-level-${level}`;
+                        cell.title = `${formatShortDate(key)}: ${item.count} contributions`;
+                        cell.setAttribute('aria-label', cell.title);
+                        calendarEl.appendChild(cell);
+                    });
+                } catch (error) {
+                    statusEl.innerText = 'Unable to load GitHub contributions right now. Open the profile link for the live calendar.';
+                    console.warn('GitHub contribution loading failed:', error);
+                }
+            };
+            renderGitHubContributions();
 
             // 弹窗逻辑
             const modal = document.getElementById('pub-modal-overlay');
             const absSec = document.getElementById('modal-abstract-section');
             const citSec = document.getElementById('modal-citation-section');
-            const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
-                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-            }[char]));
             const highlightSuyang = (authors) => escapeHtml(authors).replace(/Suyang Wang/g, '<strong class="font-bold text-[#0071E3]">Suyang Wang</strong>');
             const getAuthorRoles = (authors) => {
                 const parts = authors.split(/[,;]/).map((name) => name.trim()).filter(Boolean);
@@ -166,6 +272,7 @@
                 rb.addEventListener('click', () => t.scrollBy({left: 360, behavior: 'smooth'}));
             };
             setup('pub-carousel-track', 'pub-scroll-left', 'pub-scroll-right');
+            setup('awards-list', 'awards-scroll-left', 'awards-scroll-right');
             const setupPhoto = (tid, l, r) => {
                 const t = document.getElementById(tid);
                 const lb = document.getElementById(l);

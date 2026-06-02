@@ -8,6 +8,7 @@ The site is a static single-page homepage built with plain HTML, Tailwind CSS vi
 
 - Academic profile and contact links
 - Education and research focus
+- GitHub recent 30-day contribution calendar
 - Publications with expandable detail cards
 - Demo dropdown linking to interactive research subpages
 - Photography gallery with image preview
@@ -66,6 +67,8 @@ The main files are:
 - `assets/site-data.js` is generated from the CSV files and should not be edited by hand
 
 The homepage layout stays in `index.html`, while carousel rendering, modals, scrolling, and gallery interactions live in `assets/main.js`.
+
+The GitHub contribution module is rendered client-side for `wsy1011` from public contribution calendar data and shows the recent 30 days. If the public endpoint is unavailable, the module falls back to a profile link instead of blocking the page.
 
 ## GitHub Pages
 

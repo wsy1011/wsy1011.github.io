@@ -68,6 +68,26 @@
         .leadership-name { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; letter-spacing: -0.015em; line-height: 1.1; }
         .leadership-title { font-size: clamp(1.2rem, 3vw, 1.8rem); color: var(--apple-gray); margin-top: 0.5rem; }
 
+        .hero-quote {
+            display: inline-block;
+        }
+        .hero-quote .quote-word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(18px);
+            filter: blur(10px);
+            animation: quoteWordIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: calc(var(--word-index) * 80ms + 220ms);
+            will-change: opacity, transform, filter;
+        }
+        @keyframes quoteWordIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
         .ibm-logo-style {
             font-family: 'Arvo', serif;
             display: inline-block;
@@ -190,6 +210,48 @@
             background: rgba(0, 113, 227, 0.1);
             color: #0071E3;
         }
+        .github-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 18px;
+            border: 1px solid rgba(229, 231, 235, 0.78);
+            background:
+                radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.96), transparent 32%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.84));
+            box-shadow: 0 12px 34px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.88);
+            padding: 1.1rem;
+        }
+        .github-calendar {
+            display: grid;
+            grid-template-columns: repeat(15, minmax(0, 1fr));
+            gap: 0.38rem;
+        }
+        .github-day {
+            position: relative;
+            aspect-ratio: 1;
+            min-width: 0;
+            border-radius: 5px;
+            border: 1px solid rgba(15, 23, 42, 0.05);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .github-day:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+        }
+        .github-day.is-empty {
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .github-level-0 { background: #ebedf0; }
+        .github-level-1 { background: #9be9a8; }
+        .github-level-2 { background: #40c463; }
+        .github-level-3 { background: #30a14e; }
+        .github-level-4 { background: #216e39; }
+        @media (max-width: 640px) {
+            .github-calendar {
+                grid-template-columns: repeat(10, minmax(0, 1fr));
+            }
+        }
         .demo-menu-panel {
             opacity: 0;
             visibility: hidden;
@@ -237,6 +299,8 @@
         .open-modal-btn,
         #pub-scroll-left,
         #pub-scroll-right,
+        #awards-scroll-left,
+        #awards-scroll-right,
         #photo-scroll-left,
         #photo-scroll-right,
         #close-modal,
@@ -246,6 +310,8 @@
         .open-modal-btn:hover,
         #pub-scroll-left:hover,
         #pub-scroll-right:hover,
+        #awards-scroll-left:hover,
+        #awards-scroll-right:hover,
         #photo-scroll-left:hover,
         #photo-scroll-right:hover,
         #close-modal:hover,
@@ -335,7 +401,7 @@
     <!-- 顶部金句模块 -->
     <section class="bg-gradient-to-b from-white via-white to-[#f5f5f7] pt-28 pb-32 px-6 text-center border-b border-gray-100">
         <div class="max-w-5xl mx-auto reveal">
-            <h2 class="text-4xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight ibm-logo-style text-center">
+            <h2 id="hero-quote" class="hero-quote text-4xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight ibm-logo-style text-center">
                 Building real-life useful applications from your research is very important.
             </h2>
         </div>
@@ -365,8 +431,23 @@
                 <div class="md:col-span-7 reveal delay-100">
                     <h3 class="text-[11px] font-bold text-gray-400 mb-6 tracking-[0.12em] uppercase">Research Focus</h3>
                     <div class="text-[19px] md:text-[21px] leading-[1.45] text-gray-700 space-y-6 tracking-tight">
-                        <p>I am Suyang Wang, a Ph.D. student at Hohai University. My research is dedicated to <strong>sustainable waterway transportation</strong> and the <strong>decarbonization of inland shipping</strong>.</p>
-                        <p>Methodologically, I specialize in integrating <strong>hydrodynamic numerical simulation</strong> with <strong>operations optimization</strong>. By leveraging this interdisciplinary approach, I explore sustainable logistics solutions to drive emission reductions and enhance the efficiency of inland waterway networks.</p>
+                        <p>I am Suyang Wang, a Ph.D. student at Hohai University. My research focuses on <strong>sustainable waterway transportation</strong> and <strong>shipping decarbonization</strong>.</p>
+                        <p>Methodologically, I specialize in integrating <strong>hydrodynamic numerical simulation</strong> with <strong>operations optimization</strong>. By leveraging this interdisciplinary approach, I explore sustainable logistics solutions to reduce emissions and improve the efficiency and resilience of waterway, port, and shipping networks.</p>
+                    </div>
+                    <div class="github-card mt-8">
+                        <div class="mb-4 flex items-start justify-between gap-4">
+                            <div>
+                                <p class="text-[11px] font-bold uppercase tracking-[0.12em] text-gray-400">GitHub · Recent 30 Days</p>
+                                <p id="github-range-label" class="mt-1 text-sm font-medium leading-relaxed text-gray-500">Loading recent contribution activity.</p>
+                            </div>
+                            <a href="https://github.com/wsy1011" target="_blank" rel="noopener noreferrer" class="inline-flex h-9 w-9 flex-none items-center justify-center rounded-full bg-gray-900 text-white transition-colors hover:bg-gray-700" aria-label="View GitHub profile">
+                                <i class="fab fa-github text-base"></i>
+                            </a>
+                        </div>
+                        <div class="min-w-0">
+                            <div id="github-calendar" class="github-calendar" aria-label="GitHub contribution calendar for the recent 30 days"></div>
+                            <p id="github-status" class="mt-3 text-xs font-medium leading-relaxed text-gray-500">Fetching public contribution calendar.</p>
+                        </div>
                     </div>
                 </div>
                 <div id="education" class="md:col-span-5 reveal delay-200">
@@ -440,6 +521,25 @@
         </div>
     </div>
 
+    <!-- 荣誉奖项 Section -->
+    <section id="awards" class="py-24 bg-[#f5f5f7] text-left overflow-hidden">
+        <div class="max-w-[1400px] mx-auto text-left">
+            <div class="px-6 md:px-12 mb-10 flex justify-between items-end reveal">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Awards & Honors</h2>
+                    <p class="text-gray-500 mt-4 max-w-2xl text-[17px] font-medium leading-relaxed">
+                        Selected academic honors and recognitions.
+                    </p>
+                </div>
+                <div class="hidden md:flex gap-3">
+                    <button id="awards-scroll-left" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-50 transition-colors text-gray-700"><i class="fas fa-chevron-left text-sm"></i></button>
+                    <button id="awards-scroll-right" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-50 transition-colors text-gray-700"><i class="fas fa-chevron-right text-sm"></i></button>
+                </div>
+            </div>
+            <ul id="awards-list" class="flex gap-6 overflow-x-auto pb-12 pt-4 px-6 md:px-12 hide-scrollbar snap-x snap-mandatory items-stretch"></ul>
+        </div>
+    </section>
+
     <!-- 摄影作品 Section -->
     <section id="photography" class="py-24 overflow-hidden relative bg-white border-b border-gray-100 text-left">
         <div class="max-w-[1400px] mx-auto text-left">
@@ -474,17 +574,6 @@
             <p id="photo-modal-title" class="mt-4 text-center text-white text-lg font-semibold"></p>
         </div>
     </div>
-
-    <!-- 荣誉奖项 Section -->
-    <section id="awards" class="py-24 px-6 bg-[#f5f5f7] text-left">
-        <div class="max-w-6xl mx-auto text-left">
-            <div class="mb-12 reveal">
-                <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Awards & Honors</h2>
-                <p class="text-xl text-gray-500 mt-4 max-w-2xl font-light">Selected academic honors and recognitions.</p>
-            </div>
-            <ul id="awards-list" class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6"></ul>
-        </div>
-    </section>
 
     <footer class="bg-white py-12 px-6 border-t border-gray-200">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
