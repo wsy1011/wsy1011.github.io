@@ -1,4 +1,4 @@
-# Suyang Wang Personal Homepage
+﻿# Suyang Wang Personal Homepage
 
 This repository hosts the personal academic homepage of Suyang Wang.
 
@@ -25,6 +25,7 @@ The site is a static single-page homepage built with plain HTML, Tailwind CSS vi
 |   +-- photo-0401.jpg
 |   +-- photo-2087.jpg
 |   +-- photo-6324.jpg
+|   +-- thumbs/             # lightweight gallery thumbnails
 |   +-- site-data.js        # generated from data/, do not edit by hand
 +-- data/
 |   +-- awards/
@@ -69,6 +70,8 @@ The main files are:
 The homepage layout stays in `index.html`, while carousel rendering, modals, scrolling, and gallery interactions live in `assets/main.js`.
 
 The GitHub contribution module is rendered client-side for `wsy1011` from public contribution calendar data and shows the recent 30 days. If the public endpoint is unavailable, the module falls back to a profile link instead of blocking the page.
+
+Photography cards load lightweight WebP thumbnails on the homepage. The original JPG files are loaded only when a photo is opened in the preview modal.
 
 ## GitHub Pages
 

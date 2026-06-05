@@ -263,25 +263,28 @@
             });
 
             // 滚动控制
-            const setup = (tid, l, r) => {
-                const t = document.getElementById(tid);
-                const lb = document.getElementById(l);
-                const rb = document.getElementById(r);
-                if(!t || !lb || !rb) return;
-                lb.addEventListener('click', () => t.scrollBy({left: -360, behavior: 'smooth'}));
-                rb.addEventListener('click', () => t.scrollBy({left: 360, behavior: 'smooth'}));
+            const setup = (tid, l, r, amount = 360) => {
+                const track = document.getElementById(tid);
+                const left = document.getElementById(l);
+                const right = document.getElementById(r);
+                if(!track || !left || !right) return;
+                const updateButtons = () => {
+                    const maxScroll = Math.max(track.scrollWidth - track.clientWidth, 0);
+                    const atStart = track.scrollLeft <= 2;
+                    const atEnd = track.scrollLeft >= maxScroll - 2;
+                    left.classList.toggle('is-hidden', atStart || maxScroll <= 2);
+                    right.classList.toggle('is-hidden', atEnd || maxScroll <= 2);
+                };
+                left.addEventListener('click', () => track.scrollBy({left: -amount, behavior: 'smooth'}));
+                right.addEventListener('click', () => track.scrollBy({left: amount, behavior: 'smooth'}));
+                track.addEventListener('scroll', () => window.requestAnimationFrame(updateButtons), { passive: true });
+                window.addEventListener('resize', updateButtons);
+                window.setTimeout(updateButtons, 0);
+                window.setTimeout(updateButtons, 450);
             };
-            setup('pub-carousel-track', 'pub-scroll-left', 'pub-scroll-right');
-            setup('awards-list', 'awards-scroll-left', 'awards-scroll-right');
-            const setupPhoto = (tid, l, r) => {
-                const t = document.getElementById(tid);
-                const lb = document.getElementById(l);
-                const rb = document.getElementById(r);
-                if(!t || !lb || !rb) return;
-                lb.onclick = () => t.scrollBy({left: -480, behavior: 'smooth'});
-                rb.onclick = () => t.scrollBy({left: 480, behavior: 'smooth'});
-            };
-            setupPhoto('photo-carousel-track', 'photo-scroll-left', 'photo-scroll-right');
+            setup('pub-carousel-track', 'pub-scroll-left', 'pub-scroll-right', 360);
+            setup('awards-list', 'awards-scroll-left', 'awards-scroll-right', 360);
+            setup('photo-carousel-track', 'photo-scroll-left', 'photo-scroll-right', 480);
 
             const photoModal = document.getElementById('photo-modal-overlay');
             const photoModalImage = document.getElementById('photo-modal-image');
@@ -296,7 +299,7 @@
                     const img = card.querySelector('img');
                     const title = card.querySelector('span')?.innerText || '';
                     if (!img || !photoModalImage || !photoModalTitle || !photoModal) return;
-                    photoModalImage.src = img.getAttribute('src');
+                    photoModalImage.src = img.getAttribute('data-full-src') || img.getAttribute('src');
                     photoModalImage.alt = img.getAttribute('alt') || title;
                     photoModalTitle.innerText = title;
                     photoModal.classList.add('active');
