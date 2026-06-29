@@ -780,8 +780,8 @@
                         <div class="control-card">
                             <p class="control-label">Capacity package</p>
                             <div class="slider-row">
-                                <input id="topk-slider" type="range" min="3" max="20" step="1" value="5" aria-label="Top-K capacity package">
-                                <div class="selected-lock">Top-K package: <strong id="topk-value">5 locks</strong></div>
+                                <input id="topk-slider" type="range" min="10" max="20" step="10" value="10" aria-label="Top-K capacity package">
+                                <div class="selected-lock">Top-K package: <strong id="topk-value">10 locks</strong></div>
                             </div>
                         </div>
                         <div class="control-card">
@@ -850,53 +850,351 @@
             },
             rules: [
                 ["local_burden", "Local burden", 30.23, 69.42, "Directly targets locks with high observed pre-dispatch burden."],
-                ["gateway_priority", "Gateway priority", 20.05, 44.71, "Prioritizes gateway locks that organize corridor interfaces."],
+                ["gateway_priority", "Gateway priority", 18.73, 51.77, "Prioritizes gateway locks that organize corridor interfaces."],
                 ["connected_pressure", "Connected pressure", 16.81, 23.70, "Targets locks exposed to connected corridor-pressure spillovers."],
-                ["exposure_sensitivity", "Exposure x sensitivity", 21.07, 25.87, "Balances connected-pressure exposure with lock-level sensitivity."]
+                ["exposure_sensitivity", "Exposure x sensitivity", 22.75, 28.42, "Balances connected-pressure exposure with lock-level sensitivity."]
             ],
+            benchmarks: {
+                10: {
+                    uniform: { mean: 10.54, p90: 23.85 },
+                    local_burden: { mean: 30.23, p90: 69.42, coverage: 84.08 },
+                    gateway_priority: { mean: 18.73, p90: 51.77, coverage: 44.37 },
+                    connected_pressure: { mean: 16.81, p90: 23.70, coverage: 33.79 },
+                    exposure_sensitivity: { mean: 22.75, p90: 28.42, coverage: 55.70 }
+                },
+                20: {
+                    uniform: { mean: 21.07, p90: 47.69 },
+                    local_burden: { mean: 40.46, p90: 98.91, coverage: 95.07 },
+                    gateway_priority: { mean: 30.25, p90: 63.21, coverage: 72.20 },
+                    connected_pressure: { mean: 30.64, p90: 61.69, coverage: 53.01 },
+                    exposure_sensitivity: { mean: 31.26, p90: 51.57, coverage: 68.55 }
+                }
+            },
             priority: [
-                [1, 50, "Southern Jiangsu", true, 1588.77, 4259.95, 246.65, 1.40],
-                [2, 21, "Northern Jiangsu", false, 678.33, 2098.39, 150.17, 2.34],
-                [3, 51, "Southern Jiangsu", true, 136.08, 429.94, 259.63, 0.00],
-                [4, 46, "Southern Jiangsu", true, 137.89, 215.98, 250.39, 0.00],
-                [5, 37, "Northern Jiangsu", false, 419.12, 846.07, 85.63, 1.96],
-                [6, 45, "Southern Jiangsu", true, 1426.94, 2876.37, 113.31, 0.78],
-                [7, 47, "Southern Jiangsu", false, 68.91, 122.66, 253.59, 0.00],
-                [8, 52, "Southern Jiangsu", true, 2533.77, 5328.15, 0.00, 1.88],
-                [9, 1, "Central Jiangsu", true, 2407.15, 5262.61, 0.00, 1.85],
-                [10, 27, "Northern Jiangsu", false, 419.45, 913.80, 25.89, 1.90],
-                [11, 33, "Northern Jiangsu", false, 512.30, 1288.60, 72.40, 1.25],
-                [12, 14, "Northern Jiangsu", true, 724.80, 1546.20, 118.70, 0.92],
-                [13, 59, "Southern Jiangsu", false, 332.60, 884.10, 164.90, 0.54],
-                [14, 42, "Central Jiangsu", false, 604.20, 1398.40, 66.30, 1.08],
-                [15, 18, "Northern Jiangsu", false, 288.70, 744.50, 132.80, 0.86],
-                [16, 56, "Southern Jiangsu", true, 941.50, 2148.90, 91.20, 0.71],
-                [17, 9, "Central Jiangsu", true, 836.40, 1886.70, 58.10, 0.83],
-                [18, 63, "Southern Jiangsu", false, 276.90, 682.40, 188.30, 0.42],
-                [19, 30, "Northern Jiangsu", false, 365.80, 990.20, 43.60, 1.17],
-                [20, 6, "Central Jiangsu", false, 451.90, 1105.80, 37.40, 1.03]
+                [1, "Lock 1", "Central Jiangsu", true, 2407.15, 5262.61, 0.00, 1.85],
+                [2, "Lock 2", "Central Jiangsu", true, 624.22, 2461.91, 108.23, 0.60],
+                [3, "Lock 3", "Central Jiangsu", false, 211.17, 549.58, 114.00, 0.00],
+                [4, "Lock 4", "Central Jiangsu", false, 224.82, 545.59, 110.40, 0.00],
+                [5, "Lock 5", "Central Jiangsu", true, 564.62, 1160.78, 20.54, 0.02],
+                [6, "Lock 6", "Central Jiangsu", false, 167.13, 549.27, 19.01, 0.65],
+                [7, "Lock 7", "Central Jiangsu", false, 427.07, 963.84, 28.26, 0.00],
+                [8, "Lock 8", "Central Jiangsu", false, 205.54, 536.80, 0.11, 0.00],
+                [9, "Lock 9", "Central Jiangsu", false, 614.87, 1117.74, 146.90, 0.00],
+                [10, "Lock 10", "Central Jiangsu", false, 47.24, 110.15, 0.12, 0.00],
+                [11, "Lock 11", "Central Jiangsu", false, 115.99, 261.34, 11.91, 0.00],
+                [12, "Lock 12", "Central Jiangsu", true, 904.30, 1833.74, 0.00, 0.32],
+                [13, "Lock 13", "Central Jiangsu", false, 198.88, 499.48, 74.96, 0.00],
+                [14, "Lock 14", "Central Jiangsu", true, 491.12, 1103.07, 0.00, 0.00],
+                [15, "Lock 15", "Central Jiangsu", false, 386.04, 876.08, 117.77, 0.00],
+                [16, "Lock 16", "Northern Jiangsu", false, 255.17, 806.80, 19.93, 0.00],
+                [17, "Lock 17", "Northern Jiangsu", false, 205.24, 388.95, 27.60, 0.07],
+                [18, "Lock 18", "Northern Jiangsu", false, 60.76, 94.57, 1.59, 0.00],
+                [19, "Lock 19", "Northern Jiangsu", false, 537.75, 1022.42, 0.00, 0.00],
+                [20, "Lock 20", "Northern Jiangsu", false, 479.40, 970.04, 39.64, 0.00],
+                [21, "Lock 21", "Northern Jiangsu", false, 678.33, 2098.39, 150.17, 2.34],
+                [22, "Lock 22", "Northern Jiangsu", false, 256.28, 769.27, 33.09, 0.00],
+                [23, "Lock 23", "Northern Jiangsu", false, 374.60, 943.15, 0.00, 0.00],
+                [24, "Lock 24", "Northern Jiangsu", false, 476.92, 932.23, 0.07, 0.00],
+                [25, "Lock 25", "Northern Jiangsu", false, 258.80, 805.77, 0.00, 0.00],
+                [26, "Lock 26", "Northern Jiangsu", false, 310.19, 979.07, 2.28, 0.00],
+                [27, "Lock 27", "Northern Jiangsu", false, 419.45, 913.80, 25.89, 1.90],
+                [28, "Lock 28", "Northern Jiangsu", false, 432.39, 1134.85, 14.72, 0.46],
+                [29, "Lock 29", "Northern Jiangsu", false, 555.00, 1120.55, 26.15, 0.00],
+                [30, "Lock 30", "Northern Jiangsu", false, 203.07, 639.29, 0.00, 0.00],
+                [31, "Lock 31", "Northern Jiangsu", false, 136.01, 605.51, 17.98, 0.00],
+                [32, "Lock 32", "Northern Jiangsu", false, 586.17, 1098.28, 87.44, 0.00],
+                [33, "Lock 33", "Northern Jiangsu", false, 327.44, 686.27, 150.83, 0.00],
+                [34, "Lock 34", "Northern Jiangsu", false, 269.42, 465.47, 63.13, 0.00],
+                [35, "Lock 35", "Northern Jiangsu", false, 273.67, 497.75, 55.35, 0.00],
+                [36, "Lock 36", "Northern Jiangsu", false, 351.91, 868.17, 65.72, 0.00],
+                [37, "Lock 37", "Northern Jiangsu", false, 419.12, 846.07, 85.63, 1.96],
+                [38, "Lock 38", "Northern Jiangsu", false, 391.05, 744.34, 95.21, 0.00],
+                [39, "Lock 39", "Northern Jiangsu", false, 257.46, 473.13, 38.74, 0.00],
+                [40, "Lock 40", "Southern Jiangsu", true, 491.38, 1060.30, 0.00, 0.00],
+                [41, "Lock 41", "Southern Jiangsu", false, 1080.03, 1882.09, 0.00, 0.34],
+                [42, "Lock 42", "Southern Jiangsu", false, 1153.25, 2036.40, 95.31, 0.67],
+                [43, "Lock 43", "Southern Jiangsu", true, 293.19, 755.27, 97.86, 0.00],
+                [44, "Lock 44", "Southern Jiangsu", false, 39.67, 70.12, 10.67, 0.00],
+                [45, "Lock 45", "Southern Jiangsu", true, 1426.94, 2876.37, 113.31, 0.78],
+                [46, "Lock 46", "Southern Jiangsu", true, 137.89, 215.98, 250.39, 0.00],
+                [47, "Lock 47", "Southern Jiangsu", false, 68.91, 122.66, 253.59, 0.00],
+                [48, "Lock 48", "Southern Jiangsu", false, 67.41, 127.95, 14.45, 0.00],
+                [49, "Lock 49", "Southern Jiangsu", true, 832.77, 1482.95, 36.16, 0.16],
+                [50, "Lock 50", "Southern Jiangsu", true, 1588.77, 4259.95, 246.65, 1.40],
+                [51, "Lock 51", "Southern Jiangsu", true, 136.08, 429.94, 259.63, 0.00],
+                [52, "Lock 52", "Southern Jiangsu", true, 2533.77, 5328.16, 0.00, 1.88]
             ],
+            rankingScores: {
+                local_burden: {
+                    1: 2407.15,
+                    2: 624.22,
+                    3: 211.17,
+                    4: 224.82,
+                    5: 564.62,
+                    6: 167.13,
+                    7: 427.07,
+                    8: 205.54,
+                    9: 614.87,
+                    10: 47.24,
+                    11: 115.99,
+                    12: 904.30,
+                    13: 198.88,
+                    14: 491.12,
+                    15: 386.04,
+                    16: 255.17,
+                    17: 205.24,
+                    18: 60.76,
+                    19: 537.75,
+                    20: 479.40,
+                    21: 678.33,
+                    22: 256.28,
+                    23: 374.60,
+                    24: 476.92,
+                    25: 258.80,
+                    26: 310.19,
+                    27: 419.45,
+                    28: 432.39,
+                    29: 555.00,
+                    30: 203.07,
+                    31: 136.01,
+                    32: 586.17,
+                    33: 327.44,
+                    34: 269.42,
+                    35: 273.67,
+                    36: 351.91,
+                    37: 419.12,
+                    38: 391.05,
+                    39: 257.46,
+                    40: 491.38,
+                    41: 1080.03,
+                    42: 1153.25,
+                    43: 293.19,
+                    44: 39.67,
+                    45: 1426.94,
+                    46: 137.89,
+                    47: 68.91,
+                    48: 67.41,
+                    49: 832.77,
+                    50: 1588.77,
+                    51: 136.08,
+                    52: 2533.77
+                },
+                gateway_priority: {
+                    1: 10002.00,
+                    2: 10010.00,
+                    3: 38.00,
+                    4: 37.00,
+                    5: 10013.00,
+                    6: 43.00,
+                    7: 21.00,
+                    8: 39.00,
+                    9: 11.00,
+                    10: 51.00,
+                    11: 47.00,
+                    12: 10007.00,
+                    13: 42.00,
+                    14: 10017.00,
+                    15: 25.00,
+                    16: 36.00,
+                    17: 40.00,
+                    18: 50.00,
+                    19: 15.00,
+                    20: 18.00,
+                    21: 9.00,
+                    22: 35.00,
+                    23: 26.00,
+                    24: 19.00,
+                    25: 33.00,
+                    26: 29.00,
+                    27: 22.00,
+                    28: 20.00,
+                    29: 14.00,
+                    30: 41.00,
+                    31: 46.00,
+                    32: 12.00,
+                    33: 28.00,
+                    34: 32.00,
+                    35: 31.00,
+                    36: 27.00,
+                    37: 23.00,
+                    38: 24.00,
+                    39: 34.00,
+                    40: 10016.00,
+                    41: 6.00,
+                    42: 5.00,
+                    43: 10030.00,
+                    44: 52.00,
+                    45: 10004.00,
+                    46: 10044.00,
+                    47: 48.00,
+                    48: 49.00,
+                    49: 10008.00,
+                    50: 10003.00,
+                    51: 10045.00,
+                    52: 10001.00
+                },
+                connected_pressure: {
+                    1: 0.00,
+                    2: 108.23,
+                    3: 114.00,
+                    4: 110.40,
+                    5: 20.54,
+                    6: 19.01,
+                    7: 28.26,
+                    8: 0.11,
+                    9: 146.90,
+                    10: 0.12,
+                    11: 11.91,
+                    12: 0.00,
+                    13: 74.96,
+                    14: 0.00,
+                    15: 117.77,
+                    16: 19.93,
+                    17: 27.60,
+                    18: 1.59,
+                    19: 0.00,
+                    20: 39.64,
+                    21: 150.17,
+                    22: 33.09,
+                    23: 0.00,
+                    24: 0.07,
+                    25: 0.00,
+                    26: 2.28,
+                    27: 25.89,
+                    28: 14.72,
+                    29: 26.15,
+                    30: 0.00,
+                    31: 17.98,
+                    32: 87.44,
+                    33: 150.83,
+                    34: 63.13,
+                    35: 55.35,
+                    36: 65.72,
+                    37: 85.63,
+                    38: 95.21,
+                    39: 38.74,
+                    40: 0.00,
+                    41: 0.00,
+                    42: 95.31,
+                    43: 97.86,
+                    44: 10.67,
+                    45: 113.31,
+                    46: 250.39,
+                    47: 253.59,
+                    48: 14.45,
+                    49: 36.16,
+                    50: 246.65,
+                    51: 259.63,
+                    52: 0.00
+                },
+                exposure_sensitivity: {
+                    1: 3.56,
+                    2: 3.34,
+                    3: 1.75,
+                    4: 1.70,
+                    5: 1.27,
+                    6: 1.65,
+                    7: 1.00,
+                    8: 1.00,
+                    9: 2.21,
+                    10: 1.00,
+                    11: 1.00,
+                    12: 1.65,
+                    13: 1.21,
+                    14: 1.25,
+                    15: 1.80,
+                    16: 1.00,
+                    17: 1.07,
+                    18: 1.00,
+                    19: 1.00,
+                    20: 1.00,
+                    21: 7.52,
+                    22: 1.00,
+                    23: 1.00,
+                    24: 1.00,
+                    25: 1.00,
+                    26: 1.00,
+                    27: 2.90,
+                    28: 1.46,
+                    29: 1.00,
+                    30: 1.00,
+                    31: 1.00,
+                    32: 1.38,
+                    33: 2.26,
+                    34: 1.04,
+                    35: 1.00,
+                    36: 1.08,
+                    37: 4.02,
+                    38: 1.49,
+                    39: 1.00,
+                    40: 1.25,
+                    41: 1.34,
+                    42: 2.48,
+                    43: 1.91,
+                    44: 1.00,
+                    45: 3.88,
+                    46: 4.56,
+                    47: 3.70,
+                    48: 1.00,
+                    49: 1.45,
+                    50: 10.81,
+                    51: 4.73,
+                    52: 3.60
+                }
+            },
             locks: [
-                { id: 50, name: "Lock 50", region: "Southern Jiangsu", gateway: true, lat: 31.54, lon: 120.66 },
-                { id: 21, name: "Lock 21", region: "Northern Jiangsu", gateway: false, lat: 33.35, lon: 119.10 },
-                { id: 51, name: "Lock 51", region: "Southern Jiangsu", gateway: true, lat: 31.72, lon: 120.22 },
-                { id: 46, name: "Lock 46", region: "Southern Jiangsu", gateway: true, lat: 31.88, lon: 119.92 },
-                { id: 37, name: "Lock 37", region: "Northern Jiangsu", gateway: false, lat: 33.04, lon: 118.86 },
-                { id: 45, name: "Lock 45", region: "Southern Jiangsu", gateway: true, lat: 32.38, lon: 119.04 },
-                { id: 47, name: "Lock 47", region: "Southern Jiangsu", gateway: false, lat: 31.94, lon: 120.42 },
-                { id: 52, name: "Lock 52", region: "Southern Jiangsu", gateway: true, lat: 31.42, lon: 120.88 },
-                { id: 1, name: "Lock 1", region: "Central Jiangsu", gateway: true, lat: 32.52, lon: 119.72 },
-                { id: 27, name: "Lock 27", region: "Northern Jiangsu", gateway: false, lat: 33.68, lon: 118.74 },
-                { id: 33, name: "Lock 33", region: "Northern Jiangsu", gateway: false, lat: 33.22, lon: 118.42 },
-                { id: 14, name: "Lock 14", region: "Northern Jiangsu", gateway: true, lat: 33.58, lon: 119.62 },
-                { id: 59, name: "Lock 59", region: "Southern Jiangsu", gateway: false, lat: 31.28, lon: 119.92 },
-                { id: 42, name: "Lock 42", region: "Central Jiangsu", gateway: false, lat: 32.76, lon: 120.18 },
-                { id: 18, name: "Lock 18", region: "Northern Jiangsu", gateway: false, lat: 34.02, lon: 119.05 },
-                { id: 56, name: "Lock 56", region: "Southern Jiangsu", gateway: true, lat: 31.78, lon: 121.04 },
-                { id: 9, name: "Lock 9", region: "Central Jiangsu", gateway: true, lat: 32.18, lon: 119.48 },
-                { id: 63, name: "Lock 63", region: "Southern Jiangsu", gateway: false, lat: 31.22, lon: 120.34 },
-                { id: 30, name: "Lock 30", region: "Northern Jiangsu", gateway: false, lat: 33.86, lon: 118.48 },
-                { id: 6, name: "Lock 6", region: "Central Jiangsu", gateway: false, lat: 32.92, lon: 119.58 }
+                { id: 1, name: "Lock 1", region: "Central Jiangsu", gateway: true, lat: 32.03, lon: 120.84 },
+                { id: 2, name: "Lock 2", region: "Central Jiangsu", gateway: true, lat: 32.05, lon: 120.76 },
+                { id: 3, name: "Lock 3", region: "Central Jiangsu", gateway: false, lat: 32.55, lon: 120.45 },
+                { id: 4, name: "Lock 4", region: "Central Jiangsu", gateway: false, lat: 32.05, lon: 121.59 },
+                { id: 5, name: "Lock 5", region: "Central Jiangsu", gateway: true, lat: 32.11, lon: 120.50 },
+                { id: 6, name: "Lock 6", region: "Central Jiangsu", gateway: false, lat: 33.23, lon: 119.33 },
+                { id: 7, name: "Lock 7", region: "Central Jiangsu", gateway: false, lat: 32.77, lon: 119.44 },
+                { id: 8, name: "Lock 8", region: "Central Jiangsu", gateway: false, lat: 32.76, lon: 119.46 },
+                { id: 9, name: "Lock 9", region: "Central Jiangsu", gateway: false, lat: 32.42, lon: 119.56 },
+                { id: 10, name: "Lock 10", region: "Central Jiangsu", gateway: false, lat: 32.68, lon: 119.69 },
+                { id: 11, name: "Lock 11", region: "Central Jiangsu", gateway: false, lat: 32.54, lon: 119.52 },
+                { id: 12, name: "Lock 12", region: "Central Jiangsu", gateway: true, lat: 32.30, lon: 119.88 },
+                { id: 13, name: "Lock 13", region: "Central Jiangsu", gateway: false, lat: 32.44, lon: 119.88 },
+                { id: 14, name: "Lock 14", region: "Central Jiangsu", gateway: true, lat: 32.34, lon: 119.48 },
+                { id: 15, name: "Lock 15", region: "Central Jiangsu", gateway: false, lat: 32.53, lon: 119.51 },
+                { id: 16, name: "Lock 16", region: "Northern Jiangsu", gateway: false, lat: 33.78, lon: 119.60 },
+                { id: 17, name: "Lock 17", region: "Northern Jiangsu", gateway: false, lat: 33.17, lon: 120.34 },
+                { id: 18, name: "Lock 18", region: "Northern Jiangsu", gateway: false, lat: 34.03, lon: 119.74 },
+                { id: 19, name: "Lock 19", region: "Northern Jiangsu", gateway: false, lat: 33.59, lon: 118.95 },
+                { id: 20, name: "Lock 20", region: "Northern Jiangsu", gateway: false, lat: 33.82, lon: 119.28 },
+                { id: 21, name: "Lock 21", region: "Northern Jiangsu", gateway: false, lat: 33.31, lon: 118.85 },
+                { id: 22, name: "Lock 22", region: "Northern Jiangsu", gateway: false, lat: 33.18, lon: 118.16 },
+                { id: 23, name: "Lock 23", region: "Northern Jiangsu", gateway: false, lat: 34.29, lon: 118.80 },
+                { id: 24, name: "Lock 24", region: "Northern Jiangsu", gateway: false, lat: 33.63, lon: 118.60 },
+                { id: 25, name: "Lock 25", region: "Northern Jiangsu", gateway: false, lat: 33.90, lon: 118.12 },
+                { id: 26, name: "Lock 26", region: "Northern Jiangsu", gateway: false, lat: 34.24, lon: 117.93 },
+                { id: 27, name: "Lock 27", region: "Northern Jiangsu", gateway: false, lat: 34.41, lon: 117.18 },
+                { id: 28, name: "Lock 28", region: "Northern Jiangsu", gateway: false, lat: 34.13, lon: 119.34 },
+                { id: 29, name: "Lock 29", region: "Northern Jiangsu", gateway: false, lat: 34.24, lon: 119.29 },
+                { id: 30, name: "Lock 30", region: "Northern Jiangsu", gateway: false, lat: 34.50, lon: 119.29 },
+                { id: 31, name: "Lock 31", region: "Northern Jiangsu", gateway: false, lat: 34.46, lon: 119.26 },
+                { id: 32, name: "Lock 32", region: "Northern Jiangsu", gateway: false, lat: 33.47, lon: 119.16 },
+                { id: 33, name: "Lock 33", region: "Northern Jiangsu", gateway: false, lat: 33.58, lon: 118.97 },
+                { id: 34, name: "Lock 34", region: "Northern Jiangsu", gateway: false, lat: 33.71, lon: 118.71 },
+                { id: 35, name: "Lock 35", region: "Northern Jiangsu", gateway: false, lat: 33.83, lon: 118.45 },
+                { id: 36, name: "Lock 36", region: "Northern Jiangsu", gateway: false, lat: 33.99, lon: 118.31 },
+                { id: 37, name: "Lock 37", region: "Northern Jiangsu", gateway: false, lat: 34.07, lon: 118.12 },
+                { id: 38, name: "Lock 38", region: "Northern Jiangsu", gateway: false, lat: 34.43, lon: 117.79 },
+                { id: 39, name: "Lock 39", region: "Northern Jiangsu", gateway: false, lat: 34.32, lon: 117.39 },
+                { id: 40, name: "Lock 40", region: "Southern Jiangsu", gateway: true, lat: 31.97, lon: 118.67 },
+                { id: 41, name: "Lock 41", region: "Southern Jiangsu", gateway: false, lat: 31.31, lon: 119.11 },
+                { id: 42, name: "Lock 42", region: "Southern Jiangsu", gateway: false, lat: 31.36, lon: 118.85 },
+                { id: 43, name: "Lock 43", region: "Southern Jiangsu", gateway: true, lat: 32.20, lon: 118.95 },
+                { id: 44, name: "Lock 44", region: "Southern Jiangsu", gateway: false, lat: 31.61, lon: 118.97 },
+                { id: 45, name: "Lock 45", region: "Southern Jiangsu", gateway: true, lat: 32.18, lon: 119.58 },
+                { id: 46, name: "Lock 46", region: "Southern Jiangsu", gateway: true, lat: 31.99, lon: 119.94 },
+                { id: 47, name: "Lock 47", region: "Southern Jiangsu", gateway: false, lat: 31.79, lon: 119.58 },
+                { id: 48, name: "Lock 48", region: "Southern Jiangsu", gateway: false, lat: 31.58, lon: 120.00 },
+                { id: 49, name: "Lock 49", region: "Southern Jiangsu", gateway: true, lat: 31.92, lon: 120.21 },
+                { id: 50, name: "Lock 50", region: "Southern Jiangsu", gateway: true, lat: 31.96, lon: 120.41 },
+                { id: 51, name: "Lock 51", region: "Southern Jiangsu", gateway: true, lat: 31.67, lon: 120.70 },
+                { id: 52, name: "Lock 52", region: "Southern Jiangsu", gateway: true, lat: 31.59, lon: 121.25 }
             ]
         };
 
@@ -952,20 +1250,14 @@
             markers: {},
             bounds: {},
             activeRule: "local_burden",
-            topK: 5,
+            topK: 10,
             selectedLockId: 50
         };
 
-        const priorityById = () => new Map(DATA.priority.map((row) => [row[1], row]));
+        const priorityById = () => new Map(DATA.priority.map((row) => [row[0], row]));
 
         function priorityScore(lock, ruleId) {
-            const row = priorityById().get(lock.id);
-            if (!row) return 0;
-            const [, , , gateway, mean, p90, cp, sensitivity] = row;
-            if (ruleId === "local_burden") return mean;
-            if (ruleId === "gateway_priority") return gateway ? p90 : p90 * 0.28;
-            if (ruleId === "connected_pressure") return cp;
-            return cp * Math.max(sensitivity, 0.2);
+            return DATA.rankingScores?.[ruleId]?.[lock.id] ?? 0;
         }
 
         function selectedLocks() {
@@ -1150,33 +1442,34 @@
         }
 
         function updateToolOutput() {
-            const [, , mean10, p9010] = selectedRule();
-            const scale = state.topK / 20;
-            const mean = mean10 * (0.72 + 0.28 * scale);
-            const p90 = p9010 * (0.68 + 0.32 * scale);
+            const [ruleId] = selectedRule();
+            const benchmark = DATA.benchmarks[state.topK]?.[ruleId] || DATA.benchmarks[10][ruleId];
+            const mean = benchmark.mean;
+            const p90 = benchmark.p90;
             const meanOutput = $("#mean-output");
             const p90Output = $("#p90-output");
             animateNumber(meanOutput, mean);
             animateNumber(p90Output, p90);
-            renderToolboxBenchmark(mean, p90);
+            renderToolboxBenchmark(benchmark);
             renderPriority();
             pulseElements([".output-tile", ".toolbox-result-card", ".control-card"]);
         }
 
-        function renderToolboxBenchmark(mean, p90) {
+        function renderToolboxBenchmark(benchmark) {
             const target = $("#toolbox-capacity-bars");
             if (!target) return;
             const rule = selectedRule();
+            const uniform = DATA.benchmarks[state.topK]?.uniform || DATA.benchmarks[10].uniform;
             const rows = [
-                ["Uniform benchmark mean", 10.54],
-                [`${rule[1]} mean`, mean],
-                ["Uniform benchmark P90", 23.85],
-                [`${rule[1]} P90`, p90]
+                ["Uniform benchmark mean", uniform.mean],
+                [`${rule[1]} mean`, benchmark.mean],
+                ["Uniform benchmark P90", uniform.p90],
+                [`${rule[1]} P90`, benchmark.p90]
             ];
             renderBars("#toolbox-capacity-bars", rows, " min", "var(--apple-amber)");
             const copy = $("#toolbox-capacity-copy");
             if (copy) {
-                copy.textContent = `${rule[1]} under a Top-K package of ${state.topK} locks. Values scale from the aggregate fixed-capacity benchmark.`;
+                copy.textContent = `${rule[1]} under a Top-${state.topK}, 10% fixed-capacity benchmark. High-burden event coverage is ${benchmark.coverage.toFixed(1)}%.`;
             }
             const priorityCopy = $("#toolbox-priority-copy");
             if (priorityCopy) {
