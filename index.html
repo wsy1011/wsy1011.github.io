@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -261,6 +261,90 @@
             background: rgba(0, 113, 227, 0.1);
             color: #0071E3;
         }
+        .quick-link-card {
+            position: relative;
+            min-height: 260px;
+            overflow: hidden;
+            border-radius: 24px;
+            border: 1px solid rgba(229, 231, 235, 0.82);
+            background:
+                radial-gradient(circle at 18% 10%, color-mix(in srgb, var(--link-accent, #0071e3) 14%, transparent), transparent 34%),
+                linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.9));
+            box-shadow: 0 18px 48px rgba(15, 23, 42, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.48s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .quick-link-card::after {
+            content: "";
+            position: absolute;
+            inset: auto 0 0 0;
+            height: 4px;
+            background: var(--link-accent, #0071e3);
+            opacity: 0.82;
+        }
+        .quick-link-card:hover {
+            transform: translateY(-6px);
+            border-color: color-mix(in srgb, var(--link-accent, #0071e3) 34%, rgba(229, 231, 235, 0.82));
+            box-shadow: 0 28px 68px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        }
+        .quick-link-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 54px;
+            height: 32px;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--link-accent, #0071e3) 12%, white);
+            color: var(--link-accent, #0071e3);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+        .quick-link-tag {
+            border-radius: 999px;
+            background: rgba(243, 244, 246, 0.9);
+            color: #6b7280;
+            padding: 0.28rem 0.58rem;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .quick-link-action {
+            display: inline-flex;
+            min-height: 40px;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            border-radius: 999px;
+            padding: 0.68rem 0.92rem;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1;
+            transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.32s cubic-bezier(0.16, 1, 0.3, 1), color 0.32s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .quick-link-action:hover {
+            transform: translateY(-2px);
+        }
+        .quick-link-action.primary {
+            background: #0071e3;
+            color: #ffffff;
+        }
+        .quick-link-action.primary:hover {
+            background: #0077ed;
+        }
+        .quick-link-action.secondary {
+            border: 1px solid rgba(209, 213, 219, 0.95);
+            background: rgba(255, 255, 255, 0.74);
+            color: #111827;
+        }
+        .quick-link-action.secondary:hover {
+            border-color: rgba(156, 163, 175, 0.95);
+            background: #ffffff;
+        }
+        .quick-link-card i[class^="fa"],
+        .quick-link-card i[class*=" fa-"] {
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+        }
         .carousel-shell {
             position: relative;
         }
@@ -431,7 +515,7 @@
     <nav id="navbar" class="nav-glass border-b border-gray-200/60 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 flex justify-between items-center text-sm font-medium h-[54px]">
             <a href="#" class="ibm-logo-style text-xl tracking-tighter z-20">WSY</a>
-            <div class="hidden md:flex space-x-8 text-gray-500">
+            <div class="hidden lg:flex gap-5 xl:gap-8 text-gray-500">
                 <a href="#about" class="hover:text-gray-900 transition-colors">About</a>
                 <a href="#publications" class="hover:text-gray-900 transition-colors">Publications</a>
                 <div class="demo-menu relative">
@@ -462,15 +546,17 @@
                         </div>
                     </div>
                 </div>
+                <a href="#quick-links" class="hover:text-gray-900 transition-colors">Quick Links</a>
                 <a href="#photography" class="hover:text-gray-900 transition-colors">Photography</a>
                 <a href="#awards" class="hover:text-gray-900 transition-colors">Awards</a>
             </div>
             <a href="mailto:wangsuyang@hhu.edu.cn" class="bg-[#0071e3] text-white px-4 py-1.5 rounded-full hover:bg-[#0077ed] transition-colors text-xs font-semibold z-20">Contact</a>
         </div>
-        <div class="mobile-nav-scroll md:hidden flex gap-6 overflow-x-auto whitespace-nowrap px-5 pb-3 text-[13px] font-medium text-gray-500">
+        <div class="mobile-nav-scroll lg:hidden flex gap-6 overflow-x-auto whitespace-nowrap px-5 pb-3 text-[13px] font-medium text-gray-500">
             <a href="#about" class="hover:text-gray-900 transition-colors">About</a>
             <a href="#publications" class="hover:text-gray-900 transition-colors">Publications</a>
             <a href="demos/coordination-frictions/index.html" class="hover:text-gray-900 transition-colors">Demo</a>
+            <a href="#quick-links" class="hover:text-gray-900 transition-colors">Quick Links</a>
             <a href="#photography" class="hover:text-gray-900 transition-colors">Photography</a>
             <a href="#awards" class="hover:text-gray-900 transition-colors">Awards</a>
         </div>
@@ -655,6 +741,22 @@
             <p id="photo-modal-title" class="mt-4 text-center text-white text-lg font-semibold"></p>
         </div>
     </div>
+
+    <!-- Quick Links Section -->
+    <section id="quick-links" class="py-24 bg-[#f5f5f7] text-left border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between reveal">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Quick Links</h2>
+                    <p class="text-gray-500 mt-4 max-w-2xl text-[17px] font-medium leading-relaxed">
+                        Websites, tools, and resources I use often.
+                    </p>
+                </div>
+            </div>
+            <div id="quick-links-groups" class="space-y-12"></div>
+        </div>
+    </section>
+
 
     <footer class="bg-white py-12 px-6 border-t border-gray-200">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">

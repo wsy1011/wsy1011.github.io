@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATIONS_CSV = ROOT / "data" / "publications" / "publications.csv"
 AWARDS_CSV = ROOT / "data" / "awards" / "awards.csv"
+LINKS_CSV = ROOT / "data" / "links" / "links.csv"
 OUTPUT_JS = ROOT / "assets" / "site-data.js"
 
 PUBLICATION_REQUIRED_FIELDS = [
@@ -26,6 +27,17 @@ PUBLICATION_REQUIRED_FIELDS = [
 ]
 
 AWARD_REQUIRED_FIELDS = ["icon", "title", "detail", "issuer"]
+
+LINK_REQUIRED_FIELDS = [
+    "category",
+    "group",
+    "shortTitle",
+    "title",
+    "description",
+    "homepageUrl",
+    "submissionUrl",
+    "tags",
+]
 
 
 def read_csv(path: Path, required_fields: list[str]) -> list[dict[str, str]]:
@@ -75,6 +87,7 @@ def build_site_data() -> dict[str, object]:
     return {
         "publications": read_publications(),
         "awards": read_csv(AWARDS_CSV, AWARD_REQUIRED_FIELDS),
+        "links": read_csv(LINKS_CSV, LINK_REQUIRED_FIELDS),
     }
 
 
@@ -93,6 +106,7 @@ def write_site_data(output_path: Path) -> None:
     print(f"Generated {display_path}")
     print(f"Publications: {len(data['publications'])}")
     print(f"Awards: {len(data['awards'])}")
+    print(f"Links: {len(data['links'])}")
 
 
 def main() -> None:

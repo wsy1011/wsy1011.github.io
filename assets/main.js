@@ -1,5 +1,6 @@
 ﻿        const publications = window.siteData.publications;
         const awards = window.siteData.awards;
+        const quickLinks = window.siteData.links || [];
 
         document.addEventListener("DOMContentLoaded", function() {
             const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
@@ -77,6 +78,76 @@
                     li.className = `award-card flex-none w-[280px] md:w-[340px] h-[460px] md:h-[500px] snap-center reveal-scale delay-${(i+1)*100} flex flex-col justify-between`;
                     li.innerHTML = `<div><div class="award-icon mb-8"><i class="fas ${a.icon} text-lg"></i></div><div class="text-left"><h4 class="text-2xl md:text-3xl font-bold text-gray-900 leading-tight tracking-tight">${a.title}</h4></div></div><div class="text-left"><p class="text-sm text-gray-500 font-medium mt-3">${a.detail}</p><p class="text-[11px] text-gray-400 font-semibold uppercase tracking-wide mt-2">${a.issuer}</p></div>`;
                     al.appendChild(li);
+                });
+            }
+
+            // Render quick links
+            const quickLinksGroups = document.getElementById('quick-links-groups');
+            if (quickLinksGroups && quickLinks.length) {
+                const accents = ['#0071e3', '#34c759', '#ff9f0a', '#af52de', '#ff375f', '#30b0c7'];
+                const groupedLinks = quickLinks.reduce((groups, link) => {
+                    const groupName = link.group || 'Links';
+                    if (!groups.has(groupName)) groups.set(groupName, []);
+                    groups.get(groupName).push(link);
+                    return groups;
+                }, new Map());
+
+                groupedLinks.forEach((links, groupName) => {
+                    const groupEl = document.createElement('section');
+                    groupEl.className = 'quick-links-group reveal';
+
+                    const category = links[0]?.category || 'Links';
+                    const headerEl = document.createElement('div');
+                    headerEl.className = 'mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between';
+                    headerEl.innerHTML = `
+                        <div>
+                            <p class="text-[11px] font-bold text-gray-400 mb-3 tracking-[0.12em] uppercase">${escapeHtml(category)}</p>
+                            <h3 class="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">${escapeHtml(groupName)}</h3>
+                        </div>
+                    `;
+
+                    const gridEl = document.createElement('div');
+                    gridEl.className = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3';
+
+                    links.forEach((link, index) => {
+                        const card = document.createElement('article');
+                        const accent = accents[index % accents.length];
+                        card.className = 'quick-link-card reveal-scale flex flex-col justify-between p-6';
+                        card.style.setProperty('--link-accent', accent);
+
+                        const tags = (link.tags || '')
+                            .split(/[;,]/)
+                            .map((tag) => tag.trim())
+                            .filter(Boolean)
+                            .slice(0, 3);
+                        const tagsHtml = tags
+                            .map((tag) => `<span class="quick-link-tag">${escapeHtml(tag)}</span>`)
+                            .join('');
+
+                        card.innerHTML = `
+                            <div>
+                                <div class="mb-5 flex items-center justify-between gap-4">
+                                    <span class="quick-link-badge">${escapeHtml(link.shortTitle)}</span>
+                                </div>
+                                <h4 class="text-xl font-bold leading-tight tracking-tight text-gray-900">${escapeHtml(link.title)}</h4>
+                                <p class="mt-3 text-sm font-medium leading-relaxed text-gray-500">${escapeHtml(link.description)}</p>
+                                <div class="mt-5 flex flex-wrap gap-2">${tagsHtml}</div>
+                            </div>
+                            <div class="mt-7 grid grid-cols-2 gap-2">
+                                <a href="${escapeHtml(link.homepageUrl)}" target="_blank" rel="noopener noreferrer" class="quick-link-action primary" aria-label="Open homepage for ${escapeHtml(link.title)}">
+                                    Homepage <i class="fas fa-up-right-from-square text-[11px]" aria-hidden="true"></i>
+                                </a>
+                                <a href="${escapeHtml(link.submissionUrl)}" target="_blank" rel="noopener noreferrer" class="quick-link-action secondary" aria-label="Open submission system for ${escapeHtml(link.title)}">
+                                    Submission <i class="fas fa-paper-plane text-[11px]" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        `;
+                        gridEl.appendChild(card);
+                    });
+
+                    groupEl.appendChild(headerEl);
+                    groupEl.appendChild(gridEl);
+                    quickLinksGroups.appendChild(groupEl);
                 });
             }
 

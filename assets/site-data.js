@@ -222,5 +222,117 @@ window.siteData = {
             "detail": "2021 (1 of about 2,500 students)",
             "issuer": "Awarded by the Jiangsu Provincial Department of Education"
         }
+    ],
+    "links": [
+        {
+            "category": "Research Journals",
+            "group": "Transportation Research Series",
+            "shortTitle": "Part A",
+            "title": "Transportation Research Part A: Policy and Practice",
+            "description": "Transport policy, planning, behavior, and practice-oriented research.",
+            "homepageUrl": "https://shop.elsevier.com/journals/transportation-research-part-a-policy-and-practice/0965-8564",
+            "submissionUrl": "https://www.editorialmanager.com/ytra/default.aspx",
+            "tags": "policy;practice;transportation"
+        },
+        {
+            "category": "Research Journals",
+            "group": "Transportation Research Series",
+            "shortTitle": "Part B",
+            "title": "Transportation Research Part B: Methodological",
+            "description": "Methodological advances in transport modelling, optimization, and analytics.",
+            "homepageUrl": "https://shop.elsevier.com/journals/transportation-research-part-b-methodological/0191-2615",
+            "submissionUrl": "https://www.editorialmanager.com/trb/default.aspx",
+            "tags": "methodology;optimization;modelling"
+        },
+        {
+            "category": "Research Journals",
+            "group": "Transportation Research Series",
+            "shortTitle": "Part C",
+            "title": "Transportation Research Part C: Emerging Technologies",
+            "description": "Emerging transport technologies, intelligent systems, and data-driven mobility.",
+            "homepageUrl": "https://shop.elsevier.com/journals/transportation-research-part-c-emerging-technologies/0968-090X",
+            "submissionUrl": "https://www.editorialmanager.com/trc/default.aspx",
+            "tags": "technology;intelligent-systems;mobility"
+        },
+        {
+            "category": "Research Journals",
+            "group": "Transportation Research Series",
+            "shortTitle": "Part D",
+            "title": "Transportation Research Part D: Transport and Environment",
+            "description": "Environmental impacts, decarbonization, and sustainability in transport systems.",
+            "homepageUrl": "https://shop.elsevier.com/journals/transportation-research-part-d-transport-and-environment/1361-9209",
+            "submissionUrl": "https://www.editorialmanager.com/trd/default.aspx",
+            "tags": "environment;decarbonization;sustainability"
+        },
+        {
+            "category": "Research Journals",
+            "group": "Transportation Research Series",
+            "shortTitle": "Part E",
+            "title": "Transportation Research Part E: Logistics and Transportation Review",
+            "description": "Logistics, freight transport, supply chains, and transportation economics.",
+            "homepageUrl": "https://shop.elsevier.com/journals/transportation-research-part-e-logistics-and-transportation-review/1366-5545",
+            "submissionUrl": "https://www.editorialmanager.com/tre/default.aspx",
+            "tags": "logistics;freight;supply-chain"
+        },
+        {
+            "category": "Research Journals",
+            "group": "Transportation Research Series",
+            "shortTitle": "Part F",
+            "title": "Transportation Research Part F: Traffic Psychology and Behaviour",
+            "description": "Traffic psychology, driver behavior, human factors, and transport safety.",
+            "homepageUrl": "https://shop.elsevier.com/journals/transportation-research-part-f-traffic-psychology-and-behaviour/1369-8478",
+            "submissionUrl": "https://www.editorialmanager.com/trf/default.aspx",
+            "tags": "psychology;behavior;safety"
+        },
+        {
+            "category": "Research Journals",
+            "group": "Selected Research Journals",
+            "shortTitle": "OE",
+            "title": "Ocean Engineering",
+            "description": "Research on ocean, coastal, offshore, and marine engineering systems.",
+            "homepageUrl": "https://shop.elsevier.com/journals/ocean-engineering/0029-8018",
+            "submissionUrl": "https://www.editorialmanager.com/oe/default.aspx",
+            "tags": "ocean-engineering;offshore;marine"
+        },
+        {
+            "category": "Research Journals",
+            "group": "Selected Research Journals",
+            "shortTitle": "APEN",
+            "title": "Applied Energy",
+            "description": "Applied research on energy conversion, management, efficiency, and policy.",
+            "homepageUrl": "https://shop.elsevier.com/journals/applied-energy/0306-2619",
+            "submissionUrl": "https://www.editorialmanager.com/apen/default.aspx",
+            "tags": "energy;efficiency;policy"
+        },
+        {
+            "category": "Research Journals",
+            "group": "Selected Research Journals",
+            "shortTitle": "Energy",
+            "title": "Energy",
+            "description": "Energy systems research across production, conversion, storage, and use.",
+            "homepageUrl": "https://shop.elsevier.com/journals/energy/0360-5442",
+            "submissionUrl": "https://www.editorialmanager.com/egy/default.aspx",
+            "tags": "energy-systems;conversion;storage"
+        },
+        {
+            "category": "Research Journals",
+            "group": "Selected Research Journals",
+            "shortTitle": "OCMA",
+            "title": "Ocean & Coastal Management",
+            "description": "Management, governance, and planning for ocean and coastal systems.",
+            "homepageUrl": "https://shop.elsevier.com/journals/ocean-and-coastal-management/0964-5691",
+            "submissionUrl": "https://www.editorialmanager.com/ocma/default.aspx",
+            "tags": "ocean;coastal-management;governance"
+        },
+        {
+            "category": "Research Journals",
+            "group": "Selected Research Journals",
+            "shortTitle": "TP",
+            "title": "Transport Policy",
+            "description": "Policy-oriented research on transport systems, planning, and governance.",
+            "homepageUrl": "https://shop.elsevier.com/journals/transport-policy/0967-070X",
+            "submissionUrl": "https://www.editorialmanager.com/jtrp/default.aspx",
+            "tags": "transport-policy;planning;governance"
+        }
     ]
 };
