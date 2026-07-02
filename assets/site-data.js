@@ -68,6 +68,19 @@ window.siteData = {
             "citation": ""
         },
         {
+            "id": 104,
+            "status": "Under Review",
+            "articleType": "Journal Article",
+            "journalShort": "Ocean Eng.",
+            "journalFull": "Ocean Engineering",
+            "date": "July 2026",
+            "title": "Multi-Base Collaborative Fleet Scheduling for Maritime Oil Spill Response Considering Heterogeneous Fleets and Dynamic Offshore Replenishment",
+            "authors": "Kaixuan Tao, Xuejun Feng*, Zhu Wang*, Suyang Wang, Ruihua Wang, Jichen Zhang, Yan Zhang*",
+            "keywords": "Maritime oil spill response; Fleet scheduling; Heterogeneous fleets; Offshore replenishment; Multi-base collaboration",
+            "abstract": "",
+            "citation": ""
+        },
+        {
             "id": 1,
             "status": "Published",
             "articleType": "Journal Article",
