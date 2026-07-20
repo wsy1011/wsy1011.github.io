@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empirical Bayes - Leo's Blog</title>
+  <script>
+    (() => {
+      try {
+        const savedTheme = localStorage.getItem("site-theme");
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = savedTheme || (prefersDark ? "dark" : "light");
+      } catch {
+        document.documentElement.dataset.theme = "light";
+      }
+    })();
+  </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"]],
+        displayMath: [["\\[", "\\]"]],
+        processEscapes: true
+      },
+      svg: { fontCache: "global" }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --text: #111111;
+      --muted: #6b7280;
+      --muted-2: #9ca3af;
+      --line: #e5e7eb;
+      --panel: #f7f7f5;
+      --code: #f3f4f6;
+      --max: 1180px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b0b0c;
+        --text: #f5f5f7;
+        --muted: #a1a1aa;
+        --muted-2: #71717a;
+        --line: #27272a;
+        --panel: #18191b;
+        --code: #18191b;
+      }
+    }
+
+    :root[data-theme="light"] {
+      --bg: #ffffff;
+      --text: #111111;
+      --muted: #6b7280;
+      --muted-2: #9ca3af;
+      --line: #e5e7eb;
+      --panel: #f7f7f5;
+      --code: #f3f4f6;
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #000000;
+      --text: #f5f5f7;
+      --muted: #b7b7bd;
+      --muted-2: #7a7a82;
+      --line: #27272a;
+      --panel: #111111;
+      --code: #151515;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .ibm-logo-style {
+      font-family: "Arvo", serif;
+      display: inline-block;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        currentColor 0%,
+        currentColor 75%,
+        transparent 75%,
+        transparent 100%
+      );
+      background-size: 100% 0.12em;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(18px);
+    }
+    .topbar-inner {
+      max-width: var(--max);
+      height: 56px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .shell {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 54px 24px 88px;
+      display: grid;
+      grid-template-columns: 248px minmax(0, 760px);
+      gap: 72px;
+      align-items: start;
+    }
+    .sidebar {
+      position: sticky;
+      top: 92px;
+      display: grid;
+      gap: 28px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .side-title {
+      margin: 0 0 12px;
+      color: var(--muted-2);
+      font-size: 12px;
+      font-weight: 680;
+      letter-spacing: 0.04em;
+    }
+    .side-link {
+      display: block;
+      margin: 9px 0;
+      color: var(--muted);
+      transition: color 160ms ease;
+    }
+    .side-link:hover { color: var(--text); }
+
+    .article { min-width: 0; }
+    .back {
+      display: inline-flex;
+      margin-bottom: 44px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 540;
+    }
+    .back:hover { color: var(--text); }
+    .kicker {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    h1 {
+      margin: 0;
+      color: var(--text);
+      font-size: clamp(42px, 6.2vw, 76px);
+      font-weight: 620;
+      line-height: 1;
+      letter-spacing: -0.045em;
+    }
+    .dek {
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.55;
+      font-weight: 430;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin: 30px 0 48px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    article {
+      color: color-mix(in srgb, var(--text) 86%, var(--muted));
+      font-size: 18px;
+      line-height: 1.82;
+    }
+    article h2 {
+      margin: 54px 0 16px;
+      color: var(--text);
+      font-size: 30px;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+    }
+    article h3 {
+      margin: 34px 0 10px;
+      color: var(--text);
+      font-size: 21px;
+      line-height: 1.35;
+    }
+    article p { margin: 0 0 20px; }
+    article ul {
+      margin: 0 0 24px;
+      padding-left: 22px;
+    }
+    article li { margin: 10px 0; }
+    .callout {
+      margin: 32px 0;
+      padding: 22px 24px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+    .formula,
+    pre {
+      overflow-x: auto;
+      margin: 26px 0;
+      padding: 18px 20px;
+      border-radius: 16px;
+      background: var(--code);
+      color: var(--text);
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .formula {
+      display: block;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      font-family: inherit;
+      font-size: 18px;
+    }
+    code {
+      padding: 2px 5px;
+      border-radius: 6px;
+      background: var(--code);
+      color: var(--text);
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.9em;
+    }
+    .footer-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 62px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .footer-nav a:hover { color: var(--text); }
+
+    @media (max-width: 860px) {
+      .shell {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding-top: 36px;
+      }
+      .sidebar {
+        position: static;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--line);
+      }
+      .toc-links {
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .back { margin-bottom: 30px; }
+    }
+
+    @media (max-width: 520px) {
+      .topbar-inner { padding: 0 18px; }
+      .shell { padding: 30px 18px 68px; }
+      h1 { font-size: 42px; }
+      article { font-size: 17px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-header.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-brand" href="../../index.html" aria-label="Suyang Wang homepage">WSY</a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="../../index.html">Home</a>
+        <a class="is-active" href="../index.html">Blog</a>
+        <a href="../../index.html#publications">Publications</a>
+      </nav>
+      <div class="site-actions">
+        <a class="site-contact" href="mailto:wangsuyang@hhu.edu.cn">Contact <span aria-hidden="true">↗</span></a>
+        <button class="site-theme-toggle" type="button" data-site-theme-toggle aria-label="Switch theme" aria-pressed="false">
+          <svg class="site-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+          </svg>
+          <svg class="site-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path d="M20.99 12.45A8.5 8.5 0 1 1 11.55 3.01 6.6 6.6 0 0 0 20.99 12.45Z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <aside class="sidebar" aria-label="Article navigation">
+      <section>
+        <p class="side-title">Leo's Blog</p>
+        <a class="side-link" href="../index.html">All posts</a>
+      </section>
+      <section>
+        <p class="side-title">On this page</p>
+        <div class="toc-links">
+          <a class="side-link" href="#intuition">Intuition</a>
+          <a class="side-link" href="#model">Model</a>
+          <a class="side-link" href="#example">Example</a>
+          <a class="side-link" href="#when">When to use it</a>
+          <a class="side-link" href="#risks">Caveats</a>
+        </div>
+      </section>
+    </aside>
+
+    <section class="article">
+      <a class="back" href="../index.html">Back to blog</a>
+      <header>
+        <p class="kicker">Statistics · Bayesian Modeling</p>
+        <h1>Empirical Bayes: Stabilizing Individual Estimates with Population Information</h1>
+        <p class="dek">Empirical Bayes is useful when individual estimates are noisy, but the collection of all units contains enough structure to stabilize them.</p>
+        <div class="meta">
+          <span>Jul 2026</span>
+          <span>8 min read</span>
+          <span>Technical note</span>
+        </div>
+      </header>
+
+      <article>
+        <p>Many applied data problems have the same shape: we care about the true performance of each unit, but each unit has only a small amount of data. A new route may have only a few delay observations. A small port may have a sparse accident history. A model may have only a handful of examples in a narrow benchmark slice. Direct estimates are easy to compute, but often unstable.</p>
+
+        <p>Empirical Bayes addresses this by combining two sources of information: the data for a specific unit and the distribution learned from all comparable units. The result is a shrinkage estimate. Extreme observations with weak evidence move toward the population mean, while estimates supported by large samples stay close to their observed values.</p>
+
+        <div class="callout">
+          One-line summary: empirical Bayes estimates a prior from the data, then uses that prior to update each individual unit.
+        </div>
+
+        <h2 id="intuition">Intuition</h2>
+        <p>Suppose we compare on-time rates across ports. One small port has 5 records and all 5 are on time, giving an observed rate of 100%. Another port has 5,000 records and 4,600 are on time, giving an observed rate of 92%. If we rank by raw sample rates, the small port looks better.</p>
+
+        <p>But 5 observations are too few to support a strong claim. Empirical Bayes asks what the on-time rate looks like across all ports, how much true variation exists between ports, and how noisy each port-level estimate is. The small port's 100% estimate is pulled toward the overall rate. The large port's 92% estimate moves much less.</p>
+
+        <p>This is the central behavior: smaller samples get stronger shrinkage; larger samples get more authority.</p>
+
+        <h2 id="model">A Minimal Model</h2>
+        <p>A simple normal-normal version starts with an observed estimate \(y_i\) for unit \(i\). It is noisy around the unit's true value \(\theta_i\):</p>
+
+        <div class="formula">\[
+          y_i \mid \theta_i \sim \mathcal{N}(\theta_i, \sigma_i^2)
+        \]</div>
+
+        <p>The true values are not treated as unrelated. They are assumed to come from a shared population distribution:</p>
+
+        <div class="formula">\[
+          \theta_i \sim \mathcal{N}(\mu, \tau^2)
+        \]</div>
+
+        <p>A full Bayesian model would place priors on \(\mu\) and \(\tau\) and infer everything jointly. Empirical Bayes is more direct: estimate \(\mu\) and \(\tau\) from the full dataset, then treat them as fixed when estimating each \(\theta_i\).</p>
+
+        <div class="formula">\[
+          \mathbb{E}[\theta_i \mid y_i] = w_i y_i + (1 - w_i)\mu,
+          \qquad
+          w_i = \frac{\tau^2}{\tau^2 + \sigma_i^2}
+        \]</div>
+
+        <p>The posterior mean is a weighted average of the individual observation and the population mean. When observational uncertainty \(\sigma_i^2\) is large, \(w_i\) is small and the estimate moves toward \(\mu\). When between-unit variation \(\tau^2\) is large, the model allows units to differ more and shrinks less aggressively.</p>
+
+        <h2 id="example">A Research Monitoring Example</h2>
+        <p>Imagine estimating growth rates for many research topics. One topic has only a few papers but appears to grow very quickly this year. Reporting it as the fastest-growing topic may be misleading because small denominators amplify random variation.</p>
+
+        <p>An empirical Bayes workflow would:</p>
+
+        <ul>
+          <li>Estimate the average topic growth rate and between-topic variation from all topics.</li>
+          <li>Apply stronger shrinkage to topics with few papers or high noise.</li>
+          <li>Leave topics with large, stable evidence closer to their raw estimates.</li>
+        </ul>
+
+        <p>The output is not "which topic has the largest raw growth rate." It is closer to "which topic is likely to have high growth after accounting for uncertainty." That distinction matters in trend monitoring, risk ranking, port performance evaluation, and benchmark reporting.</p>
+
+        <h2 id="when">When To Use It</h2>
+        <p>Empirical Bayes is a good fit when there are many comparable units and uneven sample sizes across units. Common examples include school performance, hospital mortality rates, port incident rates, paper-topic growth rates, product conversion rates, and model performance across narrow benchmark slices.</p>
+
+        <p>Its main advantages are practical. It reduces false extremes from small samples, produces more stable estimates and rankings, and can be used as a lightweight post-processing step in otherwise frequentist workflows.</p>
+
+        <h2 id="risks">Caveats</h2>
+        <p>Empirical Bayes is not automatically correct. It depends on the idea that the units are exchangeable enough to share a population distribution. If the units come from fundamentally different mechanisms, shrinkage can hide real differences.</p>
+
+        <p>It also estimates hyperparameters from the data and then treats them as fixed. This usually understates uncertainty in those hyperparameters. For high-stakes decisions, compare the result with a full Bayesian model, bootstrap uncertainty analysis, or sensitivity checks across different prior families.</p>
+
+        <div class="callout">
+          My working rule: use empirical Bayes when the goal is to stabilize many noisy estimates or rankings; use full Bayesian modeling when the goal is to propagate uncertainty as rigorously as possible.
+        </div>
+      </article>
+
+      <nav class="footer-nav" aria-label="Article footer navigation">
+        <a href="../index.html">All posts</a>
+        <a href="../../index.html">Homepage</a>
+      </nav>
+    </section>
+  </main>
+  <script src="../../assets/site-header.js"></script>
+</body>
+</html>

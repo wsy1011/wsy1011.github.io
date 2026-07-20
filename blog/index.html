@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leo's Blog - Suyang (Leo) Wang</title>
+  <script>
+    (() => {
+      try {
+        const savedTheme = localStorage.getItem("site-theme");
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = savedTheme || (prefersDark ? "dark" : "light");
+      } catch {
+        document.documentElement.dataset.theme = "light";
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-soft: #f6f6f4;
+      --surface-strong: #efefed;
+      --text: #0f172a;
+      --muted: #667085;
+      --muted-2: #98a2b3;
+      --line: #e5e7eb;
+      --line-strong: #d0d5dd;
+      --pill: #f3f4f6;
+      --pill-hover: #e5e7eb;
+      --max: 1210px;
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #000000;
+      --surface: #080808;
+      --surface-soft: #111111;
+      --surface-strong: #202020;
+      --text: #f5f5f7;
+      --muted: #b7b7bd;
+      --muted-2: #7a7a82;
+      --line: #242424;
+      --line-strong: #343434;
+      --pill: #202020;
+      --pill-hover: #2a2a2a;
+    }
+
+    :root[data-theme="light"] {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-soft: #f6f6f4;
+      --surface-strong: #efefed;
+      --text: #0f172a;
+      --muted: #667085;
+      --muted-2: #98a2b3;
+      --line: #e5e7eb;
+      --line-strong: #d0d5dd;
+      --pill: #f3f4f6;
+      --pill-hover: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: var(--bg);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+
+    .ibm-logo-style {
+      font-family: "Arvo", serif;
+      display: inline-block;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        currentColor 0%,
+        currentColor 75%,
+        transparent 75%,
+        transparent 100%
+      );
+      background-size: 100% 0.12em;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+    }
+    .topbar-inner {
+      max-width: var(--max);
+      height: 64px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .home-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: var(--pill);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .home-pill:hover {
+      background: var(--pill-hover);
+      transform: translateY(-1px);
+    }
+    .theme-toggle {
+      position: relative;
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .theme-toggle:hover {
+      background: var(--pill);
+      color: var(--text);
+    }
+    .theme-toggle svg {
+      position: absolute;
+      inset: 9px;
+      width: 18px;
+      height: 18px;
+      stroke-width: 1.8;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+    .theme-icon-moon {
+      opacity: 0;
+      transform: scale(0.72) rotate(-24deg);
+    }
+    :root[data-theme="dark"] .theme-icon-sun {
+      opacity: 0;
+      transform: scale(0.72) rotate(24deg);
+    }
+    :root[data-theme="dark"] .theme-icon-moon {
+      opacity: 1;
+      transform: scale(1) rotate(0);
+    }
+
+    .layout {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 32px 24px 96px;
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 84px;
+      align-items: start;
+    }
+    .sidebar {
+      position: sticky;
+      top: 96px;
+      min-height: calc(100vh - 128px);
+      color: var(--text);
+    }
+    .sidebar-section {
+      margin-top: 28px;
+    }
+    .sidebar-title {
+      margin: 0 0 12px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .side-button,
+    .side-link {
+      display: block;
+      width: 100%;
+      padding: 9px 12px;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+      font-size: 15px;
+      line-height: 1.35;
+      cursor: pointer;
+    }
+    .side-button.is-active {
+      background: var(--pill);
+    }
+    .side-button:hover,
+    .side-link:hover {
+      background: var(--pill);
+    }
+    .side-link {
+      margin: 4px 0;
+      padding: 4px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .side-link:hover {
+      color: var(--text);
+      background: transparent;
+    }
+
+    .main {
+      min-width: 0;
+      max-width: 836px;
+    }
+    .hero {
+      text-align: center;
+      padding: 52px 0 82px;
+    }
+    h1 {
+      margin: 0;
+      color: var(--text);
+      font-size: clamp(34px, 4vw, 46px);
+      font-weight: 650;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+    .dek {
+      margin: 14px auto 0;
+      max-width: 580px;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 20px);
+      line-height: 1.45;
+      font-weight: 430;
+    }
+
+    .post-list {
+      display: grid;
+      gap: 58px;
+    }
+    .post-card {
+      display: block;
+      padding-bottom: 56px;
+      border-bottom: 1px solid var(--line);
+    }
+    .post-cover {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 2.72 / 1;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid color-mix(in srgb, var(--line) 76%, transparent);
+      box-shadow: 0 22px 55px rgba(15, 23, 42, 0.08);
+      isolation: isolate;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    :root[data-theme="dark"] .post-cover {
+      box-shadow: 0 22px 62px rgba(0, 0, 0, 0.36);
+    }
+    .post-card:hover .post-cover {
+      transform: translateY(-2px);
+      box-shadow: 0 28px 68px rgba(15, 23, 42, 0.14);
+    }
+    :root[data-theme="dark"] .post-card:hover .post-cover {
+      box-shadow: 0 30px 74px rgba(0, 0, 0, 0.46);
+    }
+    .cover-eb {
+      background:
+        radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.58), transparent 19%),
+        radial-gradient(circle at 76% 18%, rgba(255, 255, 255, 0.34), transparent 16%),
+        linear-gradient(135deg, #bde8ff 0%, #f2c36a 42%, #ff6a00 100%);
+    }
+    .cover-demo {
+      background:
+        radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.34), transparent 22%),
+        radial-gradient(circle at 82% 30%, rgba(79, 209, 197, 0.36), transparent 22%),
+        linear-gradient(135deg, #2434d8 0%, #6d5dfc 46%, #39c6f2 100%);
+    }
+    .cover-shape {
+      position: absolute;
+      border: 2px solid rgba(255, 255, 255, 0.56);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .cover-eb .cover-shape {
+      left: 38%;
+      top: 22%;
+      width: 28%;
+      height: 72%;
+      border-radius: 36px 36px 0 0;
+    }
+    .cover-demo .cover-shape {
+      left: 34%;
+      top: 18%;
+      width: 34%;
+      height: 58%;
+      border-radius: 18px;
+    }
+    .cover-code {
+      position: absolute;
+      left: 8%;
+      bottom: 13%;
+      display: grid;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.92);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: clamp(13px, 2vw, 18px);
+      font-weight: 650;
+      letter-spacing: -0.03em;
+    }
+    .cover-chip {
+      position: absolute;
+      right: 8%;
+      top: 15%;
+      padding: 9px 13px;
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      color: rgba(255, 255, 255, 0.92);
+      font-size: 14px;
+      font-weight: 650;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .cover-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.34;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.22) 1px, transparent 1px);
+      background-size: 24px 24px;
+      mask-image: radial-gradient(circle at 58% 52%, black, transparent 62%);
+    }
+
+    .post-meta {
+      display: grid;
+      grid-template-columns: 110px minmax(0, 1fr);
+      gap: 0;
+      margin-top: 18px;
+    }
+    .post-date {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.4;
+    }
+    .post-title {
+      margin: 0;
+      color: var(--text);
+      font-size: clamp(21px, 2.4vw, 28px);
+      line-height: 1.12;
+      font-weight: 650;
+      letter-spacing: -0.035em;
+    }
+    .post-excerpt {
+      margin: 10px 0 0;
+      max-width: 690px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.48;
+      font-weight: 450;
+    }
+    .post-topic {
+      display: block;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .empty {
+      display: none;
+      padding: 42px 0;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+    }
+    .empty.is-visible { display: block; }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding-top: 22px;
+      }
+      .sidebar {
+        position: static;
+        min-height: 0;
+        display: grid;
+        gap: 18px;
+      }
+      .sidebar-section {
+        margin-top: 0;
+      }
+      .topic-row {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 2px;
+      }
+      .side-button {
+        width: auto;
+        min-width: max-content;
+      }
+      .recent-list {
+        display: none;
+      }
+      .hero {
+        padding: 34px 0 52px;
+      }
+      .main {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar-inner {
+        height: 58px;
+        padding: 0 18px;
+      }
+      .layout {
+        padding: 18px 18px 68px;
+      }
+      .home-pill {
+        display: none;
+      }
+      .hero {
+        text-align: left;
+      }
+      .post-list {
+        gap: 42px;
+      }
+      .post-cover {
+        aspect-ratio: 1.56 / 1;
+      }
+      .post-meta {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .cover-chip {
+        right: 6%;
+        top: 8%;
+      }
+      .cover-code {
+        left: 6%;
+        bottom: 9%;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/site-header.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-brand" href="../index.html" aria-label="Suyang Wang homepage">WSY</a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="../index.html">Home</a>
+        <a class="is-active" href="index.html">Blog</a>
+        <a href="../index.html#publications">Publications</a>
+      </nav>
+      <div class="site-actions">
+        <a class="site-contact" href="mailto:wangsuyang@hhu.edu.cn">Contact <span aria-hidden="true">↗</span></a>
+        <button class="site-theme-toggle" type="button" data-site-theme-toggle aria-label="Switch theme" aria-pressed="false">
+          <svg class="site-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+          </svg>
+          <svg class="site-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path d="M20.99 12.45A8.5 8.5 0 1 1 11.55 3.01 6.6 6.6 0 0 0 20.99 12.45Z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" aria-label="Blog navigation">
+      <div class="topic-row">
+        <button class="side-button is-active" type="button" data-topic="All">All posts</button>
+      </div>
+
+      <section class="sidebar-section recent-list" aria-label="Recent posts">
+        <h2 class="sidebar-title">Recent</h2>
+        <a class="side-link" href="empirical-bayes/index.html">Empirical Bayes: Stabilizing Individual Estimates...</a>
+        <a class="side-link" href="../demos/coordination-frictions/index.html">Connected Lock Pressure Demo...</a>
+      </section>
+
+      <section class="sidebar-section" aria-label="Topics">
+        <h2 class="sidebar-title">Topics</h2>
+        <div class="topic-row">
+          <button class="side-button" type="button" data-topic="Statistics">Statistics</button>
+          <button class="side-button" type="button" data-topic="Demos">Demos</button>
+        </div>
+      </section>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <h1>Leo's Blog</h1>
+        <p class="dek">Notes on research software, empirical modeling, and small interfaces that make technical work easier to inspect.</p>
+      </section>
+
+      <section class="post-list" id="posts" aria-label="Blog posts"></section>
+      <div class="empty" id="emptyState">No posts match the current filter.</div>
+    </main>
+  </div>
+
+  <script>
+    const posts = [
+      {
+        id: "post-empirical-bayes",
+        date: "Jul 2026",
+        title: "Empirical Bayes: Stabilizing Individual Estimates with Population Information",
+        excerpt: "A practical note on why empirical Bayes shrinks noisy estimates, when it is useful, and how it differs from full Bayesian modeling.",
+        topic: "Statistics",
+        url: "empirical-bayes/index.html",
+        cover: "eb",
+        chip: "Shrinkage",
+        lines: ["E[theta | y]", "signal = data + prior", "noise ↓"]
+      },
+      {
+        id: "post-connected-lock-demo",
+        date: "Jul 2026",
+        title: "Connected Lock Pressure Demo",
+        excerpt: "An interactive evidence dashboard for coordination frictions in inland waterway operations.",
+        topic: "Demos",
+        url: "../demos/coordination-frictions/index.html",
+        cover: "demo",
+        chip: "Interactive demo",
+        lines: ["locks → queues", "priority targets", "counterfactual gains"]
+      }
+    ];
+
+    const postsEl = document.getElementById("posts");
+    const emptyEl = document.getElementById("emptyState");
+    const topicButtons = [...document.querySelectorAll("[data-topic]")];
+    let activeTopic = "All";
+
+    function renderPosts() {
+      const visible = posts.filter((post) => activeTopic === "All" || post.topic === activeTopic);
+      emptyEl.classList.toggle("is-visible", visible.length === 0);
+      postsEl.innerHTML = visible.map((post) => `
+        <a class="post-card" id="${post.id}" href="${post.url}" aria-label="${post.title}">
+          <div class="post-cover cover-${post.cover}">
+            <div class="cover-grid" aria-hidden="true"></div>
+            <div class="cover-shape" aria-hidden="true"></div>
+            <div class="cover-chip">${post.chip}</div>
+            <div class="cover-code" aria-hidden="true">
+              ${post.lines.map((line) => `<span>${line}</span>`).join("")}
+            </div>
+          </div>
+          <div class="post-meta">
+            <div class="post-date">${post.date}</div>
+            <div>
+              <h2 class="post-title">${post.title}</h2>
+              <p class="post-excerpt">${post.excerpt}</p>
+              <span class="post-topic">${post.topic}</span>
+            </div>
+          </div>
+        </a>
+      `).join("");
+    }
+
+    topicButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        activeTopic = button.dataset.topic;
+        topicButtons.forEach((item) => item.classList.toggle("is-active", item.dataset.topic === activeTopic));
+        renderPosts();
+      });
+    });
+
+    renderPosts();
+  </script>
+  <script src="../assets/site-header.js"></script>
+</body>
+</html>

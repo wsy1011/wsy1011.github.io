@@ -1,15 +1,27 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suyang Wang - Academic Profile</title>
+    <title>Suyang (Leo) Wang - Academic Profile</title>
+    <script>
+        (() => {
+            try {
+                const savedTheme = localStorage.getItem("site-theme");
+                const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                document.documentElement.dataset.theme = savedTheme || (prefersDark ? "dark" : "light");
+            } catch {
+                document.documentElement.dataset.theme = "light";
+            }
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 引入衬线体 Arvo -->
+    <!-- 寮曞叆琛嚎浣?Arvo -->
     <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@700;800&display=swap" rel="stylesheet">
     <style>
         :root {
+            color-scheme: light dark;
             --apple-bg: #ffffff;
             --apple-secondary-bg: #f5f5f7;
             --apple-text: #1d1d1f;
@@ -48,6 +60,52 @@
             -ms-overflow-style: none;
         }
         .mobile-nav-scroll::-webkit-scrollbar { display: none; }
+
+        .theme-toggle {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            color: #6b7280;
+            background: transparent;
+            border: 1px solid transparent;
+            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+        }
+        .theme-toggle:hover {
+            color: #111827;
+            background: rgba(17, 24, 39, 0.06);
+            transform: translateY(-1px);
+        }
+        .theme-toggle svg {
+            position: absolute;
+            width: 17px;
+            height: 17px;
+            stroke-width: 1.9;
+            transition: opacity 0.22s ease, transform 0.22s ease;
+        }
+        .theme-toggle .theme-icon-moon {
+            opacity: 0;
+            transform: scale(0.72) rotate(-24deg);
+        }
+        :root[data-theme="dark"] .theme-toggle {
+            color: #d4d4d8;
+        }
+        :root[data-theme="dark"] .theme-toggle:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        :root[data-theme="dark"] .theme-toggle .theme-icon-sun {
+            opacity: 0;
+            transform: scale(0.72) rotate(24deg);
+        }
+        :root[data-theme="dark"] .theme-toggle .theme-icon-moon {
+            opacity: 1;
+            transform: scale(1) rotate(0);
+        }
 
         .reveal {
             opacity: 0;
@@ -391,81 +449,6 @@
         }
         .apple-edge-btn.left { left: 0.4rem; }
         .apple-edge-btn.right { right: 0.4rem; }
-        .github-card {
-            position: relative;
-            overflow: hidden;
-            border-radius: 18px;
-            border: 1px solid rgba(229, 231, 235, 0.78);
-            background:
-                radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.96), transparent 32%),
-                linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.84));
-            box-shadow: 0 12px 34px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.88);
-            padding: 1.1rem;
-        }
-        .github-calendar {
-            display: grid;
-            grid-template-columns: repeat(15, minmax(0, 1fr));
-            gap: 0.38rem;
-        }
-        .github-day {
-            position: relative;
-            aspect-ratio: 1;
-            min-width: 0;
-            border-radius: 5px;
-            border: 1px solid rgba(15, 23, 42, 0.05);
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-        .github-day:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
-        }
-        .github-day.is-empty {
-            visibility: hidden;
-            pointer-events: none;
-        }
-        .github-level-0 { background: #ebedf0; }
-        .github-level-1 { background: #9be9a8; }
-        .github-level-2 { background: #40c463; }
-        .github-level-3 { background: #30a14e; }
-        .github-level-4 { background: #216e39; }
-        @media (max-width: 640px) {
-            .github-calendar {
-                grid-template-columns: repeat(10, minmax(0, 1fr));
-            }
-        }
-        .demo-menu-panel {
-            opacity: 0;
-            visibility: hidden;
-            position: fixed;
-            left: 0;
-            right: 0;
-            top: 54px;
-            transform: translateY(-12px);
-            transition: opacity 0.42s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.42s, transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
-            background:
-                radial-gradient(circle at 46% 8%, rgba(0, 113, 227, 0.08), transparent 30%),
-                rgba(251, 251, 253, 0.98);
-            border-bottom: 1px solid rgba(229, 231, 235, 0.78);
-            box-shadow: 0 28px 80px rgba(15, 23, 42, 0.10);
-            backdrop-filter: blur(26px) saturate(180%);
-            -webkit-backdrop-filter: blur(26px) saturate(180%);
-            pointer-events: none;
-        }
-        .demo-menu:hover .demo-menu-panel,
-        .demo-menu:focus-within .demo-menu-panel {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-        .demo-menu-link {
-            transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .demo-menu-link:hover {
-            transform: translateY(-1px);
-            color: #0071E3;
-        }
-        
         #pub-modal-overlay {
             background: rgba(245, 245, 247, 0.85);
             backdrop-filter: blur(25px) saturate(180%);
@@ -505,6 +488,537 @@
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         #photo-modal-overlay.active #photo-modal-content { transform: translateY(0) scale(1); }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --apple-bg: #0b0b0c;
+                --apple-secondary-bg: #141416;
+                --apple-text: #f5f5f7;
+                --apple-gray: #a1a1aa;
+            }
+
+            body {
+                background:
+                    radial-gradient(circle at 18% 8%, rgba(0, 113, 227, 0.12), transparent 30%),
+                    radial-gradient(circle at 86% 18%, rgba(52, 199, 89, 0.10), transparent 28%),
+                    linear-gradient(180deg, #0b0b0c 0%, #101113 46%, #141416 100%);
+                color: var(--apple-text);
+            }
+
+            .nav-glass {
+                background: rgba(11, 11, 12, 0.76);
+                border-color: rgba(63, 63, 70, 0.72) !important;
+            }
+
+            body > section:first-of-type {
+                background: linear-gradient(180deg, #0b0b0c 0%, #101113 48%, #141416 100%) !important;
+                border-color: rgba(63, 63, 70, 0.72) !important;
+            }
+
+            #about,
+            #awards,
+            footer {
+                background: #0b0b0c !important;
+                border-color: rgba(63, 63, 70, 0.72) !important;
+            }
+
+            #publications,
+            #photography {
+                background: #141416 !important;
+                border-color: rgba(63, 63, 70, 0.72) !important;
+            }
+
+            .bg-white,
+            .bg-gray-50,
+            .bg-gray-100,
+            #pub-modal-content,
+            #modal-citation-section {
+                background-color: #101113 !important;
+            }
+
+            .border-gray-100,
+            .border-gray-200,
+            .border-gray-200\/60,
+            .border-gray-200\/70 {
+                border-color: rgba(63, 63, 70, 0.72) !important;
+            }
+
+            .text-gray-900,
+            .text-gray-800,
+            .hover\:text-gray-900:hover,
+            .leadership-name {
+                color: #f5f5f7 !important;
+            }
+
+            .text-gray-700,
+            .text-gray-600,
+            .text-gray-500,
+            .leadership-title {
+                color: #a1a1aa !important;
+            }
+
+            .text-gray-400,
+            .text-gray-300 {
+                color: #71717a !important;
+            }
+
+            .ibm-logo-style {
+                color: #f5f5f7;
+                background-image: repeating-linear-gradient(
+                    to bottom,
+                    currentColor 0%,
+                    currentColor 75%,
+                    transparent 75%,
+                    transparent 100%
+                );
+            }
+
+            .hero-quote-striped .quote-word {
+                background-image: repeating-linear-gradient(
+                    to bottom,
+                    #f5f5f7 0%,
+                    #f5f5f7 68%,
+                    rgba(245, 245, 247, 0.20) 68%,
+                    rgba(245, 245, 247, 0.20) 100%
+                );
+            }
+
+            .apple-card {
+                background:
+                    radial-gradient(circle at 12% 8%, rgba(39, 39, 42, 0.96), transparent 32%),
+                    linear-gradient(135deg, rgba(24, 24, 27, 0.96), rgba(17, 17, 19, 0.88));
+                border-color: rgba(63, 63, 70, 0.72);
+                box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            }
+
+            .award-card,
+            .pub-card-custom {
+                border-color: rgba(63, 63, 70, 0.72);
+                box-shadow: 0 18px 48px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+                color: #f5f5f7;
+                filter: none;
+            }
+
+            .card-published {
+                background:
+                    radial-gradient(circle at 20% 12%, rgba(34, 197, 94, 0.24), transparent 38%),
+                    linear-gradient(135deg, #102317 0%, #18351f 50%, #1f4a2d 100%);
+            }
+            .card-under-review {
+                background:
+                    radial-gradient(circle at 20% 12%, rgba(245, 158, 11, 0.24), transparent 38%),
+                    linear-gradient(135deg, #2a2110 0%, #463515 52%, #5a4318 100%);
+            }
+            .card-working-paper {
+                background:
+                    radial-gradient(circle at 20% 12%, rgba(59, 130, 246, 0.24), transparent 38%),
+                    linear-gradient(135deg, #101d32 0%, #182b46 50%, #203b5e 100%);
+            }
+            .card-thesis {
+                background:
+                    radial-gradient(circle at 20% 12%, rgba(20, 184, 166, 0.22), transparent 38%),
+                    linear-gradient(135deg, #0d2523 0%, #143c39 50%, #1c524e 100%);
+            }
+
+            .award-card {
+                background:
+                    radial-gradient(circle at 20% 12%, rgba(96, 165, 250, 0.22), transparent 38%),
+                    linear-gradient(135deg, #101827 0%, #17233a 52%, #21365b 100%);
+            }
+
+            .pub-card-custom::before,
+            .award-card::before {
+                background:
+                    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.12), transparent 34%),
+                    linear-gradient(135deg, rgba(255, 255, 255, 0.07), transparent 58%);
+                opacity: 1;
+            }
+
+            .pub-card-custom::after,
+            .award-card::after {
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+            }
+
+            .pub-card-custom .text-gray-900,
+            .award-card .text-gray-900,
+            .pub-card-custom .text-gray-800,
+            .award-card .text-gray-800 {
+                color: #f5f5f7 !important;
+            }
+            .pub-card-custom .text-gray-700,
+            .award-card .text-gray-700,
+            .pub-card-custom .text-gray-600,
+            .award-card .text-gray-600,
+            .pub-card-custom .text-gray-500,
+            .award-card .text-gray-500 {
+                color: #d4d4d8 !important;
+            }
+            .pub-card-custom .text-gray-400,
+            .award-card .text-gray-400 {
+                color: #a1a1aa !important;
+            }
+
+            .pub-card-custom:hover,
+            .award-card:hover {
+                filter: saturate(1) brightness(0.98);
+                box-shadow: 0 28px 70px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+            }
+
+            #avatar-container {
+                background-color: #101113 !important;
+                border-color: rgba(63, 63, 70, 0.72) !important;
+            }
+
+            .apple-edge-btn {
+                color: rgba(245, 245, 247, 0.84);
+                background: rgba(39, 39, 42, 0.78);
+                border-color: rgba(82, 82, 91, 0.72);
+                box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            }
+
+            .apple-edge-btn:hover {
+                background: rgba(63, 63, 70, 0.92);
+            }
+
+            #pub-modal-overlay {
+                background: rgba(11, 11, 12, 0.82);
+            }
+
+            #close-modal {
+                background-color: #18181b !important;
+                color: #a1a1aa !important;
+            }
+
+            #modal-journal-meta {
+                color: #34d399 !important;
+            }
+
+            .github-day {
+                border-color: rgba(255, 255, 255, 0.08);
+            }
+
+            .github-level-0 { background: #27272a; }
+            .github-level-1 { background: #14532d; }
+            .github-level-2 { background: #15803d; }
+            .github-level-3 { background: #16a34a; }
+            .github-level-4 { background: #22c55e; }
+        }
+        :root[data-theme="dark"] {
+            color-scheme: dark;
+            --apple-bg: #0b0b0c;
+            --apple-secondary-bg: #141416;
+            --apple-text: #f5f5f7;
+            --apple-gray: #a1a1aa;
+        }
+        :root[data-theme="light"] {
+            color-scheme: light;
+            --apple-bg: #ffffff;
+            --apple-secondary-bg: #f5f5f7;
+            --apple-text: #1d1d1f;
+            --apple-gray: #86868b;
+        }
+        :root[data-theme="dark"] body {
+            background:
+                radial-gradient(circle at 18% 8%, rgba(0, 113, 227, 0.12), transparent 30%),
+                radial-gradient(circle at 86% 18%, rgba(52, 199, 89, 0.10), transparent 28%),
+                linear-gradient(180deg, #0b0b0c 0%, #101113 46%, #141416 100%);
+            color: var(--apple-text);
+        }
+        :root[data-theme="light"] body {
+            background:
+                radial-gradient(circle at 18% 8%, rgba(0, 113, 227, 0.08), transparent 30%),
+                radial-gradient(circle at 86% 18%, rgba(52, 199, 89, 0.08), transparent 28%),
+                linear-gradient(180deg, #ffffff 0%, #fbfbfd 46%, #f5f5f7 100%);
+            color: var(--apple-text);
+        }
+        :root[data-theme="dark"] .nav-glass {
+            background: rgba(11, 11, 12, 0.76);
+            border-color: rgba(63, 63, 70, 0.72) !important;
+        }
+        :root[data-theme="light"] .nav-glass {
+            background: rgba(255, 255, 255, 0.72);
+            border-color: rgba(229, 231, 235, 0.60) !important;
+        }
+        :root[data-theme="dark"] body > section:first-of-type {
+            background: linear-gradient(180deg, #0b0b0c 0%, #101113 48%, #141416 100%) !important;
+            border-color: rgba(63, 63, 70, 0.72) !important;
+        }
+        :root[data-theme="light"] body > section:first-of-type {
+            background: #ffffff !important;
+            border-color: #f3f4f6 !important;
+        }
+        :root[data-theme="dark"] #about,
+        :root[data-theme="dark"] #awards,
+        :root[data-theme="dark"] footer {
+            background: #0b0b0c !important;
+            border-color: rgba(63, 63, 70, 0.72) !important;
+        }
+        :root[data-theme="light"] #about,
+        :root[data-theme="light"] #awards,
+        :root[data-theme="light"] footer {
+            background: #ffffff !important;
+            border-color: #f3f4f6 !important;
+        }
+        :root[data-theme="dark"] #publications,
+        :root[data-theme="dark"] #photography {
+            background: #141416 !important;
+            border-color: rgba(63, 63, 70, 0.72) !important;
+        }
+        :root[data-theme="light"] #publications,
+        :root[data-theme="light"] #photography {
+            background: #ffffff !important;
+            border-color: #f3f4f6 !important;
+        }
+        :root[data-theme="dark"] .bg-white,
+        :root[data-theme="dark"] .bg-gray-50,
+        :root[data-theme="dark"] .bg-gray-100,
+        :root[data-theme="dark"] #pub-modal-content,
+        :root[data-theme="dark"] #modal-citation-section {
+            background-color: #101113 !important;
+        }
+        :root[data-theme="light"] .bg-white,
+        :root[data-theme="light"] #pub-modal-content {
+            background-color: #ffffff !important;
+        }
+        :root[data-theme="light"] .bg-gray-50,
+        :root[data-theme="light"] #modal-citation-section {
+            background-color: #f9fafb !important;
+        }
+        :root[data-theme="light"] .bg-gray-100 {
+            background-color: #f3f4f6 !important;
+        }
+        :root[data-theme="dark"] .border-gray-100,
+        :root[data-theme="dark"] .border-gray-200,
+        :root[data-theme="dark"] .border-gray-200\/60,
+        :root[data-theme="dark"] .border-gray-200\/70 {
+            border-color: rgba(63, 63, 70, 0.72) !important;
+        }
+        :root[data-theme="dark"] .text-gray-900,
+        :root[data-theme="dark"] .text-gray-800,
+        :root[data-theme="dark"] .hover\:text-gray-900:hover,
+        :root[data-theme="dark"] .leadership-name {
+            color: #f5f5f7 !important;
+        }
+        :root[data-theme="light"] .text-gray-900,
+        :root[data-theme="light"] .leadership-name {
+            color: #111827 !important;
+        }
+        :root[data-theme="light"] .text-gray-800 {
+            color: #1f2937 !important;
+        }
+        :root[data-theme="dark"] .text-gray-700,
+        :root[data-theme="dark"] .text-gray-600,
+        :root[data-theme="dark"] .text-gray-500,
+        :root[data-theme="dark"] .leadership-title {
+            color: #a1a1aa !important;
+        }
+        :root[data-theme="light"] .text-gray-700 {
+            color: #374151 !important;
+        }
+        :root[data-theme="light"] .text-gray-600 {
+            color: #4b5563 !important;
+        }
+        :root[data-theme="light"] .text-gray-500,
+        :root[data-theme="light"] .leadership-title {
+            color: #6b7280 !important;
+        }
+        :root[data-theme="dark"] .text-gray-400,
+        :root[data-theme="dark"] .text-gray-300 {
+            color: #71717a !important;
+        }
+        :root[data-theme="light"] .text-gray-400 {
+            color: #9ca3af !important;
+        }
+        :root[data-theme="dark"] .ibm-logo-style {
+            color: #f5f5f7;
+            background-image: repeating-linear-gradient(to bottom, currentColor 0%, currentColor 75%, transparent 75%, transparent 100%);
+        }
+        :root[data-theme="light"] .ibm-logo-style {
+            color: #1d1d1f;
+            background-image: repeating-linear-gradient(to bottom, currentColor 0%, currentColor 75%, transparent 75%, transparent 100%);
+        }
+        :root[data-theme="dark"] .hero-quote-striped .quote-word {
+            background-image: repeating-linear-gradient(to bottom, #f5f5f7 0%, #f5f5f7 68%, rgba(245, 245, 247, 0.20) 68%, rgba(245, 245, 247, 0.20) 100%);
+        }
+        :root[data-theme="light"] .hero-quote-striped .quote-word {
+            background-image: repeating-linear-gradient(to bottom, #1d1d1f 0%, #1d1d1f 68%, rgba(29, 29, 31, 0.18) 68%, rgba(29, 29, 31, 0.18) 100%);
+        }
+        :root[data-theme="dark"] .apple-card {
+            background:
+                radial-gradient(circle at 12% 8%, rgba(39, 39, 42, 0.96), transparent 32%),
+                linear-gradient(135deg, rgba(24, 24, 27, 0.96), rgba(17, 17, 19, 0.88));
+            border-color: rgba(63, 63, 70, 0.72);
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+        :root[data-theme="dark"] .award-card,
+        :root[data-theme="dark"] .pub-card-custom {
+            border-color: rgba(63, 63, 70, 0.72);
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            color: #f5f5f7;
+            filter: none;
+        }
+        :root[data-theme="dark"] .card-published {
+            background:
+                radial-gradient(circle at 20% 12%, rgba(34, 197, 94, 0.24), transparent 38%),
+                linear-gradient(135deg, #102317 0%, #18351f 50%, #1f4a2d 100%);
+        }
+        :root[data-theme="dark"] .card-under-review {
+            background:
+                radial-gradient(circle at 20% 12%, rgba(245, 158, 11, 0.24), transparent 38%),
+                linear-gradient(135deg, #2a2110 0%, #463515 52%, #5a4318 100%);
+        }
+        :root[data-theme="dark"] .card-working-paper {
+            background:
+                radial-gradient(circle at 20% 12%, rgba(59, 130, 246, 0.24), transparent 38%),
+                linear-gradient(135deg, #101d32 0%, #182b46 50%, #203b5e 100%);
+        }
+        :root[data-theme="dark"] .card-thesis {
+            background:
+                radial-gradient(circle at 20% 12%, rgba(20, 184, 166, 0.22), transparent 38%),
+                linear-gradient(135deg, #0d2523 0%, #143c39 50%, #1c524e 100%);
+        }
+        :root[data-theme="dark"] .award-card {
+            background:
+                radial-gradient(circle at 20% 12%, rgba(96, 165, 250, 0.22), transparent 38%),
+                linear-gradient(135deg, #101827 0%, #17233a 52%, #21365b 100%);
+        }
+        :root[data-theme="dark"] .pub-card-custom::before,
+        :root[data-theme="dark"] .award-card::before {
+            background:
+                radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.12), transparent 34%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.07), transparent 58%);
+            opacity: 1;
+        }
+        :root[data-theme="dark"] .pub-card-custom::after,
+        :root[data-theme="dark"] .award-card::after {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+        }
+        :root[data-theme="dark"] .pub-card-custom .text-gray-900,
+        :root[data-theme="dark"] .award-card .text-gray-900,
+        :root[data-theme="dark"] .pub-card-custom .text-gray-800,
+        :root[data-theme="dark"] .award-card .text-gray-800 {
+            color: #f5f5f7 !important;
+        }
+        :root[data-theme="dark"] .pub-card-custom .text-gray-700,
+        :root[data-theme="dark"] .award-card .text-gray-700,
+        :root[data-theme="dark"] .pub-card-custom .text-gray-600,
+        :root[data-theme="dark"] .award-card .text-gray-600,
+        :root[data-theme="dark"] .pub-card-custom .text-gray-500,
+        :root[data-theme="dark"] .award-card .text-gray-500 {
+            color: #d4d4d8 !important;
+        }
+        :root[data-theme="dark"] .pub-card-custom .text-gray-400,
+        :root[data-theme="dark"] .award-card .text-gray-400 {
+            color: #a1a1aa !important;
+        }
+        :root[data-theme="light"] .award-card,
+        :root[data-theme="light"] .pub-card-custom {
+            filter: none;
+            color: #111827;
+            border-color: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 16px 44px rgba(15, 23, 42, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.82);
+        }
+        :root[data-theme="light"] .card-published {
+            background: linear-gradient(135deg, #F7FFF9 0%, #E3FBEA 48%, #D9F8E5 100%);
+        }
+        :root[data-theme="light"] .card-under-review {
+            background: linear-gradient(135deg, #FFFDF1 0%, #FFF5C9 52%, #FFEFB2 100%);
+        }
+        :root[data-theme="light"] .card-working-paper {
+            background: linear-gradient(135deg, #F1F8FF 0%, #DCEEFF 50%, #C9E2FF 100%);
+        }
+        :root[data-theme="light"] .card-thesis {
+            background: linear-gradient(135deg, #F1FFFE 0%, #D6F6F5 50%, #C4ECEA 100%);
+        }
+        :root[data-theme="light"] .award-card {
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(245, 250, 255, 0.58)),
+                linear-gradient(135deg, #EAF4FF 0%, #B9DCFF 52%, #7CB7F4 100%);
+        }
+        :root[data-theme="light"] .pub-card-custom::before {
+            background:
+                radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.95), transparent 36%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.65), transparent 58%);
+            opacity: 0.74;
+        }
+        :root[data-theme="light"] .award-card::before {
+            background:
+                radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.98), transparent 36%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.68), transparent 58%);
+            opacity: 0.78;
+        }
+        :root[data-theme="light"] .pub-card-custom::after,
+        :root[data-theme="light"] .award-card::after {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.72), transparent);
+        }
+        :root[data-theme="light"] .pub-card-custom .text-gray-900,
+        :root[data-theme="light"] .award-card .text-gray-900 {
+            color: #111827 !important;
+        }
+        :root[data-theme="light"] .pub-card-custom .text-gray-800,
+        :root[data-theme="light"] .award-card .text-gray-800 {
+            color: #1f2937 !important;
+        }
+        :root[data-theme="light"] .pub-card-custom .text-gray-700,
+        :root[data-theme="light"] .award-card .text-gray-700 {
+            color: #374151 !important;
+        }
+        :root[data-theme="light"] .pub-card-custom .text-gray-600,
+        :root[data-theme="light"] .award-card .text-gray-600 {
+            color: #4b5563 !important;
+        }
+        :root[data-theme="light"] .pub-card-custom .text-gray-500,
+        :root[data-theme="light"] .award-card .text-gray-500 {
+            color: #6b7280 !important;
+        }
+        :root[data-theme="light"] .pub-card-custom .text-gray-400,
+        :root[data-theme="light"] .award-card .text-gray-400 {
+            color: #9ca3af !important;
+        }
+        :root[data-theme="light"] #avatar-container {
+            background-color: #f9fafb !important;
+            border-color: rgba(229, 231, 235, 0.78) !important;
+            box-shadow: 0 18px 54px rgba(15, 23, 42, 0.08);
+        }
+        :root[data-theme="light"] #about .border-b.border-gray-200 {
+            border-color: rgba(209, 213, 219, 0.72) !important;
+        }
+        :root[data-theme="light"] #education .border-l {
+            border-color: rgba(203, 213, 225, 0.64) !important;
+        }
+        :root[data-theme="light"] #education .bg-gray-900 {
+            background-color: #0071e3 !important;
+        }
+        :root[data-theme="dark"] #avatar-container {
+            background-color: #101113 !important;
+            border-color: rgba(63, 63, 70, 0.72) !important;
+        }
+        :root[data-theme="dark"] .apple-edge-btn {
+            color: rgba(245, 245, 247, 0.84);
+            background: rgba(39, 39, 42, 0.78);
+            border-color: rgba(82, 82, 91, 0.72);
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+        :root[data-theme="dark"] .apple-edge-btn:hover {
+            background: rgba(63, 63, 70, 0.92);
+        }
+        :root[data-theme="dark"] #pub-modal-overlay {
+            background: rgba(11, 11, 12, 0.82);
+        }
+        :root[data-theme="dark"] #close-modal {
+            background-color: #18181b !important;
+            color: #a1a1aa !important;
+        }
+        :root[data-theme="dark"] #modal-journal-meta {
+            color: #34d399 !important;
+        }
+        :root[data-theme="dark"] .github-day {
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        :root[data-theme="dark"] .github-level-0 { background: #27272a; }
+        :root[data-theme="dark"] .github-level-1 { background: #14532d; }
+        :root[data-theme="dark"] .github-level-2 { background: #15803d; }
+        :root[data-theme="dark"] .github-level-3 { background: #16a34a; }
+        :root[data-theme="dark"] .github-level-4 { background: #22c55e; }
         @media (prefers-reduced-motion: reduce) {
             *,
             *::before,
@@ -516,62 +1030,36 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="assets/site-header.css">
 </head>
-<body>
+<body class="homepage">
 
-    <!-- 导航栏 -->
-    <nav id="navbar" class="nav-glass border-b border-gray-200/60 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 flex justify-between items-center text-sm font-medium h-[54px]">
-            <a href="#" class="ibm-logo-style text-xl tracking-tighter z-20">WSY</a>
-            <div class="hidden lg:flex gap-5 xl:gap-8 text-gray-500">
-                <a href="#about" class="hover:text-gray-900 transition-colors">About</a>
-                <a href="#publications" class="hover:text-gray-900 transition-colors">Publications</a>
-                <div class="demo-menu relative">
-                    <button type="button" class="hover:text-gray-900 transition-colors">Demos</button>
-                    <div class="demo-menu-panel text-left">
-                        <div class="mx-auto grid max-w-5xl grid-cols-[1.35fr_1fr_1fr] gap-16 px-8 py-10">
-                            <div>
-                                <p class="mb-4 text-xs font-semibold text-gray-400">Explore Demos</p>
-                                <a href="demos/coordination-frictions/index.html" class="demo-menu-link block text-2xl font-semibold leading-tight text-gray-900">
-                                    Connected Lock Pressure Demo
-                                </a>
-                                <p class="mt-3 max-w-sm text-sm leading-relaxed text-gray-500">
-                                    Interactive evidence dashboard for coordination frictions in inland waterway operations.
-                                </p>
-                            </div>
-                            <div>
-                                <p class="mb-4 text-xs font-semibold text-gray-400">Current Module</p>
-                                <a href="demos/coordination-frictions/index.html" class="demo-menu-link block text-sm font-semibold leading-7 text-gray-700">Evidence Dashboard</a>
-                                <span class="block text-sm font-semibold leading-7 text-gray-400">Paper Visualization</span>
-                                <span class="block text-sm font-semibold leading-7 text-gray-400">Interactive Analysis</span>
-                            </div>
-                            <div>
-                                <p class="mb-4 text-xs font-semibold text-gray-400">More from Demos</p>
-                                <span class="block text-sm font-semibold leading-7 text-gray-500">Inland Waterway Research</span>
-                                <span class="block text-sm font-semibold leading-7 text-gray-400">Visual Analytics</span>
-                                <span class="block text-sm font-semibold leading-7 text-gray-400">Simulation Interfaces</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a href="#quick-links" class="hover:text-gray-900 transition-colors">Quick Links</a>
-                <a href="#photography" class="hover:text-gray-900 transition-colors">Photography</a>
-                <a href="#awards" class="hover:text-gray-900 transition-colors">Awards</a>
+    <!-- 瀵艰埅鏍?-->
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a class="site-brand" href="#" aria-label="Suyang Wang homepage">WSY</a>
+            <nav class="site-nav" aria-label="Primary navigation">
+                <a class="is-active" href="#">Home</a>
+                <a href="#blog">Blog</a>
+                <a href="#publications">Publications</a>
+            </nav>
+            <div class="site-actions">
+                <a class="site-contact" href="mailto:wangsuyang@hhu.edu.cn">Contact <span aria-hidden="true">&nearr;</span></a>
+                <button class="site-theme-toggle" type="button" data-site-theme-toggle aria-label="Switch theme" aria-pressed="false">
+                    <svg class="site-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                    </svg>
+                    <svg class="site-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                        <path d="M20.99 12.45A8.5 8.5 0 1 1 11.55 3.01 6.6 6.6 0 0 0 20.99 12.45Z"></path>
+                    </svg>
+                </button>
             </div>
-            <a href="mailto:wangsuyang@hhu.edu.cn" class="bg-[#0071e3] text-white px-4 py-1.5 rounded-full hover:bg-[#0077ed] transition-colors text-xs font-semibold z-20">Contact</a>
         </div>
-        <div class="mobile-nav-scroll lg:hidden flex gap-6 overflow-x-auto whitespace-nowrap px-5 pb-3 text-[13px] font-medium text-gray-500">
-            <a href="#about" class="hover:text-gray-900 transition-colors">About</a>
-            <a href="#publications" class="hover:text-gray-900 transition-colors">Publications</a>
-            <a href="demos/coordination-frictions/index.html" class="hover:text-gray-900 transition-colors">Demo</a>
-            <a href="#quick-links" class="hover:text-gray-900 transition-colors">Quick Links</a>
-            <a href="#photography" class="hover:text-gray-900 transition-colors">Photography</a>
-            <a href="#awards" class="hover:text-gray-900 transition-colors">Awards</a>
-        </div>
-    </nav>
+    </header>
 
-    <!-- 顶部金句模块 -->
-    <section class="bg-gradient-to-b from-white via-white to-[#f5f5f7] pt-28 pb-32 px-6 text-center border-b border-gray-100">
+    <!-- 椤堕儴閲戝彞妯″潡 -->
+    <section class="bg-white pt-28 pb-32 px-6 text-center border-b border-gray-100">
         <div class="max-w-5xl mx-auto reveal">
             <h2 id="hero-quote" class="hero-quote hero-quote-striped text-4xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight text-gray-900 text-center">
                 Building real-life useful applications from your research is very important.
@@ -584,7 +1072,7 @@
         <div class="max-w-5xl mx-auto">
             <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-gray-200 pb-12">
                 <div class="reveal text-left">
-                    <h1 class="leadership-name tracking-tight">Suyang Wang</h1>
+                    <h1 class="leadership-name tracking-tight">Suyang (Leo) Wang</h1>
                     <h2 class="leadership-title font-medium">Ph.D. Candidate at Hohai University</h2>
                     <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
                         <a href="https://orcid.org/my-orcid?orcid=0009-0002-8499-1181" target="_blank" class="inline-flex items-center gap-1 whitespace-nowrap text-[#0071e3] hover:underline font-medium text-[17px]">ORCID Profile <i class="fas fa-chevron-right text-[10px]"></i></a>
@@ -594,7 +1082,7 @@
                 </div>
                 <div class="mt-12 md:mt-0 reveal-scale delay-100">
                     <div id="avatar-container" class="w-64 h-64 md:w-[400px] md:h-[400px] overflow-hidden rounded-3xl bg-gray-50 flex items-center justify-center relative shadow-sm border border-gray-100">
-                        <img id="avatar-gif" src="assets/avatar.png" alt="Suyang Wang" class="w-full h-full object-cover relative z-10" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'text-gray-300 font-medium italic text-center p-4\'>[Avatar Placeholder]</div>'">
+                        <img id="avatar-gif" src="assets/avatar.png" alt="Suyang (Leo) Wang" class="w-full h-full object-cover relative z-10" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'text-gray-300 font-medium italic text-center p-4\'>[Avatar Placeholder]</div>'">
                     </div>
                 </div>
             </div>
@@ -603,23 +1091,8 @@
                 <div class="md:col-span-7 reveal delay-100">
                     <h3 class="text-[11px] font-bold text-gray-400 mb-6 tracking-[0.12em] uppercase">Research Focus</h3>
                     <div class="text-[19px] md:text-[21px] leading-[1.45] text-gray-700 space-y-6 tracking-tight">
-                        <p>I am Suyang Wang, a Ph.D. student at Hohai University. My research focuses on <strong>sustainable waterway transportation</strong> and <strong>shipping decarbonization</strong>.</p>
+                        <p>I am Suyang (Leo) Wang, a Ph.D. student at Hohai University. My research focuses on <strong>sustainable waterway transportation</strong> and <strong>shipping decarbonization</strong>.</p>
                         <p>Methodologically, I specialize in integrating <strong>hydrodynamic numerical simulation</strong> with <strong>operations optimization</strong>. By leveraging this interdisciplinary approach, I explore sustainable logistics solutions to reduce emissions and improve the efficiency and resilience of waterway, port, and shipping networks.</p>
-                    </div>
-                    <div class="github-card mt-8">
-                        <div class="mb-4 flex items-start justify-between gap-4">
-                            <div>
-                                <p class="text-[11px] font-bold uppercase tracking-[0.12em] text-gray-400">GitHub · Recent 30 Days</p>
-                                <p id="github-range-label" class="mt-1 text-sm font-medium leading-relaxed text-gray-500">Loading recent contribution activity.</p>
-                            </div>
-                            <a href="https://github.com/wsy1011" target="_blank" rel="noopener noreferrer" class="inline-flex h-9 w-9 flex-none items-center justify-center rounded-full bg-gray-900 text-white transition-colors hover:bg-gray-700" aria-label="View GitHub profile">
-                                <i class="fab fa-github text-base"></i>
-                            </a>
-                        </div>
-                        <div class="min-w-0">
-                            <div id="github-calendar" class="github-calendar" aria-label="GitHub contribution calendar for the recent 30 days"></div>
-                            <p id="github-status" class="mt-3 text-xs font-medium leading-relaxed text-gray-500">Fetching public contribution calendar.</p>
-                        </div>
                     </div>
                 </div>
                 <div id="education" class="md:col-span-5 reveal delay-200">
@@ -649,8 +1122,47 @@
         </div>
     </section>
 
+    <!-- Blog Section -->
+    <section id="blog" class="home-blog-section py-24 bg-white text-left overflow-hidden border-b border-gray-100">
+        <div class="max-w-[1400px] mx-auto px-6 md:px-12">
+            <div class="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between reveal">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Blog</h2>
+                    <p class="text-gray-500 mt-4 max-w-2xl text-[17px] font-medium leading-relaxed">
+                        Notes on empirical modeling, research software, and interactive demos.
+                    </p>
+                </div>
+                <a href="blog/index.html" class="home-blog-link">View all posts <span aria-hidden="true">&nearr;</span></a>
+            </div>
+            <div class="home-blog-grid">
+                <a class="home-blog-card reveal-scale" href="blog/empirical-bayes/index.html">
+                    <div class="home-blog-cover home-blog-cover-eb">
+                        <span class="home-blog-chip">Statistics</span>
+                        <span class="home-blog-code">E[theta | y]</span>
+                    </div>
+                    <div class="home-blog-body">
+                        <span class="home-blog-meta">Jul 2026</span>
+                        <h3>Empirical Bayes: Stabilizing Individual Estimates</h3>
+                        <p>A practical note on shrinkage, noisy estimates, and how population information can stabilize individual signals.</p>
+                    </div>
+                </a>
+                <a class="home-blog-card reveal-scale delay-100" href="demos/coordination-frictions/index.html">
+                    <div class="home-blog-cover home-blog-cover-demo">
+                        <span class="home-blog-chip">Demos</span>
+                        <span class="home-blog-code">locks -> queues</span>
+                    </div>
+                    <div class="home-blog-body">
+                        <span class="home-blog-meta">Jul 2026</span>
+                        <h3>Connected Lock Pressure Demo</h3>
+                        <p>An interactive evidence dashboard for coordination frictions in inland waterway operations.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Publications Section -->
-    <section id="publications" class="pt-24 pb-24 bg-[#f5f5f7] text-left overflow-hidden">
+    <section id="publications" class="pt-24 pb-24 bg-white text-left overflow-hidden border-b border-gray-100">
         <div class="max-w-[1400px] mx-auto">
             <div class="px-6 md:px-12 mb-10 flex justify-between items-end reveal">
                 <div>
@@ -664,14 +1176,52 @@
             <div class="carousel-shell">
                 <button id="pub-scroll-left" class="apple-edge-btn left" aria-label="Scroll publications left"><i class="fas fa-chevron-left text-xl"></i></button>
                 <div id="pub-carousel-track" class="flex gap-6 overflow-x-auto pb-16 pt-4 px-6 md:px-12 hide-scrollbar snap-x snap-mandatory items-center">
-                    <!-- 10 篇文章渲染处 -->
+                    <!-- 10 绡囨枃绔犳覆鏌撳 -->
                 </div>
                 <button id="pub-scroll-right" class="apple-edge-btn right" aria-label="Scroll publications right"><i class="fas fa-chevron-right text-xl"></i></button>
+            </div>
+
+            <div class="publication-highlights px-6 md:px-12 pt-4 reveal">
+                <div class="publication-highlights-head">
+                    <div>
+                        <h3>Publication Highlights</h3>
+                        <p>Selected figures, visual results, and interface snapshots from research outputs.</p>
+                    </div>
+                </div>
+                <div class="publication-highlight-grid">
+                    <article class="publication-highlight-card is-featured reveal-scale">
+                        <div class="publication-highlight-visual">
+                            <img src="assets/publication-highlights/fig08_energy_use_and_capacity_by_ship_cargo.png" alt="Energy use and capacity by ship cargo figure" loading="lazy" decoding="async">
+                        </div>
+                        <div class="publication-highlight-body">
+                            <span>Main research figure</span>
+                            <h4>Energy use and capacity by ship cargo</h4>
+                        </div>
+                    </article>
+                    <article class="publication-highlight-card reveal-scale delay-100">
+                        <div class="publication-highlight-visual">
+                            <img src="assets/publication-highlights/fig07_operator_transport_and_energy_structure.png" alt="Operator transport and energy structure figure" loading="lazy" decoding="async">
+                        </div>
+                        <div class="publication-highlight-body">
+                            <span>Research figure</span>
+                            <h4>Operator transport and energy structure</h4>
+                        </div>
+                    </article>
+                    <article class="publication-highlight-card reveal-scale delay-200">
+                        <div class="publication-highlight-visual">
+                            <img src="assets/publication-highlights/jiangsu_admin_co2_gap_filled_rivermouth.png" alt="Jiangsu administrative CO2 gap filled river mouth map" loading="lazy" decoding="async">
+                        </div>
+                        <div class="publication-highlight-body">
+                            <span>Spatial result</span>
+                            <h4>Jiangsu CO2 gap filled river mouth map</h4>
+                        </div>
+                    </article>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Modal 弹窗 -->
+    <!-- Modal 寮圭獥 -->
     <div id="pub-modal-overlay" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
         <div id="pub-modal-content" class="bg-white w-full max-w-4xl max-h-[90vh] rounded-[30px] shadow-2xl relative flex flex-col overflow-hidden text-left">
             <button id="close-modal" class="absolute top-6 right-6 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors z-20 text-gray-500 text-2xl leading-none" aria-label="Close publication details">
@@ -693,7 +1243,7 @@
         </div>
     </div>
 
-    <!-- 荣誉奖项 Section -->
+    <!-- 鑽ｈ獕濂栭」 Section -->
     <section id="awards" class="py-24 bg-white text-left overflow-hidden">
         <div class="max-w-[1400px] mx-auto text-left">
             <div class="px-6 md:px-12 mb-10 flex justify-between items-end reveal">
@@ -712,8 +1262,8 @@
         </div>
     </section>
 
-    <!-- 摄影作品 Section -->
-    <section id="photography" class="py-24 overflow-hidden relative bg-[#f5f5f7] border-b border-gray-100 text-left">
+    <!-- 鎽勫奖浣滃搧 Section -->
+    <section id="photography" class="py-24 overflow-hidden relative bg-white border-b border-gray-100 text-left">
         <div class="max-w-[1400px] mx-auto text-left">
             <div class="px-6 md:px-12 mb-10 flex justify-between items-end reveal">
                 <div><h2 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Photography</h2><p class="text-xl text-gray-500 mt-4 max-w-2xl font-light">Capturing moments of life.</p></div>
@@ -750,25 +1300,9 @@
         </div>
     </div>
 
-    <!-- Quick Links Section -->
-    <section id="quick-links" class="py-24 bg-[#f5f5f7] text-left border-b border-gray-100">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between reveal">
-                <div>
-                    <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Quick Links</h2>
-                    <p class="text-gray-500 mt-4 max-w-2xl text-[17px] font-medium leading-relaxed">
-                        Websites, tools, and resources I use often.
-                    </p>
-                </div>
-            </div>
-            <div id="quick-links-groups" class="space-y-12"></div>
-        </div>
-    </section>
-
-
     <footer class="bg-white py-12 px-6 border-t border-gray-200">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-            <div class="mb-4 md:mb-0">&copy; 2026 Suyang Wang. All rights reserved.</div>
+            <div class="mb-4 md:mb-0">&copy; 2026 Suyang (Leo) Wang. All rights reserved.</div>
             <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 font-medium">
                 <a href="mailto:wangsuyang@hhu.edu.cn" class="whitespace-nowrap hover:text-gray-900 transition-colors">Contact</a>
                 <a href="https://orcid.org/my-orcid?orcid=0009-0002-8499-1181" target="_blank" class="whitespace-nowrap hover:text-gray-900 transition-colors">ORCID</a>
@@ -781,6 +1315,33 @@
         </p>
     </footer>
 
+    <script>
+        (() => {
+            const root = document.documentElement;
+            const button = document.getElementById("theme-toggle");
+            if (!button) return;
+
+            const updateButton = () => {
+                const isDark = root.dataset.theme === "dark";
+                button.setAttribute("aria-pressed", String(isDark));
+                button.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+            };
+
+            button.addEventListener("click", () => {
+                const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
+                root.dataset.theme = nextTheme;
+                try {
+                    localStorage.setItem("site-theme", nextTheme);
+                } catch {
+                    // Ignore storage failures in private browsing contexts.
+                }
+                updateButton();
+            });
+
+            updateButton();
+        })();
+    </script>
+    <script src="assets/site-header.js"></script>
     <script src="assets/site-data.js"></script>
     <script src="assets/main.js?v=20260604-photo-thumbs"></script>
 </body>
