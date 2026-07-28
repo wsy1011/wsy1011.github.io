@@ -295,6 +295,12 @@
         radial-gradient(circle at 82% 30%, rgba(79, 209, 197, 0.36), transparent 22%),
         linear-gradient(135deg, #2434d8 0%, #6d5dfc 46%, #39c6f2 100%);
     }
+    .cover-data {
+      background:
+        radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.44), transparent 20%),
+        radial-gradient(circle at 82% 20%, rgba(253, 186, 116, 0.36), transparent 18%),
+        linear-gradient(135deg, #0f766e 0%, #2563eb 48%, #111827 100%);
+    }
     .cover-shape {
       position: absolute;
       border: 2px solid rgba(255, 255, 255, 0.56);
@@ -498,6 +504,7 @@
 
       <section class="sidebar-section recent-list" aria-label="Recent posts">
         <h2 class="sidebar-title">Recent</h2>
+        <a class="side-link" href="datasets/cepii-data-portal/index.html">CEPII Data Portal: A Practical Starting Point...</a>
         <a class="side-link" href="empirical-bayes/index.html">Empirical Bayes: Stabilizing Individual Estimates...</a>
         <a class="side-link" href="../demos/coordination-frictions/index.html">Connected Lock Pressure Demo...</a>
       </section>
@@ -506,6 +513,7 @@
         <h2 class="sidebar-title">Topics</h2>
         <div class="topic-row">
           <button class="side-button" type="button" data-topic="Statistics">Statistics</button>
+          <button class="side-button" type="button" data-topic="Datasets">Datasets</button>
           <button class="side-button" type="button" data-topic="Demos">Demos</button>
         </div>
       </section>
@@ -524,6 +532,17 @@
 
   <script>
     const posts = [
+      {
+        id: "post-cepii-data-portal",
+        date: "Jul 2026",
+        title: "CEPII Data Portal: A Practical Starting Point for Trade and Gravity Work",
+        excerpt: "A dataset note on using CEPII's catalogue for trade, gravity, tariff, indicator, and macroeconomic research workflows.",
+        topic: "Datasets",
+        url: "datasets/cepii-data-portal/index.html",
+        cover: "data",
+        chip: "Data portal",
+        lines: ["BACI + Gravity", "trade · tariffs · indicators", "country pairs"]
+      },
       {
         id: "post-empirical-bayes",
         date: "Jul 2026",

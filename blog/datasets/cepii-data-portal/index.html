@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEPII Data Portal - Leo's Blog</title>
+  <script>
+    (() => {
+      try {
+        const savedTheme = localStorage.getItem("site-theme");
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = savedTheme || (prefersDark ? "dark" : "light");
+      } catch {
+        document.documentElement.dataset.theme = "light";
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --text: #111111;
+      --muted: #6b7280;
+      --muted-2: #9ca3af;
+      --line: #e5e7eb;
+      --panel: #f7f7f5;
+      --code: #f3f4f6;
+      --max: 1180px;
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #000000;
+      --text: #f5f5f7;
+      --muted: #b7b7bd;
+      --muted-2: #7a7a82;
+      --line: #27272a;
+      --panel: #111111;
+      --code: #151515;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: var(--site-font, ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .shell {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 54px 24px 88px;
+      display: grid;
+      grid-template-columns: 248px minmax(0, 760px);
+      gap: 72px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 92px;
+      display: grid;
+      gap: 28px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .side-title {
+      margin: 0 0 12px;
+      color: var(--muted-2);
+      font-size: 12px;
+      font-weight: 680;
+      letter-spacing: 0.04em;
+    }
+
+    .side-link {
+      display: block;
+      margin: 9px 0;
+      color: var(--muted);
+      transition: color 160ms ease;
+    }
+    .side-link:hover { color: var(--text); }
+
+    .article {
+      min-width: 0;
+    }
+    .back {
+      display: inline-flex;
+      margin-bottom: 44px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 540;
+    }
+    .back:hover { color: var(--text); }
+
+    .kicker {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    h1 {
+      margin: 0;
+      color: var(--text);
+      font-size: clamp(42px, 6.2vw, 76px);
+      font-weight: 620;
+      line-height: 1;
+      letter-spacing: -0.045em;
+    }
+    .dek {
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.55;
+      font-weight: 430;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin: 30px 0 40px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero-panel {
+      margin: 0 0 30px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--panel);
+    }
+    .hero-panel h2 {
+      margin: 0 0 10px;
+      color: var(--text);
+      font-size: 22px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+    .hero-panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    article {
+      color: color-mix(in srgb, var(--text) 86%, var(--muted));
+      font-size: 18px;
+      line-height: 1.82;
+    }
+    article a {
+      color: #0b63ce;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    :root[data-theme="dark"] article a {
+      color: #8ab4ff;
+    }
+    article h2 {
+      margin: 54px 0 16px;
+      color: var(--text);
+      font-size: 30px;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+    }
+    article p { margin: 0 0 20px; }
+    article ul {
+      margin: 0 0 24px;
+      padding-left: 22px;
+    }
+    article li { margin: 10px 0; }
+
+    .callout {
+      margin: 32px 0;
+      padding: 22px 24px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+
+    .dataset-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin: 22px 0 30px;
+    }
+    .dataset-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, color-mix(in srgb, var(--panel) 82%, white), var(--panel));
+    }
+    .dataset-card span {
+      display: block;
+      color: var(--muted-2);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .dataset-card strong {
+      display: block;
+      color: var(--text);
+      font-size: 18px;
+      line-height: 1.25;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+    .dataset-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .source-links {
+      display: grid;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .source-link {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      color: var(--text);
+      background: var(--panel);
+    }
+    .source-link small {
+      display: block;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .footer-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 62px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .footer-nav a:hover { color: var(--text); }
+
+    @media (max-width: 860px) {
+      .shell {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding-top: 36px;
+      }
+      .sidebar {
+        position: static;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--line);
+      }
+      .toc-links {
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .back { margin-bottom: 30px; }
+      .dataset-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      .shell { padding: 30px 18px 68px; }
+      h1 { font-size: 42px; }
+      article { font-size: 17px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../../assets/site-header.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-brand" href="../../../index.html" aria-label="Suyang Wang homepage">WSY</a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="../../../index.html">Home</a>
+        <a class="is-active" href="../../index.html">Blog</a>
+        <a href="../../../index.html#publications">Publications</a>
+      </nav>
+      <div class="site-actions">
+        <a class="site-contact" href="mailto:wangsuyang@hhu.edu.cn">Contact <span aria-hidden="true">↗</span></a>
+        <button class="site-theme-toggle" type="button" data-site-theme-toggle aria-label="Switch theme" aria-pressed="false">
+          <svg class="site-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+          </svg>
+          <svg class="site-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path d="M20.99 12.45A8.5 8.5 0 1 1 11.55 3.01 6.6 6.6 0 0 0 20.99 12.45Z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <aside class="sidebar" aria-label="Article navigation">
+      <section>
+        <p class="side-title">Leo's Blog</p>
+        <a class="side-link" href="../../index.html">All posts</a>
+      </section>
+      <section>
+        <p class="side-title">On this page</p>
+        <div class="toc-links">
+          <a class="side-link" href="#why">Why it matters</a>
+          <a class="side-link" href="#structure">How it is organized</a>
+          <a class="side-link" href="#workflows">What I use first</a>
+          <a class="side-link" href="#watchouts">Watchouts</a>
+          <a class="side-link" href="#bottom-line">Bottom line</a>
+        </div>
+      </section>
+    </aside>
+
+    <section class="article">
+      <a class="back" href="../../index.html">Back to blog</a>
+      <header>
+        <p class="kicker">Datasets · Trade and Gravity</p>
+        <h1>CEPII Data Portal: A Practical Starting Point for Trade and Gravity Work</h1>
+        <p class="dek">CEPII's database catalogue is the sort of page I like to keep bookmarked: dense, practical, and much more useful than a glossy landing page pretending to be a data product.</p>
+        <div class="meta">
+          <span>Jul 2026</span>
+          <span>6 min read</span>
+          <span>Dataset note</span>
+        </div>
+      </header>
+
+      <div class="hero-panel">
+        <h2>The portal is not the dataset. That is the point.</h2>
+        <p>The CEPII page groups a lot of useful material in one place: international trade data, gravity-related variables, indicators, and macroeconomic resources. If you work on trade, tariffs, distance frictions, or bilateral country-pair analysis, this is a better first stop than starting with a random CSV search.</p>
+      </div>
+
+      <article>
+        <p>I like datasets that are organized like an actual research workflow. CEPII's portal does that. It does not try to be clever. It just puts the relevant families of data in front of you and lets you move from broad questions to specific files without too much ceremony.</p>
+
+        <p>The official portal is here: <a href="https://www.cepii.fr/CEPII/en/bdd_modele/bdd_modele.asp" target="_blank" rel="noopener noreferrer">CEPII Data Portal</a>. On the page, CEPII groups its databases into four broad families. That structure matters because it tells you what kind of question each dataset is meant to answer.</p>
+
+        <div class="dataset-grid" id="structure">
+          <div class="dataset-card">
+            <span>International Trade</span>
+            <strong>BACI, CHELEM, MAcMap-HS6, TRADHIST</strong>
+            <p>Useful when you need product-level trade flows, tariff schedules, or long-run trade history.</p>
+          </div>
+          <div class="dataset-card">
+            <span>Gravity</span>
+            <strong>Distances and bilateral frictions</strong>
+            <p>The right bucket for country-pair variables when you are building a gravity-style model.</p>
+          </div>
+          <div class="dataset-card">
+            <span>Indicators</span>
+            <strong>Country-level trade indicators</strong>
+            <p>Handy when you want compact comparative measures instead of raw transaction tables.</p>
+          </div>
+          <div class="dataset-card">
+            <span>Macroeconomy</span>
+            <strong>Broader macro reference data</strong>
+            <p>Useful when trade work needs a macro frame around flows, prices, or exposure measures.</p>
+          </div>
+        </div>
+
+        <h2 id="why">Why I keep this bookmarked</h2>
+        <p>Most research projects do not begin with a perfect dataset. They begin with a question that is only half clear. A page like this helps because it narrows the search space. Instead of wandering through the web asking for "trade data," you can decide whether you need bilateral flows, tariff data, a gravity covariate set, or a compact indicator table.</p>
+
+        <p>That sounds obvious, but in practice it saves time. It also keeps you from reaching for a giant general-purpose source when a narrower, cleaner one would do the job better. I would rather start from a curated portal than spend an hour cleaning up a dataset that was never designed for my problem.</p>
+
+        <h2 id="workflows">What I would use first</h2>
+        <p>If I were starting a trade or shipping project, I would usually begin with <strong>BACI</strong> when I need harmonized bilateral trade flows at product level. If the project is more about country-pair frictions, I would look at the <strong>Gravity</strong> resources first. If I need tariffs, <strong>MAcMap-HS6</strong> is the obvious place to check. And if I want a long historical lens, <strong>TRADHIST</strong> gives the kind of depth most research portals simply do not bother to organize well.</p>
+
+        <p>That is the part I care about: the page is not a single dataset, it is a map. Once you know which family belongs to the question, the rest of the search becomes much easier.</p>
+
+        <div class="callout">
+          My rule of thumb: use CEPII when the question is about trade structure, bilateral frictions, tariffs, or cross-country comparisons. If the question is too broad, the portal helps you narrow it before you touch the data.
+        </div>
+
+        <h2 id="watchouts">What to watch out for</h2>
+        <p>CEPII datasets are useful, but they are not magic. Some entries are better suited for academic work than operational workflows. Some need preprocessing. Some are harmonized, which is helpful, but harmonization always comes with assumptions. If you do not know what the dataset was designed to measure, you can still use it, but you should not pretend the design choices are neutral.</p>
+
+        <p>I also would not treat the portal as a substitute for reading the documentation. The page gives you the map; the dataset notes tell you the terrain. Those are not the same thing. In practice, the difference shows up fast when you try to join the data to ports, countries, or policy events.</p>
+
+        <h2 id="bottom-line">Bottom line</h2>
+        <p>CEPII's portal is the kind of resource that quietly improves a project. It does not announce itself loudly, but it makes the first hour of a data search much better. For a blog series on datasets, this is exactly the sort of thing I want to record: a reliable starting point, a few high-value datasets, and a clearer way to think about what belongs where.</p>
+
+        <p>If I keep this series going, the next posts will probably be similar: not "here is every variable in the file," but "here is why this dataset is worth using and what kind of work it actually supports."</p>
+
+        <div class="source-links" aria-label="Sources">
+          <a class="source-link" href="https://www.cepii.fr/CEPII/en/bdd_modele/bdd_modele.asp" target="_blank" rel="noopener noreferrer">
+            CEPII Data Portal
+            <small>Official dataset catalogue.</small>
+          </a>
+          <a class="source-link" href="https://www.cepii.fr/CEPII/en/bdd_modele/bdd_modele_item.asp?id=37" target="_blank" rel="noopener noreferrer">
+            BACI
+            <small>Harmonized bilateral trade database.</small>
+          </a>
+          <a class="source-link" href="https://www.cepii.fr/CEPII/en/bdd_modele/bdd_modele_item.asp?id=8" target="_blank" rel="noopener noreferrer">
+            Gravity
+            <small>CEPII's gravity-related data resources.</small>
+          </a>
+        </div>
+      </article>
+
+      <nav class="footer-nav" aria-label="Article footer navigation">
+        <a href="../../index.html">All posts</a>
+        <a href="../../../index.html">Homepage</a>
+      </nav>
+    </section>
+  </main>
+  <script src="../../../assets/site-header.js"></script>
+</body>
+</html>
