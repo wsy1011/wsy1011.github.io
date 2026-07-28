@@ -3,6 +3,19 @@
 window.siteData = {
     "publications": [
         {
+            "id": 203,
+            "status": "Working Paper",
+            "articleType": "Manuscript",
+            "journalShort": "Working Paper",
+            "journalFull": "Working Paper",
+            "date": "Latest",
+            "title": "Inland Waterway Electrification",
+            "authors": "Suyang Wang",
+            "keywords": "Inland waterway transport; Fleet electrification; Charging infrastructure; Battery swapping; Port energy systems; Decarbonisation pathways",
+            "abstract": "Manuscript in progress.",
+            "citation": ""
+        },
+        {
             "id": 201,
             "status": "Working Paper",
             "articleType": "Manuscript",
@@ -17,16 +30,16 @@ window.siteData = {
         },
         {
             "id": 202,
-            "status": "Working Paper",
-            "articleType": "Manuscript",
-            "journalShort": "Working Paper",
-            "journalFull": "Working Paper",
-            "date": "Latest",
-            "title": "Governance and Bottlenecks in Inland Waterway Transport",
-            "authors": "Suyang Wang",
-            "keywords": "Inland waterway transport; Governance; Bottlenecks.",
-            "abstract": "Manuscript in progress.",
-            "citation": ""
+            "status": "Under Review",
+            "articleType": "Journal Article",
+            "journalShort": "Transp. Res. Part A",
+            "journalFull": "Transportation Research Part A: Policy and Practice",
+            "date": "July 2026",
+            "title": "From Local Queues to Connected Pressure: Rethinking Lock Governance in Inland Waterways with Multi-Source Evidence",
+            "authors": "Suyang Wang, Xuejun Feng*, Leheng Li, Ruihua Wang, Kum Fai Yuen*, Min Wu*",
+            "keywords": "Transport policy; Inland waterway governance; Lock congestion; Connected pressure; Pre-dispatch burden; AIS data",
+            "abstract": "Manuscript under review.",
+            "citation": "Manuscript YTRA-D-26-02140. Submitted to Transportation Research Part A: Policy and Practice."
         },
         {
             "id": 101,
@@ -55,19 +68,6 @@ window.siteData = {
             "citation": ""
         },
         {
-            "id": 103,
-            "status": "Under Review",
-            "articleType": "Journal Article",
-            "journalShort": "Transp. Res. Part D",
-            "journalFull": "Transportation Research Part D: Transport and Environment",
-            "date": "April 2026",
-            "title": "Collaborative Planning Framework for Heavy-Duty Truck Electrification: Corridor-Port Integrated Energy Systems",
-            "authors": "Ruihua Wang, Xuejun Feng*, Suyang Wang, Kaixuan Tao, Kum Fai Yuen*, Min Wu*",
-            "keywords": "Port integrated energy system; Green freight corridor; Heavy-duty truck electrification; Renewable energy; Two-stage distributionally robust optimisation; Battery swapping station",
-            "abstract": "",
-            "citation": ""
-        },
-        {
             "id": 104,
             "status": "Under Review",
             "articleType": "Journal Article",
@@ -79,6 +79,19 @@ window.siteData = {
             "keywords": "Maritime oil spill response; Fleet scheduling; Heterogeneous fleets; Offshore replenishment; Multi-base collaboration",
             "abstract": "",
             "citation": ""
+        },
+        {
+            "id": 103,
+            "status": "Published",
+            "articleType": "Journal Article",
+            "journalShort": "Transp. Res. Part D",
+            "journalFull": "Transportation Research Part D: Transport and Environment",
+            "date": "October 2026",
+            "title": "Collaborative planning framework for heavy-duty truck electrification: corridor-port integrated energy systems",
+            "authors": "Ruihua Wang, Xuejun Feng*, Suyang Wang, Kaixuan Tao, Yan Zhang, Kum Fai Yuen*, Min Wu*",
+            "keywords": "Port integrated energy system; Green freight corridor; Heavy-duty truck electrification; Renewable energy; Two-stage distributionally robust optimisation; Battery swapping station",
+            "abstract": "Deep decarbonisation of heavy-duty truck freight is essential for global carbon neutrality. As vital intermodal hubs, ports can support the development of green freight corridors. This study proposes a Corridor-Port Integrated Energy System (C-PIES) framework and develops a two-stage distributionally robust optimisation model to address uncertainties in renewable energy generation and freight traffic flow. Using high-frequency GPS trajectory data, ambiguity sets are constructed to support robust scheduling of port renewable energy for corridor traffic-driven loads. A case study of Quanzhou Port shows that C-PIES enables source-load-storage coordination through battery swapping stations, reducing system cost by 42.89% and carbon emissions by 50.2% compared with the isolated mode. The results demonstrate the potential of ports as regional energy hubs for low-carbon freight corridors.",
+            "citation": "Wang, Ruihua, Feng, Xuejun, Wang, Suyang, Tao, Kaixuan, Zhang, Yan, Yuen, Kum Fai, & Wu, Min. (2026). Collaborative planning framework for heavy-duty truck electrification: Corridor-port integrated energy systems. Transportation Research Part D: Transport and Environment, 159, 105537. https://doi.org/10.1016/j.trd.2026.105537"
         },
         {
             "id": 1,

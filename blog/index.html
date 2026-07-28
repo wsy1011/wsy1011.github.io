@@ -322,6 +322,35 @@
       height: 58%;
       border-radius: 18px;
     }
+    .cover-data .cover-shape {
+      left: 39%;
+      top: 16%;
+      width: 29%;
+      height: 68%;
+      border-radius: 10px 10px 28px 28px;
+      transform: skewX(-8deg);
+      box-shadow:
+        20px 18px 0 rgba(255, 255, 255, 0.12),
+        40px 36px 0 rgba(255, 255, 255, 0.08);
+    }
+    .cover-data .cover-shape::before,
+    .cover-data .cover-shape::after {
+      content: "";
+      position: absolute;
+      left: 16%;
+      right: 16%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.62);
+      box-shadow: 0 22px 0 rgba(255, 255, 255, 0.42), 0 44px 0 rgba(255, 255, 255, 0.28);
+    }
+    .cover-data .cover-shape::before { top: 24%; }
+    .cover-data .cover-shape::after {
+      top: 70%;
+      left: 22%;
+      right: 28%;
+      transform: rotate(-18deg);
+      box-shadow: none;
+    }
     .cover-code {
       position: absolute;
       left: 8%;
@@ -505,6 +534,8 @@
       <section class="sidebar-section recent-list" aria-label="Recent posts">
         <h2 class="sidebar-title">Recent</h2>
         <a class="side-link" href="datasets/cepii-data-portal/index.html">CEPII Data Portal: A Practical Starting Point...</a>
+        <a class="side-link" href="datasets/eurostat-database/index.html">Eurostat Database: A Reliable Entry Point...</a>
+        <a class="side-link" href="datasets/grades-discharge/index.html">GRADES: Global Reach-Scale Discharge...</a>
         <a class="side-link" href="empirical-bayes/index.html">Empirical Bayes: Stabilizing Individual Estimates...</a>
         <a class="side-link" href="../demos/coordination-frictions/index.html">Connected Lock Pressure Demo...</a>
       </section>
@@ -553,6 +584,94 @@
         cover: "eb",
         chip: "Shrinkage",
         lines: ["E[theta | y]", "signal = data + prior", "noise ↓"]
+      },
+      {
+        id: "post-eurostat-database",
+        date: "Jul 2026",
+        title: "Eurostat Database: A Reliable Entry Point for European Data",
+        excerpt: "How to move from an indicator question to a reproducible European statistics query.",
+        topic: "Datasets",
+        url: "datasets/eurostat-database/index.html",
+        cover: "data",
+        chip: "Official statistics",
+        lines: ["EU database", "metadata + API", "reproducible tables"]
+      },
+      {
+        id: "post-grades-discharge",
+        date: "Jul 2026",
+        title: "GRADES: Global Reach-Scale Discharge Estimates for SWOT",
+        excerpt: "A practical note on modeled global discharge, reach-level hydrology, and the GRADES-hydroDL upgrade.",
+        topic: "Datasets",
+        url: "datasets/grades-discharge/index.html",
+        cover: "data",
+        chip: "Hydrology",
+        lines: ["daily discharge", "river reaches", "GRADES-hydroDL"]
+      },
+      {
+        id: "post-worldclim",
+        date: "Jul 2026",
+        title: "WorldClim v2.1: Global Climate Surfaces at Research-Friendly Scales",
+        excerpt: "A climate baseline for spatial modeling, with monthly temperature, precipitation, and bioclimatic variables.",
+        topic: "Datasets",
+        url: "datasets/worldclim/index.html",
+        cover: "data",
+        chip: "Climate",
+        lines: ["temperature", "precipitation", "BIO variables"]
+      },
+      {
+        id: "post-earthenv-topography",
+        date: "Jul 2026",
+        title: "EarthEnv Topography: Elevation, Slope, and Terrain Context",
+        excerpt: "A standardized global topographic layer collection for environmental and spatial analysis.",
+        topic: "Datasets",
+        url: "datasets/earthenv-topography/index.html",
+        cover: "data",
+        chip: "Topography",
+        lines: ["elevation + slope", "terrain context", "1–100 km"]
+      },
+      {
+        id: "post-gridded-gdp",
+        date: "Jul 2026",
+        title: "Downscaled Gridded Global GDP: From Country Totals to Spatial Exposure",
+        excerpt: "How a Zenodo record turns country-level economic information into a spatial covariate.",
+        topic: "Datasets",
+        url: "datasets/gridded-gdp/index.html",
+        cover: "data",
+        chip: "Socioeconomic grids",
+        lines: ["GDP per capita", "PPP", "1990–2022"]
+      },
+      {
+        id: "post-globpop",
+        date: "Jul 2026",
+        title: "GlobPOP: A Global Gridded Population Dataset for Spatial Context",
+        excerpt: "A 33-year population grid for exposure, demand proxies, and population-weighted summaries.",
+        topic: "Datasets",
+        url: "datasets/globpop/index.html",
+        cover: "data",
+        chip: "Population",
+        lines: ["1990–2022", "global grid", "Earth Engine"]
+      },
+      {
+        id: "post-river-co2-transfer",
+        date: "Jul 2026",
+        title: "River CO₂ Transfer Velocity: A Paper-Supplied Data Source",
+        excerpt: "Why gas-transfer and riverine CO₂ evasion inputs must be tracked through the cited paper and supplement.",
+        topic: "Datasets",
+        url: "datasets/river-co2-transfer/index.html",
+        cover: "data",
+        chip: "Paper supplement",
+        lines: ["gas transfer", "riverine CO₂", "PNAS source"]
+      },
+      {
+        id: "post-soil-respiration",
+        date: "Jul 2026",
+        title: "Global Soil Respiration: A Climate-Driven Model from a Global Database",
+        excerpt: "A paper-based source for modeled soil respiration rates and global carbon-cycle context.",
+        topic: "Datasets",
+        url: "datasets/soil-respiration/index.html",
+        cover: "data",
+        chip: "Soil carbon",
+        lines: ["soil respiration", "climate drivers", "global model"]
       },
       {
         id: "post-connected-lock-demo",

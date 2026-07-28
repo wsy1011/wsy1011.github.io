@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publications - Suyang (Leo) Wang</title>
+  <script>
+    (() => {
+      try {
+        const savedTheme = localStorage.getItem("site-theme");
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = savedTheme || (prefersDark ? "dark" : "light");
+      } catch {
+        document.documentElement.dataset.theme = "light";
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="../assets/site-header.css">
+  <style>
+    :root {
+      --pub-bg: #ffffff;
+      --pub-text: #111111;
+      --pub-muted: #667085;
+      --pub-line: #e5e7eb;
+      --pub-surface: #f7f7f5;
+      --pub-shelf: #d7d9dd;
+      --pub-max: 1240px;
+    }
+
+    :root[data-theme="dark"] {
+      --pub-bg: #000000;
+      --pub-text: #f5f5f7;
+      --pub-muted: #b7b7bd;
+      --pub-line: #292929;
+      --pub-surface: #111111;
+      --pub-shelf: #363636;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--pub-text);
+      background: var(--pub-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .publications-shell {
+      width: min(100%, var(--pub-max));
+      margin: 0 auto;
+      padding: 64px 24px 100px;
+    }
+    .publications-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 60px;
+      align-items: end;
+      padding: 24px 0 54px;
+      border-bottom: 1px solid var(--pub-line);
+    }
+    .publications-kicker {
+      margin: 0 0 18px;
+      color: var(--pub-muted);
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      color: var(--pub-text);
+      font-size: clamp(46px, 7vw, 88px);
+      font-weight: 620;
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+    .publications-dek {
+      max-width: 520px;
+      margin: 22px 0 0;
+      color: var(--pub-muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+    .shelf-note {
+      margin: 0;
+      padding-left: 20px;
+      border-left: 2px solid var(--pub-text);
+      color: var(--pub-muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .publication-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 30px 0 12px;
+    }
+    .publication-count {
+      color: var(--pub-muted);
+      font-size: 14px;
+    }
+    .filter-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .filter-button {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--pub-line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--pub-muted);
+      font-size: 13px;
+      transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+    }
+    .filter-button:hover,
+    .filter-button.is-active {
+      border-color: var(--pub-text);
+      background: var(--pub-text);
+      color: var(--pub-bg);
+      transform: translateY(-1px);
+    }
+
+    .bookcase {
+      display: grid;
+      gap: 54px;
+      padding-top: 12px;
+    }
+    .shelf-section { min-width: 0; }
+    .shelf-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .shelf-heading h2 {
+      margin: 0;
+      color: var(--pub-text);
+      font-size: 22px;
+      font-weight: 620;
+      letter-spacing: -.025em;
+    }
+    .shelf-heading span {
+      color: var(--pub-muted);
+      font-size: 13px;
+    }
+    .shelf {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      min-height: 270px;
+      padding: 26px 22px 0;
+      overflow-x: auto;
+      border-bottom: 10px solid var(--pub-shelf);
+      background:
+        linear-gradient(180deg, transparent 0 84%, color-mix(in srgb, var(--pub-shelf) 22%, transparent) 84% 85%, transparent 85%),
+        linear-gradient(90deg, color-mix(in srgb, var(--pub-surface) 82%, transparent), transparent 18% 82%, color-mix(in srgb, var(--pub-surface) 82%, transparent));
+      scrollbar-width: thin;
+      scrollbar-color: var(--pub-shelf) transparent;
+    }
+    .shelf::after {
+      content: "";
+      flex: 0 0 18px;
+      height: 18px;
+    }
+    .book {
+      position: relative;
+      display: flex;
+      flex: 0 0 168px;
+      width: 168px;
+      height: 218px;
+      padding: 16px 12px 14px;
+      overflow: hidden;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(255, 255, 255, .46);
+      border-radius: 5px 5px 2px 2px;
+      color: #ffffff;
+      text-align: left;
+      box-shadow: 8px 5px 0 rgba(17, 24, 39, .14), inset 1px 0 0 rgba(255,255,255,.18);
+      transform-origin: bottom center;
+      transition: transform .22s ease, box-shadow .22s ease, filter .22s ease;
+    }
+    .book:hover,
+    .book:focus-visible {
+      z-index: 2;
+      outline: none;
+      transform: translateY(-12px) rotate(-1deg);
+      box-shadow: 12px 16px 0 rgba(17, 24, 39, .16), inset 1px 0 0 rgba(255,255,255,.24);
+      filter: saturate(1.08);
+    }
+    .book::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(0,0,0,.18), transparent 18% 78%, rgba(255,255,255,.16));
+    }
+    .book-status,
+    .book-year,
+    .book-title,
+    .book-journal,
+    .book-author { position: relative; z-index: 1; }
+    .book-status {
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .book-title {
+      display: -webkit-box;
+      max-height: 106px;
+      margin: 14px 0;
+      overflow: hidden;
+      font-size: 15px;
+      font-weight: 650;
+      line-height: 1.12;
+      letter-spacing: -.02em;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 6;
+    }
+    .book-author {
+      overflow: hidden;
+      color: rgba(255,255,255,.76);
+      font-size: 10px;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .book-journal {
+      display: -webkit-box;
+      max-height: 29px;
+      overflow: hidden;
+      color: rgba(255,255,255,.84);
+      font-size: 10px;
+      font-weight: 650;
+      line-height: 1.25;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+    .book-year {
+      color: rgba(255,255,255,.72);
+      font-size: 10px;
+      line-height: 1.2;
+    }
+    .book-working { background: linear-gradient(155deg, #2563eb, #142b5c); }
+    .book-review { background: linear-gradient(155deg, #d97706, #73340b); }
+    .book-published { background: linear-gradient(155deg, #16845b, #123f31); }
+    .book-thesis { background: linear-gradient(155deg, #0f766e, #123d43); }
+    .book-empty {
+      min-height: 140px;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed var(--pub-line);
+      background: transparent;
+      color: var(--pub-muted);
+      box-shadow: none;
+      font-size: 13px;
+    }
+    .book-empty:hover { transform: none; filter: none; }
+
+    .publication-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(0, 0, 0, .58);
+      backdrop-filter: blur(12px);
+    }
+    .publication-modal.is-open { display: flex; }
+    .publication-modal-panel {
+      position: relative;
+      width: min(100%, 760px);
+      max-height: min(760px, 90vh);
+      overflow: auto;
+      padding: 34px;
+      border: 1px solid var(--pub-line);
+      border-radius: 10px;
+      background: var(--pub-bg);
+      color: var(--pub-text);
+      box-shadow: 0 28px 90px rgba(0,0,0,.28);
+    }
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--pub-line);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--pub-muted);
+      font-size: 20px;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--pub-text); border-color: var(--pub-text); }
+    .modal-status { margin: 0 0 14px; color: var(--pub-muted); font-size: 12px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+    .publication-modal h2 { max-width: 650px; margin: 0; font-size: clamp(30px, 5vw, 52px); font-weight: 620; line-height: 1.02; letter-spacing: -.045em; }
+    .modal-meta { margin: 18px 0 26px; color: var(--pub-muted); font-size: 14px; line-height: 1.5; }
+    .modal-block { padding-top: 20px; border-top: 1px solid var(--pub-line); }
+    .modal-block + .modal-block { margin-top: 20px; }
+    .modal-block h3 { margin: 0 0 8px; color: var(--pub-muted); font-size: 11px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+    .modal-block p { margin: 0; color: var(--pub-text); font-size: 16px; line-height: 1.65; }
+    .modal-citation { overflow-wrap: anywhere; }
+
+    @media (max-width: 760px) {
+      .publications-shell { padding: 34px 18px 72px; }
+      .publications-hero { grid-template-columns: 1fr; gap: 28px; padding-top: 18px; }
+      .publication-toolbar { align-items: flex-start; flex-direction: column-reverse; }
+      .shelf { margin-right: -18px; margin-left: -18px; padding-left: 18px; padding-right: 18px; }
+      .publication-modal-panel { padding: 28px 22px; }
+    }
+
+    /* OpenAI-inspired editorial refinement: quiet surfaces, precise rules, restrained accents. */
+    body {
+      background:
+        linear-gradient(90deg, transparent 0, transparent calc(50% - 620px), color-mix(in srgb, var(--pub-line) 30%, transparent) calc(50% - 620px), transparent calc(50% - 619px), transparent 100%),
+        var(--pub-bg);
+    }
+    .publications-shell { width: min(100%, 1280px); padding-top: 48px; }
+    .publications-hero { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 42px 0 64px; }
+    .publications-kicker { color: var(--pub-text); font-size: 11px; letter-spacing: .12em; }
+    h1 { max-width: 850px; font-size: clamp(50px, 7vw, 96px); font-weight: 560; letter-spacing: -.065em; }
+    .publication-toolbar { padding-top: 34px; }
+    .filter-button { border-radius: 7px; }
+    .filter-button:hover,
+    .filter-button.is-active { border-color: var(--pub-text); background: var(--pub-text); }
+    .bookcase { gap: 64px; padding-top: 16px; }
+    .shelf-heading { margin-bottom: 18px; }
+    .shelf-heading h2 { font-size: 18px; font-weight: 560; letter-spacing: -.015em; }
+    .shelf-heading span { font-size: 12px; }
+    .shelf {
+      min-height: 278px;
+      padding: 34px 24px 0;
+      border-top: 1px solid var(--pub-line);
+      border-bottom: 4px solid var(--pub-shelf);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--pub-surface) 54%, transparent), transparent 78%);
+    }
+    .book {
+      color: var(--pub-text);
+      border-color: var(--pub-line);
+      border-radius: 6px 6px 2px 2px;
+      background: var(--pub-surface);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, .06), inset 1px 0 0 rgba(255,255,255,.8);
+    }
+    .book::before {
+      inset: 0 0 auto;
+      height: 4px;
+      background: var(--book-accent, #111111);
+    }
+    .book-working { --book-accent: #2563eb; background: var(--pub-surface); }
+    .book-review { --book-accent: #d97706; background: var(--pub-surface); }
+    .book-published { --book-accent: #16845b; background: var(--pub-surface); }
+    .book-thesis { --book-accent: #0f766e; background: var(--pub-surface); }
+    .book:hover,
+    .book:focus-visible {
+      color: var(--pub-text);
+      border-color: color-mix(in srgb, var(--pub-text) 55%, var(--pub-line));
+      box-shadow: 0 16px 30px rgba(15, 23, 42, .12), inset 1px 0 0 rgba(255,255,255,.8);
+      transform: translateY(-9px);
+      filter: none;
+    }
+    .book-status { color: var(--pub-muted); font-size: 9px; }
+    .book-title { font-size: 16px; font-weight: 560; letter-spacing: -.025em; }
+    .book-journal { color: var(--pub-muted); font-weight: 560; }
+    .book-author { color: var(--pub-muted); }
+    .publication-modal-panel { border-radius: 8px; }
+    :root[data-theme="dark"] body {
+      background:
+        linear-gradient(90deg, transparent 0, transparent calc(50% - 620px), rgba(255,255,255,.045) calc(50% - 620px), transparent calc(50% - 619px), transparent 100%),
+        var(--pub-bg);
+    }
+    :root[data-theme="dark"] .book {
+      background: #111111;
+      border-color: #2d2d2d;
+      box-shadow: 0 8px 22px rgba(0,0,0,.26), inset 1px 0 0 rgba(255,255,255,.04);
+    }
+    :root[data-theme="dark"] .book:hover,
+    :root[data-theme="dark"] .book:focus-visible {
+      border-color: #686868;
+      box-shadow: 0 18px 34px rgba(0,0,0,.42), inset 1px 0 0 rgba(255,255,255,.06);
+    }
+
+    /* Keep the colorful shelf while making rows predictable and readable. */
+    .shelf {
+      display: grid;
+      grid-template-columns: repeat(6, 168px);
+      grid-auto-rows: 218px;
+      align-items: end;
+      justify-content: start;
+      row-gap: 28px;
+      overflow: visible;
+    }
+    .shelf::after { display: none; }
+    .book {
+      width: 168px;
+      flex: none;
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, .46);
+      background: var(--book-background);
+      box-shadow: 8px 5px 0 rgba(17, 24, 39, .14), inset 1px 0 0 rgba(255,255,255,.18);
+      transform-origin: center bottom;
+      transition: transform .46s cubic-bezier(.22, 1, .36, 1), box-shadow .46s cubic-bezier(.22, 1, .36, 1), border-color .32s ease;
+    }
+    .book::before {
+      inset: 0;
+      height: auto;
+      background: linear-gradient(90deg, rgba(0,0,0,.18), transparent 18% 78%, rgba(255,255,255,.16));
+    }
+    .book-working { --book-background: linear-gradient(155deg, #3b82f6, #142b5c); --book-accent: #60a5fa; }
+    .book-review { --book-background: linear-gradient(155deg, #e18a21, #73340b); --book-accent: #fbbf24; }
+    .book-published { --book-background: linear-gradient(155deg, #16845b, #123f31); --book-accent: #34d399; }
+    .book-thesis { --book-background: linear-gradient(155deg, #0f766e, #123d43); --book-accent: #2dd4bf; }
+    .book-status { color: rgba(255,255,255,.92); }
+    .book-journal { color: rgba(255,255,255,.84); }
+    .book-author,
+    .book-year { color: rgba(255,255,255,.76); }
+    :root[data-theme="dark"] .book-working { --book-background: linear-gradient(155deg, #244f9f, #101d3a); }
+    :root[data-theme="dark"] .book-review { --book-background: linear-gradient(155deg, #9a5b17, #40200b); }
+    :root[data-theme="dark"] .book-published { --book-background: linear-gradient(155deg, #126044, #0d2b23); }
+    :root[data-theme="dark"] .book-thesis { --book-background: linear-gradient(155deg, #0f5b58, #0b292f); }
+    @media (max-width: 1120px) {
+      .shelf { grid-template-columns: repeat(5, 168px); }
+    }
+    @media (max-width: 930px) {
+      .shelf { grid-template-columns: repeat(4, 168px); }
+    }
+    @media (max-width: 730px) {
+      .shelf {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        padding-right: 18px;
+        padding-left: 18px;
+      }
+      .book { width: 100%; }
+    }
+    @media (max-width: 520px) {
+      .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 10px; }
+    }
+
+    @keyframes archive-fade-up {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shelf-fade-up {
+      from { opacity: 0; transform: translateY(22px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes book-fade-up {
+      from { opacity: 0; transform: translateY(22px) rotate(.8deg); }
+      to { opacity: 1; transform: translateY(0) rotate(0); }
+    }
+    @keyframes modal-fade-in {
+      from { opacity: 0; transform: translateY(12px) scale(.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .publications-hero,
+    .publication-toolbar {
+      animation: archive-fade-up .72s cubic-bezier(.16, 1, .3, 1) both;
+    }
+    .publication-toolbar { animation-delay: 90ms; }
+    .shelf-section {
+      animation: shelf-fade-up .72s cubic-bezier(.16, 1, .3, 1) both;
+    }
+    .shelf-section:nth-child(2) { animation-delay: 100ms; }
+    .shelf-section:nth-child(3) { animation-delay: 180ms; }
+    .shelf-section:nth-child(4) { animation-delay: 260ms; }
+    .book { opacity: 1; animation: none; }
+    .book.is-entering {
+      opacity: 0;
+      animation: book-fade-up .64s cubic-bezier(.16, 1, .3, 1) var(--book-delay, 0ms) both;
+    }
+    .book::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -65%;
+      width: 28%;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+      transform: skewX(-18deg);
+      transition: transform .78s cubic-bezier(.22, 1, .36, 1);
+    }
+    .book:hover::after,
+    .book:focus-visible::after { transform: translateX(360%) skewX(-18deg); }
+    .book:hover,
+    .book:focus-visible {
+      opacity: 1;
+      transform: translateY(-8px) scale(1.018);
+    }
+    /* The archive uses the same publication card language as the homepage. */
+    .shelf {
+      grid-template-columns: repeat(3, minmax(280px, 340px));
+      grid-auto-rows: 500px;
+      gap: 24px;
+      align-items: stretch;
+      justify-content: start;
+    }
+    .pub-card-custom {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 500px;
+      min-width: 0;
+      padding: 2.2rem;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      isolation: isolate;
+      border: 1px solid rgba(255, 255, 255, .92);
+      border-radius: 28px;
+      color: #111827;
+      text-align: left;
+      box-shadow: 0 16px 44px rgba(15, 23, 42, .07), inset 0 1px 0 rgba(255,255,255,.82);
+      transition: transform .55s cubic-bezier(.16, 1, .3, 1), box-shadow .55s cubic-bezier(.16, 1, .3, 1), filter .55s cubic-bezier(.16, 1, .3, 1);
+    }
+    .pub-card-custom::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(circle at 20% 12%, rgba(255,255,255,.95), transparent 36%), linear-gradient(135deg, rgba(255,255,255,.65), transparent 58%);
+      opacity: .74;
+    }
+    .pub-card-custom::after {
+      content: "";
+      position: absolute;
+      inset: -60% auto auto -85%;
+      width: 70%;
+      height: 220%;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.72), transparent);
+      opacity: 0;
+      transform: rotate(18deg) translateX(-40%);
+      transition: transform .85s cubic-bezier(.16, 1, .3, 1), opacity .45s cubic-bezier(.16, 1, .3, 1);
+    }
+    .pub-card-custom:hover,
+    .pub-card-custom:focus-visible {
+      z-index: 2;
+      outline: none;
+      transform: translateY(-8px) scale(1.025);
+      filter: saturate(1.04);
+      box-shadow: 0 28px 70px rgba(15,23,42,.14), inset 0 1px 0 rgba(255,255,255,.94);
+    }
+    .pub-card-custom:hover::after,
+    .pub-card-custom:focus-visible::after { opacity: 1; transform: rotate(18deg) translateX(290%); }
+    .card-published { background: linear-gradient(135deg, #F7FFF9 0%, #E3FBEA 48%, #D9F8E5 100%); }
+    .card-under-review { background: linear-gradient(135deg, #FFFDF1 0%, #FFF5C9 52%, #FFEFB2 100%); }
+    .card-working-paper { background: linear-gradient(135deg, #F1F8FF 0%, #DCEEFF 50%, #C9E2FF 100%); }
+    .card-thesis { background: linear-gradient(135deg, #F1FFFE 0%, #D6F6F5 50%, #C4ECEA 100%); }
+    .pub-card-top,
+    .pub-card-bottom { position: relative; z-index: 1; }
+    .pub-card-status-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .pub-card-status,
+    .pub-card-type { font-size: 11px; font-weight: 750; letter-spacing: .04em; text-transform: uppercase; }
+    .pub-card-status { color: #16845b; }
+    .card-under-review .pub-card-status { color: #a16207; }
+    .card-working-paper .pub-card-status { color: #2563eb; }
+    .card-thesis .pub-card-status { color: #0f766e; }
+    .pub-card-type { color: #667085; }
+    .pub-card-title { display: -webkit-box; max-height: 232px; margin: 0; overflow: hidden; color: #111827; font-size: 28px; font-weight: 700; line-height: 1.08; letter-spacing: -.04em; -webkit-box-orient: vertical; -webkit-line-clamp: 7; }
+    .pub-card-bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+    .pub-card-meta { min-width: 0; max-width: 75%; }
+    .pub-card-author { margin: 0 0 5px; overflow: hidden; color: #667085; font-size: 14px; font-weight: 520; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+    .pub-card-journal { margin: 0; color: #98a2b3; font-size: 11px; font-weight: 700; letter-spacing: .04em; line-height: 1.35; text-transform: uppercase; }
+    .pub-card-open { display: inline-flex; width: 40px; height: 40px; flex: 0 0 40px; align-items: center; justify-content: center; border: 0; border-radius: 50%; background: #16845b; color: #fff; font-size: 19px; line-height: 1; transition: transform .3s cubic-bezier(.16,1,.3,1), opacity .2s ease; }
+    .card-under-review .pub-card-open { background: #d97706; }
+    .card-working-paper .pub-card-open { background: #2563eb; }
+    .card-thesis .pub-card-open { background: #0f766e; }
+    .pub-card-custom:hover .pub-card-open,
+    .pub-card-custom:focus-visible .pub-card-open { transform: translate(2px, -2px); }
+    .pub-card-custom.is-entering { opacity: 0; animation: book-fade-up .64s cubic-bezier(.16,1,.3,1) var(--book-delay,0ms) both; }
+    :root[data-theme="dark"] .pub-card-custom { border-color: rgba(63,63,70,.72); color: #f5f5f7; box-shadow: 0 18px 48px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.08); }
+    :root[data-theme="dark"] .pub-card-custom::before { background: radial-gradient(circle at 18% 12%, rgba(255,255,255,.12), transparent 34%), linear-gradient(135deg, rgba(255,255,255,.07), transparent 58%); opacity: 1; }
+    :root[data-theme="dark"] .card-published { background: linear-gradient(135deg, #102317 0%, #18351f 50%, #1f4a2d 100%); }
+    :root[data-theme="dark"] .card-under-review { background: linear-gradient(135deg, #2a2110 0%, #463515 52%, #5a4318 100%); }
+    :root[data-theme="dark"] .card-working-paper { background: linear-gradient(135deg, #101d32 0%, #182b46 50%, #203b5e 100%); }
+    :root[data-theme="dark"] .card-thesis { background: linear-gradient(135deg, #0d2523 0%, #143c39 50%, #1c524e 100%); }
+    :root[data-theme="dark"] .pub-card-title { color: #f5f5f7; }
+    :root[data-theme="dark"] .pub-card-type,
+    :root[data-theme="dark"] .pub-card-author { color: #d4d4d8; }
+    :root[data-theme="dark"] .pub-card-journal { color: #a1a1aa; }
+    @media (max-width: 1120px) { .shelf { grid-template-columns: repeat(2, minmax(280px, 340px)); } }
+    @media (max-width: 720px) { .shelf { grid-template-columns: minmax(280px, 340px); justify-content: center; } }
+
+    /* Publication archive: compact book cards with restrained OpenAI-style structure. */
+    .shelf {
+      grid-template-columns: repeat(6, 168px);
+      grid-auto-rows: 218px;
+      gap: 28px 10px;
+      align-items: end;
+      justify-content: start;
+    }
+    .book {
+      width: 168px;
+      height: 218px;
+      padding: 16px 12px 14px;
+      border-radius: 7px 7px 2px 2px;
+      box-shadow: 7px 5px 0 rgba(15,23,42,.13), inset 1px 0 0 rgba(255,255,255,.18);
+    }
+    .book-title { max-height: 106px; font-size: 16px; font-weight: 650; letter-spacing: -.03em; }
+    .book-status { font-size: 10px; letter-spacing: .065em; }
+    .book-journal { font-size: 10px; }
+    .book-year { font-size: 10px; font-weight: 650; }
+    .book-author { font-size: 10px; }
+    @media (max-width: 1120px) { .shelf { grid-template-columns: repeat(5, 168px); } }
+    @media (max-width: 930px) { .shelf { grid-template-columns: repeat(4, 168px); } }
+    @media (max-width: 730px) {
+      .shelf { grid-template-columns: repeat(3, minmax(0, 1fr)); padding-right: 18px; padding-left: 18px; }
+      .book { width: 100%; }
+    }
+    @media (max-width: 520px) { .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 10px; } }
+
+    .publication-modal.is-open .publication-modal-panel {
+      animation: modal-fade-in .28s cubic-bezier(.16, 1, .3, 1) both;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 1ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-brand" href="../index.html" aria-label="Suyang Wang homepage">WSY</a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="../index.html">Home</a>
+        <a href="../blog/index.html">Blog</a>
+        <a class="is-active" href="index.html">Publications</a>
+      </nav>
+      <div class="site-actions">
+        <a class="site-contact" href="mailto:wangsuyang@hhu.edu.cn">Contact <span aria-hidden="true">↗</span></a>
+        <button class="site-theme-toggle" type="button" data-site-theme-toggle aria-label="Switch theme" aria-pressed="false">
+          <svg class="site-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+          <svg class="site-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20.99 12.45A8.5 8.5 0 1 1 11.55 3.01 6.6 6.6 0 0 0 20.99 12.45Z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="publications-shell">
+    <section class="publications-hero">
+      <div>
+        <p class="publications-kicker">Research archive</p>
+        <h1>Publications</h1>
+      </div>
+    </section>
+
+    <div class="publication-toolbar">
+      <span class="publication-count" id="publication-count" aria-live="polite"></span>
+      <div class="filter-list" role="group" aria-label="Filter publications">
+        <button class="filter-button is-active" type="button" data-filter="All">All</button>
+        <button class="filter-button" type="button" data-filter="Working Paper">Working Papers</button>
+        <button class="filter-button" type="button" data-filter="Under Review">Under Review</button>
+        <button class="filter-button" type="button" data-filter="Published">Published</button>
+        <button class="filter-button" type="button" data-filter="Thesis">Thesis</button>
+      </div>
+    </div>
+
+    <div class="bookcase" id="bookcase" aria-live="polite"></div>
+  </main>
+
+  <div class="publication-modal" id="publication-modal" aria-hidden="true">
+    <section class="publication-modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" id="modal-close" type="button" aria-label="Close publication details">&times;</button>
+      <p class="modal-status" id="modal-status"></p>
+      <h2 id="modal-title"></h2>
+      <p class="modal-meta" id="modal-meta"></p>
+      <div class="modal-block"><h3>Authors</h3><p id="modal-authors"></p></div>
+      <div class="modal-block"><h3>Keywords</h3><p id="modal-keywords"></p></div>
+      <div class="modal-block" id="modal-abstract-block"><h3>Abstract</h3><p id="modal-abstract"></p></div>
+      <div class="modal-block" id="modal-citation-block"><h3>Citation</h3><p class="modal-citation" id="modal-citation"></p></div>
+    </section>
+  </div>
+
+  <script src="../assets/site-data.js"></script>
+  <script src="../assets/site-header.js"></script>
+  <script>
+    (() => {
+      const publications = window.siteData?.publications || [];
+      const bookcase = document.getElementById("bookcase");
+      const count = document.getElementById("publication-count");
+      const modal = document.getElementById("publication-modal");
+      const close = document.getElementById("modal-close");
+      const sections = [
+        { status: "Working Paper", title: "Working Papers", className: "book-working" },
+        { status: "Under Review", title: "Under Review", className: "book-review" },
+        { status: "Published", title: "Published", className: "book-published" },
+        { status: "Thesis", title: "Thesis", className: "book-thesis" }
+      ];
+      let activeFilter = "All";
+
+      const formatAuthors = (authors) => authors.replace(/\*/g, "");
+      const publicationYear = (date) => date.match(/\b(?:19|20)\d{2}\b/)?.[0] || "Latest";
+      const statusClass = (status) => status === "Working Paper" ? "book-working" : status === "Under Review" ? "book-review" : status === "Thesis" ? "book-thesis" : "book-published";
+
+      const openModal = (publication) => {
+        document.getElementById("modal-status").textContent = `${publication.status} · ${publication.articleType}`;
+        document.getElementById("modal-title").textContent = publication.title;
+        document.getElementById("modal-meta").textContent = `${publication.journalFull} · ${publication.date}`;
+        document.getElementById("modal-authors").textContent = formatAuthors(publication.authors);
+        document.getElementById("modal-keywords").textContent = publication.keywords || "Not specified.";
+        const abstractBlock = document.getElementById("modal-abstract-block");
+        const citationBlock = document.getElementById("modal-citation-block");
+        abstractBlock.style.display = publication.abstract ? "block" : "none";
+        citationBlock.style.display = publication.citation ? "block" : "none";
+        document.getElementById("modal-abstract").textContent = publication.abstract || "";
+        document.getElementById("modal-citation").textContent = publication.citation || "";
+        modal.classList.add("is-open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        close.focus();
+      };
+
+      const closeModal = () => {
+        modal.classList.remove("is-open");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      };
+
+      const render = () => {
+        const visible = publications.filter((publication) => activeFilter === "All" || publication.status === activeFilter);
+        count.textContent = `${visible.length} ${visible.length === 1 ? "record" : "records"}`;
+        bookcase.innerHTML = "";
+        sections.forEach((section) => {
+          const items = visible.filter((publication) => publication.status === section.status);
+          if (!items.length) return;
+          const shelfSection = document.createElement("section");
+          shelfSection.className = "shelf-section";
+          shelfSection.innerHTML = `<div class="shelf-heading"><h2>${section.title}</h2></div>`;
+          const shelf = document.createElement("div");
+          shelf.className = "shelf";
+          items.forEach((publication, index) => {
+            const book = document.createElement("button");
+            book.type = "button";
+            book.className = `book is-entering ${statusClass(publication.status)}`;
+            book.style.setProperty("--book-delay", `${Math.min(index * 48, 360)}ms`);
+            book.setAttribute("aria-label", `Open details for ${publication.title}`);
+            book.innerHTML = `<span class="book-status"></span><span class="book-title"></span><span class="book-journal"></span><span class="book-year"></span><span class="book-author"></span>`;
+            book.querySelector(".book-status").textContent = publication.status;
+            book.querySelector(".book-title").textContent = publication.title;
+            book.querySelector(".book-journal").textContent = publication.journalShort || publication.journalFull || "Working Paper";
+            book.querySelector(".book-year").textContent = publicationYear(publication.date);
+            const authorList = formatAuthors(publication.authors).split(",").map((name) => name.trim()).filter(Boolean);
+            book.querySelector(".book-author").textContent = authorList.length > 1 ? `${authorList[0]} et al.` : authorList[0];
+            book.addEventListener("animationend", () => book.classList.remove("is-entering"), { once: true });
+            book.addEventListener("click", () => openModal(publication));
+            shelf.appendChild(book);
+          });
+          shelfSection.appendChild(shelf);
+          bookcase.appendChild(shelfSection);
+        });
+      };
+
+      document.querySelectorAll("[data-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+          activeFilter = button.dataset.filter;
+          document.querySelectorAll("[data-filter]").forEach((item) => item.classList.toggle("is-active", item === button));
+          render();
+        });
+      });
+      close.addEventListener("click", closeModal);
+      modal.addEventListener("click", (event) => { if (event.target === modal) closeModal(); });
+      document.addEventListener("keydown", (event) => { if (event.key === "Escape" && modal.classList.contains("is-open")) closeModal(); });
+      render();
+    })();
+  </script>
+</body>
+</html>
