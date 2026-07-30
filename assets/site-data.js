@@ -38,8 +38,7 @@ window.siteData = {
             "title": "From Local Queues to Connected Pressure: Rethinking Lock Governance in Inland Waterways with Multi-Source Evidence",
             "authors": "Suyang Wang, Xuejun Feng*, Leheng Li, Ruihua Wang, Kum Fai Yuen*, Min Wu*",
             "keywords": "Transport policy; Inland waterway governance; Lock congestion; Connected pressure; Pre-dispatch burden; AIS data",
-            "abstract": "Manuscript under review.",
-            "citation": "Manuscript YTRA-D-26-02140. Submitted to Transportation Research Part A: Policy and Practice."
+            "abstract": "Manuscript under review."
         },
         {
             "id": 101,

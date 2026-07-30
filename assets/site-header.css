@@ -311,7 +311,7 @@ body.homepage > section {
   overflow: hidden;
   border: 1px solid rgba(229, 231, 235, 0.86);
   border-radius: 8px;
-  background: #ffffff;
+  background: #ffffff !important;
   transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
