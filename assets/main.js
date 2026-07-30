@@ -6,6 +6,7 @@
             const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
                 '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
             }[char]));
+            const displayPublicationTitle = (publication) => publication.status === 'Under Review' ? '••••••••••••' : publication.title;
 
             const heroQuote = document.getElementById('hero-quote');
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -35,6 +36,7 @@
                     "Published": { card: "card-published", text: "text-emerald-500", bg: "bg-emerald-500" }
                 };
                 publications.forEach(pub => {
+                    const displayTitle = displayPublicationTitle(pub);
                     const card = document.createElement('div');
                     const style = statusStyles[pub.status] || statusStyles.Published;
                     const statusClass = style.card;
@@ -52,7 +54,7 @@
                     card.innerHTML = `
                         <div class="relative z-10">
                             <p class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1">${statusTag}${typeTag}</p>
-                            <h3 class="text-2xl md:text-3xl font-bold leading-tight mb-4 tracking-tight text-gray-900 text-left">${pub.title}</h3>
+                            <h3 class="text-2xl md:text-3xl font-bold leading-tight mb-4 tracking-tight text-gray-900 text-left">${displayTitle}</h3>
                         </div>
                         <div class="relative z-10 flex justify-between items-end">
                             <div class="max-w-[75%] text-left">
@@ -272,7 +274,7 @@
                 const pub = publications.find(p => p.id == id);
                 if(!pub) return;
                 document.getElementById('modal-journal-meta').innerText = `${pub.journalFull} · ${pub.date}`;
-                document.getElementById('modal-title').innerText = pub.title;
+                document.getElementById('modal-title').innerText = displayPublicationTitle(pub);
                 document.getElementById('modal-author-tags').innerHTML = renderAuthorTags(pub.authors);
                 document.getElementById('modal-authors').innerHTML = highlightSuyang(pub.authors);
                 document.getElementById('modal-keywords').innerText = pub.keywords;

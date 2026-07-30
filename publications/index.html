@@ -710,10 +710,11 @@
       const formatAuthors = (authors) => authors.replace(/\*/g, "");
       const publicationYear = (date) => date.match(/\b(?:19|20)\d{2}\b/)?.[0] || "Latest";
       const statusClass = (status) => status === "Working Paper" ? "book-working" : status === "Under Review" ? "book-review" : status === "Thesis" ? "book-thesis" : "book-published";
+      const displayPublicationTitle = (publication) => publication.status === "Under Review" ? "••••••••••••" : publication.title;
 
       const openModal = (publication) => {
         document.getElementById("modal-status").textContent = `${publication.status} · ${publication.articleType}`;
-        document.getElementById("modal-title").textContent = publication.title;
+        document.getElementById("modal-title").textContent = displayPublicationTitle(publication);
         document.getElementById("modal-meta").textContent = `${publication.journalFull} · ${publication.date}`;
         document.getElementById("modal-authors").textContent = formatAuthors(publication.authors);
         document.getElementById("modal-keywords").textContent = publication.keywords || "Not specified.";
@@ -748,14 +749,15 @@
           const shelf = document.createElement("div");
           shelf.className = "shelf";
           items.forEach((publication, index) => {
+            const displayTitle = displayPublicationTitle(publication);
             const book = document.createElement("button");
             book.type = "button";
             book.className = `book is-entering ${statusClass(publication.status)}`;
             book.style.setProperty("--book-delay", `${Math.min(index * 48, 360)}ms`);
-            book.setAttribute("aria-label", `Open details for ${publication.title}`);
+            book.setAttribute("aria-label", publication.status === "Under Review" ? "Open details for confidential manuscript" : `Open details for ${displayTitle}`);
             book.innerHTML = `<span class="book-status"></span><span class="book-title"></span><span class="book-journal"></span><span class="book-year"></span><span class="book-author"></span>`;
             book.querySelector(".book-status").textContent = publication.status;
-            book.querySelector(".book-title").textContent = publication.title;
+            book.querySelector(".book-title").textContent = displayTitle;
             book.querySelector(".book-journal").textContent = publication.journalShort || publication.journalFull || "Working Paper";
             book.querySelector(".book-year").textContent = publicationYear(publication.date);
             const authorList = formatAuthors(publication.authors).split(",").map((name) => name.trim()).filter(Boolean);
