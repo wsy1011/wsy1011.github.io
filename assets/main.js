@@ -6,7 +6,8 @@
             const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
                 '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
             }[char]));
-            const displayPublicationTitle = (publication) => publication.status === 'Under Review' ? '••••••••••••' : publication.title;
+            const isWithheldTitle = (publication) => publication.status === 'Under Review';
+            const displayPublicationTitle = (publication) => isWithheldTitle(publication) ? 'Title withheld during peer review' : publication.title;
 
             const heroQuote = document.getElementById('hero-quote');
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -274,7 +275,8 @@
                 const pub = publications.find(p => p.id == id);
                 if(!pub) return;
                 document.getElementById('modal-journal-meta').innerText = `${pub.journalFull} · ${pub.date}`;
-                document.getElementById('modal-title').innerText = displayPublicationTitle(pub);
+                const modalTitle = document.getElementById('modal-title');
+                modalTitle.innerText = displayPublicationTitle(pub);
                 document.getElementById('modal-author-tags').innerHTML = renderAuthorTags(pub.authors);
                 document.getElementById('modal-authors').innerHTML = highlightSuyang(pub.authors);
                 document.getElementById('modal-keywords').innerText = pub.keywords;
