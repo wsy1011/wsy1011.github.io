@@ -1031,6 +1031,7 @@
         }
     </style>
     <link rel="stylesheet" href="assets/site-header.css?v=20260728-highlights-white">
+    <link rel="stylesheet" href="assets/phd-voyage.css">
 </head>
 <body class="homepage">
 
@@ -1119,6 +1120,30 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section id="phd-voyage" aria-labelledby="phd-progress-heading">
+        <div class="phd-progress-card" data-start="2025-09-01" data-end="2029-06-30">
+            <div class="phd-progress-heading">
+                <div>
+                    <h2 id="phd-progress-heading">PhD Progress</h2>
+                    <p>Sep 2025 — Jun 2029 <span>· Expected graduation</span></p>
+                </div>
+                <span id="phd-progress-percent" class="phd-progress-percent">—</span>
+            </div>
+            <div id="phd-progress-bar" class="phd-progress-track" role="progressbar" aria-label="Doctoral programme time elapsed" aria-valuemin="0" aria-valuemax="100">
+                <div id="phd-progress-fill" class="phd-progress-fill"></div>
+                <span class="phd-progress-reward" role="img" tabindex="0" aria-label="PhD goal, expected June 2029" title="PhD · Expected June 2029">
+                    <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+                    <span aria-hidden="true">PhD</span>
+                </span>
+            </div>
+            <div class="phd-progress-footer">
+                <span id="phd-progress-elapsed">Calculating elapsed time…</span>
+                <span id="phd-progress-remaining"></span>
+            </div>
+            <p class="phd-progress-note">Time elapsed in the planned programme</p>
         </div>
     </section>
 
@@ -1356,6 +1381,7 @@
     <script src="assets/site-header.js"></script>
     <script src="assets/site-data.js"></script>
     <script src="assets/main.js?v=20260604-photo-thumbs"></script>
+    <script src="assets/phd-voyage.js"></script>
 </body>
 </html>
 
