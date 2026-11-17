@@ -55,19 +55,6 @@ window.siteData = {
             "citation": ""
         },
         {
-            "id": 102,
-            "status": "Under Review",
-            "articleType": "Journal Article",
-            "journalShort": "Int. J. Disaster Risk Reduct.",
-            "journalFull": "International Journal of Disaster Risk Reduction",
-            "date": "April 2026",
-            "title": "Risk-Informed and Disruption-Aware Rescue-Base Siting for Emergency Preparedness in Tidal Inland Waterways",
-            "authors": "Mingchang Huang, Zhiyi Lei, Suyang Wang*, Guangyu Huang, Liangen Zeng*",
-            "keywords": "AIS trajectories; hydrodynamic modelling; emergency preparedness; Disaster risk reduction; robust rescue-base siting; tidal inland waterways",
-            "abstract": "",
-            "citation": ""
-        },
-        {
             "id": 104,
             "status": "Under Review",
             "articleType": "Journal Article",
@@ -79,6 +66,19 @@ window.siteData = {
             "keywords": "Maritime oil spill response; Fleet scheduling; Heterogeneous fleets; Offshore replenishment; Multi-base collaboration",
             "abstract": "",
             "citation": ""
+        },
+        {
+            "id": 102,
+            "status": "Published",
+            "articleType": "Journal Article",
+            "journalShort": "Int. J. Disaster Risk Reduct.",
+            "journalFull": "International Journal of Disaster Risk Reduction",
+            "date": "November 2026",
+            "title": "Risk-informed and disruption-aware rescue-base siting for emergency preparedness in tidal inland waterways",
+            "authors": "Mingchang Huang, Zhiyi Lei, Suyang Wang*, Guangyu Huang, Liangen Zeng*",
+            "keywords": "AIS trajectories; hydrodynamic modelling; emergency preparedness; Disaster risk reduction; robust rescue-base siting; tidal inland waterways",
+            "abstract": "",
+            "citation": "Huang, M., Lei, Z., Wang, S., Huang, G., & Zeng, L. (2026). Risk-informed and disruption-aware rescue-base siting for emergency preparedness in tidal inland waterways. International Journal of Disaster Risk Reduction, Article 106563. https://doi.org/10.1016/j.ijdrr.2026.106563"
         },
         {
             "id": 103,
